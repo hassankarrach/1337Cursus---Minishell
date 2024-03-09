@@ -20,6 +20,6 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-void	parse(char *line, char **env);
+void	parse(char *line);
 
 #endif

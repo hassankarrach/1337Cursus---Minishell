@@ -1,7 +1,8 @@
 CFLAGS = -Wall -Wextra -Werror
 RDLFLAG  = -lreadline
-SRCS = main.c parser/parse.c
+SRCS = main.c parser/parse.c executor/execute.c
 
+HEADERS = minishell.h
 NAME = minishell
 OBJS = $(SRCS:.c=.o)
 
@@ -9,7 +10,7 @@ all : $(NAME)
 
 .c.o : 
 	cc $(CFLAGS) -c -o $@ $^
-$(NAME) : $(OBJS)
+$(NAME) : $(OBJS) $(HEADERS)
 	cc $(CFLAGS) $(RDLFLAG) $(OBJS) -o $(NAME) 
 clean : 
 	rm -f $(OBJS)
