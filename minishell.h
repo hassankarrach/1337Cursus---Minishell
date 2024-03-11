@@ -20,6 +20,11 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-void	parse(char *line);
+typedef struct  s_data
+{
+    int pipes_nbr;
+} t_data;
+
+void	parse(char *line, t_);
 
 #endif

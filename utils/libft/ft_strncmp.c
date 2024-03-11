@@ -1,31 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/08 12:29:39 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/03/08 12:29:42 by aelbasri         ###   ########.fr       */
+/*   Created: 2023/11/01 10:08:09 by aelbasri          #+#    #+#             */
+/*   Updated: 2023/11/13 10:05:34 by aelbasri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av, char **env)
+int	ft_strncmp(const char *str1, const char *str2, size_t n)
 {
-	t_data	 data;
-	char	*line;
+	size_t			i;
+	unsigned char	*s1;
+	unsigned char	*s2;
 
-	(void)ac;
-	(void)av;
-	(void)env;
-	while (1)
+	s1 = (unsigned char *)str1;
+	s2 = (unsigned char *)str2;
+	i = 0;
+	if ((int)n < 0)
+		return (-1);
+	while (s1[i] != '\0' && s2[i] == s1[i] && i < n)
 	{
-		line = readline("\033[1;32m > myMiniSh-1.0$ \033[0m");
-		if (line != NULL && line != '\0')
-			add_history(line);
-		data = (t_data){0};
-		parse(line, &data);
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
 	}
+	if (i == n)
+		return (0);
+	return (s1[i] - s2[i]);
 }

@@ -1,31 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/08 12:29:39 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/03/08 12:29:42 by aelbasri         ###   ########.fr       */
+/*   Created: 2023/11/03 08:38:35 by aelbasri          #+#    #+#             */
+/*   Updated: 2023/11/13 10:05:11 by aelbasri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av, char **env)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	t_data	 data;
-	char	*line;
+	size_t	i;
+	size_t	j;
+	char	*str;
 
-	(void)ac;
-	(void)av;
-	(void)env;
-	while (1)
-	{
-		line = readline("\033[1;32m > myMiniSh-1.0$ \033[0m");
-		if (line != NULL && line != '\0')
-			add_history(line);
-		data = (t_data){0};
-		parse(line, &data);
-	}
+	if (!s1 || !s2)
+		return (NULL);
+	i = ft_strlen(s1) + ft_strlen(s2);
+	str = (char *)malloc((i + 1) * sizeof(char));
+	if (!str)
+		return (NULL);
+	j = 0;
+	while (*s1)
+		str[j++] = *(s1++);
+	while (*s2)
+		str[j++] = *(s2++);
+	str[j] = '\0';
+	return (str);
 }

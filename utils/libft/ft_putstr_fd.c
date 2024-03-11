@@ -1,31 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/08 12:29:39 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/03/08 12:29:42 by aelbasri         ###   ########.fr       */
+/*   Created: 2023/11/04 12:55:59 by aelbasri          #+#    #+#             */
+/*   Updated: 2023/11/04 13:39:41 by aelbasri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av, char **env)
+void	ft_putstr_fd(char *s, int fd)
 {
-	t_data	 data;
-	char	*line;
+	int	i;
 
-	(void)ac;
-	(void)av;
-	(void)env;
-	while (1)
-	{
-		line = readline("\033[1;32m > myMiniSh-1.0$ \033[0m");
-		if (line != NULL && line != '\0')
-			add_history(line);
-		data = (t_data){0};
-		parse(line, &data);
-	}
+	i = ft_strlen(s);	
+	write(fd, s, i);
+	write (fd, "\n", 1);
 }

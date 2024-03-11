@@ -1,31 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/08 12:29:39 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/03/08 12:29:42 by aelbasri         ###   ########.fr       */
+/*   Created: 2023/11/02 07:27:36 by aelbasri          #+#    #+#             */
+/*   Updated: 2023/11/13 10:04:53 by aelbasri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av, char **env)
+char	*ft_strdup(const char *s)
 {
-	t_data	 data;
-	char	*line;
+	char	*str;
+	size_t	i;
+	size_t	j;
 
-	(void)ac;
-	(void)av;
-	(void)env;
-	while (1)
+	if (s == NULL)
+		return (NULL);
+	i = ft_strlen(s);
+	str = (char *)malloc((i + 1) * sizeof(char));
+	if (!str)
+		return (NULL);
+	j = 0;
+	while (i > j && s[j] != '\n')
 	{
-		line = readline("\033[1;32m > myMiniSh-1.0$ \033[0m");
-		if (line != NULL && line != '\0')
-			add_history(line);
-		data = (t_data){0};
-		parse(line, &data);
+		str[j] = s[j];
+		j++;
 	}
+	str[j] = '\0';
+	return (str);
 }

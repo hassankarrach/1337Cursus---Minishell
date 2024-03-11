@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/08 12:29:39 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/03/08 12:29:42 by aelbasri         ###   ########.fr       */
+/*   Created: 2023/10/30 17:12:07 by aelbasri          #+#    #+#             */
+/*   Updated: 2023/10/30 17:40:15 by aelbasri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(int ac, char **av, char **env)
+size_t	ft_strlen(const char *s)
 {
-	t_data	 data;
-	char	*line;
+	size_t	i;
 
-	(void)ac;
-	(void)av;
-	(void)env;
-	while (1)
-	{
-		line = readline("\033[1;32m > myMiniSh-1.0$ \033[0m");
-		if (line != NULL && line != '\0')
-			add_history(line);
-		data = (t_data){0};
-		parse(line, &data);
-	}
+	i = 0;
+	while (s[i] != '\0')
+		i++;
+	return (i);
 }
