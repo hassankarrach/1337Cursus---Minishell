@@ -20,11 +20,15 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+# define GREEN "\033[1;32m"
+# define RED "\033[1;31m"
+
 typedef struct  s_data
 {
-    int pipes_nbr;
+    int     pipes_nbr;
+    char    **my_env;
 } t_data;
 
-void	parse(char *line, t_);
+void	parse(char *line, t_data *data);
 
 #endif

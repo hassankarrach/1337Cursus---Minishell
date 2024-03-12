@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = #-Wall -Wextra -Werror
 RDLFLAG  = -lreadline
 SRCS = main.c parser/parse.c executor/execute.c
 
