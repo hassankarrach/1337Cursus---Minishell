@@ -14,10 +14,13 @@
 
 int	check_just_spaces(char *line)
 {
-	while (*line)
+	int	i;
+
+	i = 0;
+	while (line[i])
 	{
-		if (*line != ' ' && *line == '\t' && *line == '\n')
-			return (0)
+		if (line[i] != ' ' && line[i] != '\t' && line[i] != '\n')
+			return (0);
 		line++;
 	}
 	return (1);
@@ -27,7 +30,7 @@ int	count_env(char **env)
 {
 	int	i;
 
-	i == 0;
+	i = 0;
 	while (env[i] != NULL)
 		i++;
 	return (i);
@@ -37,25 +40,21 @@ void	setup_environment(char **env, t_data *data)
 {
 	int		i;
 	int		j;
-	char	len;
+	int		len;
 
-	data->my_env = (char **)malloc((count_env + 1) * sizeof(char *));
-	if (!data->env)
+	data->my_env = (char **)malloc(sizeof(char *) * (count_env(env) + 1));
+	if (!(data->my_env))
 	{
 		ft_putstr_fd("\033[1;31mmalloc_error : setup environment \033[0m", 2);
 		exit(1);
 	}
 	i = 0;
-	while  (env[i])
+	while  (env[i] != NULL)
 	{
-		j = 0;
-		len = ft_strlen();
-		while (env[i][j] != 0)
-		{
-			data =
-			j++;
-		}
+		(data->my_env)[i] = ft_strdup(env[i]);
+		i++;
 	}
+	(data->my_env)[i] = NULL;
 }
 
 int	main(int ac, char **av, char **env)
@@ -66,9 +65,9 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		data = (t_data){0};
-		setup_environment(env, data);
+		setup_environment(env, &data);
 		line = readline("\033[1;32m > myMiniSh-1.0$ \033[0m");
-		if (!line || check_just_spaces(line) || line[0] == '\0')
+		if (!line || check_just_spaces(line) == 1 || line[0] == '\0')
 			continue ;
 		if (line != NULL)
 			add_history(line);

@@ -1,8 +1,8 @@
 CFLAGS = #-Wall -Wextra -Werror
 RDLFLAG  = -lreadline
-SRCS = main.c parser/parse.c executor/execute.c
+SRCS = main.c parser/parse.c executor/execute.c utils/libft/ft_putstr_fd.c utils/libft/ft_split.c utils/libft/ft_strdup.c utils/libft/ft_strjoin.c utils/libft/ft_strlen.c utils/libft/ft_strncmp.c
 
-HEADERS = minishell.h
+HEADERS = minishell.h utils/libft/libft.h
 NAME = minishell
 OBJS = $(SRCS:.c=.o)
 
