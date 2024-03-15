@@ -1,18 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   tokenizer.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/08 09:46:02 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/03/08 09:46:08 by aelbasri         ###   ########.fr       */
+/*   Created: 2024/03/15 17:39:50 by aelbasri          #+#    #+#             */
+/*   Updated: 2024/03/15 17:39:59 by aelbasri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
-
-void	parse(char *line, t_data *data)
+typedef enum e_token
 {
-	
-}
+	WORD;
+	PIP;
+    O_AND;
+    O_OR;
+	RED_IN;
+    RED_OUT;
+	APPEND;
+} t_token;
+
+char	get_token(char *str);

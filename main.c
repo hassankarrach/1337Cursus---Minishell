@@ -71,7 +71,8 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		if (line != NULL)
 			add_history(line);
+		tokenizer(linr, &data);
+		parse(line, &data);
 		// printf("%s", line);
-		// parse(line, &data);
 	}
 }
