@@ -10,15 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-typedef enum e_token
+typedef enum
 {
-	WORD;
-	PIP;
-    O_AND;
-    O_OR;
-	RED_IN;
-    RED_OUT;
-	APPEND;
-} t_token;
+	WORD,
+	PIP,
+    O_AND,
+    O_OR,
+	RED_IN,
+    RED_OUT,
+	APPEND,
+	HERDOC
+} token;
 
-char	get_token(char *str);
+token	get_token(char *str);

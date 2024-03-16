@@ -45,7 +45,7 @@ void	setup_environment(char **env, t_data *data)
 	data->my_env = (char **)malloc(sizeof(char *) * (count_env(env) + 1));
 	if (!(data->my_env))
 	{
-		ft_putstr_fd("\033[1;31mmalloc_error : setup environment \033[0m", 2);
+		ft_putstr_fd("\033[1;31mError: malloc: setup environment \033[0m", 2);
 		exit(1);
 	}
 	i = 0;
@@ -57,22 +57,39 @@ void	setup_environment(char **env, t_data *data)
 	(data->my_env)[i] = NULL;
 }
 
+void	_error(int	i)
+{
+	if (i == 0)
+		ft_putstr_fd("Error: unclosed quote", 2);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_data	 data;
 	char	*line;
 
+	if (ac != 1)
+	{
+		ft_putstr_fd("Error: invalid arguments", 2);
+		exit(1); 
+	}
 	while (1)
 	{
 		data = (t_data){0};
 		setup_environment(env, &data);
 		line = readline("\033[1;32m > myMiniSh-1.0$ \033[0m");
-		if (!line || check_just_spaces(line) == 1 || line[0] == '\0')
+		if (line == NULL)
+			exit(0);
+		if (check_just_spaces(line) == 1 || line[0] == '\0')
 			continue ;
 		if (line != NULL)
 			add_history(line);
-		tokenizer(linr, &data);
-		parse(line, &data);
+		// tokenizer(linr, &data);
+		if (parse(line, &data) == 0)
+		{
+			_error(data.error);
+			continue;
+		}
 		// printf("%s", line);
 	}
 }

@@ -21,16 +21,26 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "./utils/libft/libft.h"
+# include "tokenizer/tokenizer.h"
 
 # define GREEN "\033[1;32m"
 # define RED "\033[1;31m"
 
 typedef struct  s_data
 {
+    int		error;
     int     pipes_nbr;
     char    **my_env;
 } t_data;
 
-void	parse(char *line, t_data *data);
+// typedef struct s_tree
+// {
+//     int type;
+//     struct s_tree *left;
+//     struct s_tree *right;
+// } t_tree;
+
+
+int	parse(char *line, t_data *data);
 
 #endif
