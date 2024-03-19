@@ -42,5 +42,6 @@ typedef struct  s_data
 
 
 int	parse(char *line, t_data *data);
+int	check_just_spaces(char *line, char *limiter) ;
 
 #endif
