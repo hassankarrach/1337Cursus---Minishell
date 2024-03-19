@@ -12,11 +12,12 @@
 
 #include "minishell.h"
 
-int	check_just_spaces(char *line)
+int	check_just_spaces(char *line, char *limiter)
 {
 	int	i;
 
 	i = 0;
+	(void)limiter;
 	while (line[i])
 	{
 		if (line[i] != ' ' && line[i] != '\t' && line[i] != '\n')
@@ -36,31 +37,31 @@ int	count_env(char **env)
 	return (i);
 }
 
-void	setup_environment(char **env, t_data *data)
+void	setup_environment(char **envp, t_data *data)
 {
-	int		i;
-	int		j;
-	int		len;
+	t_environment	*env;
+	
 
-	data->my_env = (char **)malloc(sizeof(char *) * (count_env(env) + 1));
-	if (!(data->my_env))
-	{
-		ft_putstr_fd("\033[1;31mError: malloc: setup environment \033[0m", 2);
-		exit(1);
-	}
-	i = 0;
-	while  (env[i] != NULL)
-	{
-		(data->my_env)[i] = ft_strdup(env[i]);
-		i++;
-	}
-	(data->my_env)[i] = NULL;
+	env = malloc(sizeof(t_environment));
+	while (envp[i])
+	{}
 }
+
+// ft_putstr_fd("\033[1;31mError: malloc: setup environment \033[0m", 2);
+// 		exit(1);
 
 void	_error(int	i)
 {
 	if (i == 0)
 		ft_putstr_fd("Error: unclosed quote", 2);
+	else if (i == 1)
+		ft_putstr_fd("Error: syntax error near unexpected token '|'", 2);
+	else if (i == 2)
+		ft_putstr_fd("Error: unclosed pipe", 2);
+	else if (i == 3)
+		ft_putstr_fd("Error: syntax error near unexpected token '||' or '&&'", 2);
+	else if (i == 4)
+		ft_putstr_fd("Error: unclosed token", 2);
 }
 
 int	main(int ac, char **av, char **env)
@@ -68,6 +69,7 @@ int	main(int ac, char **av, char **env)
 	t_data	 data;
 	char	*line;
 
+	(void)av;
 	if (ac != 1)
 	{
 		ft_putstr_fd("Error: invalid arguments", 2);
@@ -80,7 +82,7 @@ int	main(int ac, char **av, char **env)
 		line = readline("\033[1;32m > myMiniSh-1.0$ \033[0m");
 		if (line == NULL)
 			exit(0);
-		if (check_just_spaces(line) == 1 || line[0] == '\0')
+		if (check_just_spaces(line, "\0") == 1 || line[0] == '\0')
 			continue ;
 		if (line != NULL)
 			add_history(line);
@@ -90,6 +92,7 @@ int	main(int ac, char **av, char **env)
 			_error(data.error);
 			continue;
 		}
+		execute(data);
 		// printf("%s", line);
 	}
 }

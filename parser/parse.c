@@ -53,7 +53,7 @@ int	check_logical_symboles(char *line, int i, t_data *data, char *token)
 	{
 		if (ft_strncmp((line + i), token, ft_strlen(token)) == 0)
 		{
-			if (check_just_spaces((line + i + len), token) == 1 || line[i + len] == '\0')
+			if (check_just_spaces((line + i + len), token) == 1)
 			{
 				data->error = 4;
 				return (0);
@@ -73,7 +73,7 @@ int	check_pipe(char *line, int i, t_data *data)
 	}
 	while (line[i] != '\0')
 	{
-		if (line[i] == '|' && line[i + 1] != '|')
+		if (line[i] == '|' && line[i + 1] != '|' && line[i - 1] != '|')
 		{
 			if (check_just_spaces((line + i), "|") == 1 || line[i + 1] == '\0')
 			{
@@ -83,7 +83,7 @@ int	check_pipe(char *line, int i, t_data *data)
 		}
 		i++;
 	}
-	return (1);
+	return (1) ;
 }
 
 int	parse(char *line, t_data *data)
