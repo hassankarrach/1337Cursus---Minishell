@@ -37,14 +37,64 @@ int	count_env(char **env)
 	return (i);
 }
 
+t_environment	*new_env(char *key, char *value)
+{
+	t_environment	*v_env;
+
+	v_env = malloc(sizeof(t_environment));
+	if (!v_env)
+		return (NULL);
+	v_env->key = key;
+	v_env->value = value;
+	v_env->next = NULL;
+	return (v_env);
+}
+
+char	*ft_strdup_key(const char *s)
+{
+	int		i;
+	char	*str;
+	int		j;
+
+	i = 0;
+	if (s == NULL)
+		return (NULL);
+	while (s[i] != '=')
+		i++;
+	str = (char *)malloc(sizeof(char) * (i + 1));
+	if (!str)
+		return (NULL);
+	j = 0;
+	while (j < i && s[j] != 0)
+	{
+		str[j] = s[j];
+		j++;
+	}
+	str[j] = '\0';
+	return (str);
+}
+
 void	setup_environment(char **envp, t_data *data)
 {
-	t_environment	*env;
-	
+	int				i;
+	char			*h_key;
+	char			*h_value;
+	t_environment	*tmp;
 
-	env = malloc(sizeof(t_environment));
-	while (envp[i])
-	{}
+
+	h_key = ft_strdup_key(envp[0]);
+	h_value = ft_strdup(*(envp) + (ft_strlen(h_key) + 1));
+	data->environment = new_env(h_key, h_value);
+	tmp = data->environment;
+	i = 1;
+	while (envp[i] != NULL)
+	{
+		h_key = ft_strdup_key(envp[i]);
+		h_value = ft_strdup(*(envp + i) + (ft_strlen(h_key) + 1));
+		tmp->next = new_env(h_key, h_value);
+		tmp = tmp->next;
+		i++;
+	}
 }
 
 // ft_putstr_fd("\033[1;31mError: malloc: setup environment \033[0m", 2);
@@ -68,6 +118,7 @@ int	main(int ac, char **av, char **env)
 {
 	t_data	 data;
 	char	*line;
+	t_environment *tmp;
 
 	(void)av;
 	if (ac != 1)
@@ -92,7 +143,7 @@ int	main(int ac, char **av, char **env)
 			_error(data.error);
 			continue;
 		}
-		execute(data);
+		// execute(data);
 		// printf("%s", line);
 	}
 }

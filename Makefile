@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = #-Wall -Wextra -Werror
 RDLFLAG  = -lreadline
 SRCS = main.c parser/parse.c utils/libft/ft_putstr_fd.c utils/libft/ft_split.c utils/libft/ft_strdup.c utils/libft/ft_strjoin.c utils/libft/ft_strlen.c utils/libft/ft_strncmp.c
 

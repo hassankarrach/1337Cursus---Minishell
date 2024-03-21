@@ -26,13 +26,21 @@
 # define GREEN "\033[1;32m"
 # define RED "\033[1;31m"
 
+typedef struct s_environment
+{
+    char	*key;
+	char	*value;
+    struct s_environment	*next;
+} t_environment;
+
 typedef struct  s_data
 {
-    int		error;
-    int     pipes_nbr;
-    char    **my_env;
-	t_environment	*envirnment;
+    int		        error;
+    int             pipes_nbr;
+    char            **my_env;
+	t_environment	*environment;
 } t_data;
+
 
 // typedef struct s_tree
 // {
@@ -41,12 +49,6 @@ typedef struct  s_data
 //     struct s_tree *right;
 // } t_tree;
 
-typedef struct s_environment
-{
-    char	*key;
-	char	*value;
-    struct s_environment	*next;
-} t_environment;
 
 int	parse(char *line, t_data *data);
 int	check_just_spaces(char *line, char *limiter) ;
