@@ -113,6 +113,19 @@ void	_error(int	i)
 	else if (i == 4)
 		ft_putstr_fd("Error: unclosed token", 2);
 }
+char	**ft_split_operators(char *line, t_data *data)
+{
+	
+}
+
+/* Tree implementation */
+void	grass(char *line, t_data *data)
+{
+	t_tree	*root;
+
+	root = data->root;
+		 
+}
 
 int	main(int ac, char **av, char **env)
 {
@@ -137,12 +150,12 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		if (line != NULL)
 			add_history(line);
-		// tokenizer(linr, &data);
 		if (parse(line, &data) == 0)
 		{
 			_error(data.error);
 			continue;
 		}
+		grass(line, data);
 		// execute(data);
 		// printf("%s", line);
 	}
