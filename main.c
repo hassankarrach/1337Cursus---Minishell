@@ -11,18 +11,24 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	check_just_spaces(char *line, char *limiter)
+// create new line without spaces at the beginning
+int	check_just_spaces(int flag, char **line, char *limiter)
 {
 	int	i;
 
 	i = 0;
 	(void)limiter;
-	while (line[i])
+	if (line == 0 || *line == 0)
+		return (1);
+	while ((*line)[i] != 0)
 	{
-		if (line[i] != ' ' && line[i] != '\t' && line[i] != '\n')
+		if ((*line)[i] != ' ' && (*line)[i] != '\t' && (*line)[i] != '\n')
+		{
+			if (flag == 1)
+				*line = ft_strdup((*line) + i);
 			return (0);
-		line++;
+		}
+		i++;
 	}
 	return (1);
 }
@@ -97,9 +103,6 @@ void	setup_environment(char **envp, t_data *data)
 	}
 }
 
-// ft_putstr_fd("\033[1;31mError: malloc: setup environment \033[0m", 2);
-// 		exit(1);
-
 void	_error(int	i)
 {
 	if (i == 0)
@@ -113,18 +116,84 @@ void	_error(int	i)
 	else if (i == 4)
 		ft_putstr_fd("Error: unclosed token", 2);
 }
-char	**ft_split_operators(char *line, t_data *data)
+
+t_line	*new_line(void *component)
 {
-	
+	t_line	*node;
+
+	node = malloc(sizeof(t_line));
+	if (!node)
+		return (NULL);
+	node->component = component;
+	node->next = NULL;
+	return (node);
 }
-
-/* Tree implementation */
-void	grass(char *line, t_data *data)
+// Duplicate parts of string using start and end (this function  can help you to split a string wit different separators just you have to know teh start and the end )
+char	*ft_strdup_parts(const char *s, int start, int end)
 {
-	t_tree	*root;
+	char	*str;
+	size_t	i;
+	size_t	j;
 
-	root = data->root;
-		 
+	if (s == NULL)
+		return (NULL);
+	str = (char *)malloc(((end - start) + 2) * sizeof(char));
+	if (!str)
+		return (NULL);
+	j = 0;
+	i = (end - start) + 1;
+	while (i > j && s[j] != '\0')
+	{
+		str[j] = s[start];
+		start++;
+		j++;
+	}
+	str[j] = '\0';
+	return (str);
+}
+// create a linked list to split commands with pipe (you can add && and || ) 
+void	setup_to_parse(char *line, t_data *data)
+{
+	int	i;
+	int	flag;
+	int	start;
+	t_line	*v_line;
+
+	flag = 0;
+	i = 0;
+	start = 0;
+	data->line = NULL;
+	while (line[i])
+	{
+		if(line[i] == '\"' || line[i] == '\'')
+		{
+			flag++;
+			if (flag == 2)
+				flag = 0;
+		}
+		if (flag == 0 && line[i] == '|')
+		{
+			if (data->line == 0)
+			{
+				data->line = new_line(ft_strdup_parts(line, start, i - 1));
+				start = i + 1;
+				v_line = data->line;
+			}
+			else
+			{
+		
+				v_line->next = new_line(ft_strdup_parts(line, start, i - 1));
+				start = i + 1;
+				v_line = v_line->next;
+			}
+		}
+		i++;
+	}
+	if (data->line == NULL)
+		data->line = new_line(ft_strdup_parts(line, start, i - 1));
+	else
+		v_line->next = new_line(ft_strdup_parts(line, start, i - 1));
+
 }
 
 int	main(int ac, char **av, char **env)
@@ -146,7 +215,8 @@ int	main(int ac, char **av, char **env)
 		line = readline("\033[1;32m > myMiniSh-1.0$ \033[0m");
 		if (line == NULL)
 			exit(0);
-		if (check_just_spaces(line, "\0") == 1 || line[0] == '\0')
+		int k = check_just_spaces(1, &line, "\0");
+		if (k == 1 || line[0] == '\0')
 			continue ;
 		if (line != NULL)
 			add_history(line);
@@ -155,7 +225,7 @@ int	main(int ac, char **av, char **env)
 			_error(data.error);
 			continue;
 		}
-		grass(line, data);
+		setup_to_parse(line, &data);
 		// execute(data);
 		// printf("%s", line);
 	}

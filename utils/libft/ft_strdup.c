@@ -25,7 +25,7 @@ char	*ft_strdup(const char *s)
 	if (!str)
 		return (NULL);
 	j = 0;
-	while (i > j && s[j] != '\n')
+	while (i > j && s[j] != '\0')
 	{
 		str[j] = s[j];
 		j++;

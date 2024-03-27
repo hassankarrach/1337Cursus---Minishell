@@ -28,29 +28,35 @@
 
 typedef struct s_environment
 {
-    char	*key;
+	char	*key;
 	char	*value;
-    struct s_environment	*next;
+	struct s_environment	*next;
 } t_environment;
 
-typedef struct  s_data
+typedef struct s_line
 {
-    int				error;
-    int				pipes_nbr;
-    char			**my_env;
+	char	*component;
+	struct s_line *next;
+} t_line;
+
+typedef struct s_data
+{
+	int				error;
+	int				pipes_nbr;
+	char			**my_env;
 	t_environment	*environment;
-    t_tree			*root;
+	t_line			*line;
 } t_data;
 
-typedef struct s_tree
-{
-    char			*type;
-    struct s_tree	*left;
-    struct s_tree	*right;
-} t_tree;
+// typedef struct s_tree
+// {
+//     char			*type;
+//     struct s_tree	*left;
+//     struct s_tree	*right;
+// } t_tree;
 
 
 int	parse(char *line, t_data *data);
-int	check_just_spaces(char *line, char *limiter) ;
+int	check_just_spaces(int flag, char **line, char *limiter) ;
 
 #endif

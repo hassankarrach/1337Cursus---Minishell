@@ -20,7 +20,6 @@ typedef struct s_list
 {
 	int				data;
 	struct s_list	*next;
-	struct s_list	*prev;
 }	t_stack;
 
 void	ft_free(char **splited);
