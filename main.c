@@ -181,7 +181,6 @@ void	setup_to_parse(char *line, t_data *data)
 			}
 			else
 			{
-		
 				v_line->next = new_line(ft_strdup_parts(line, start, i - 1));
 				start = i + 1;
 				v_line = v_line->next;
@@ -215,8 +214,7 @@ int	main(int ac, char **av, char **env)
 		line = readline("\033[1;32m > myMiniSh-1.0$ \033[0m");
 		if (line == NULL)
 			exit(0);
-		int k = check_just_spaces(1, &line, "\0");
-		if (k == 1 || line[0] == '\0')
+		if (check_just_spaces(1, &line, "\0") || line[0] == '\0')
 			continue ;
 		if (line != NULL)
 			add_history(line);
