@@ -46,14 +46,54 @@ typedef struct s_data
 	char			**my_env;
 	t_environment	*environment;
 	t_line			*line;
+	t_tree			*root;
 } t_data;
 
-// typedef struct s_tree
-// {
-//     char			*type;
-//     struct s_tree	*left;
-//     struct s_tree	*right;
-// } t_tree;
+typedef struct s_tree
+{
+	int	type;
+    struct s_tree	*left;
+    struct s_tree	*right;
+} t_tree;
+
+typedef struct s_logical_operations
+{
+	int	type;
+	struct s_logical_operations	*left;
+    struct s_logical_operations	*right;
+} l_op;
+
+typedef struct s_block
+{
+	int	type;
+	struct s_block	*left;
+    struct s_block	*right;
+} t_block;
+
+typedef struct s_cmd
+{
+	int	type;
+	union
+	{
+		char	*cmd;
+		char	**args;
+		int		in_f;
+		int		out_f;
+	};
+	struct s_cmd	*left;
+    struct s_cmd	*right;
+} t_cmd;
+
+typedef struct s_pip
+{
+	int	type;
+	union
+	{
+		int		fd[2];
+	};
+	struct s_pip	*left;
+    struct s_pip	*right;
+} t_pip;
 
 
 int	parse(char *line, t_data *data);

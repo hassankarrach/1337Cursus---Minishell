@@ -79,7 +79,6 @@ char	*ft_strdup_key(const char *s)
 	str[j] = '\0';
 	return (str);
 }
-
 void	setup_environment(char **envp, t_data *data)
 {
 	int				i;
@@ -195,6 +194,7 @@ void	setup_to_parse(char *line, t_data *data)
 
 }
 
+
 int	main(int ac, char **av, char **env)
 {
 	t_data	 data;
@@ -224,7 +224,7 @@ int	main(int ac, char **av, char **env)
 			continue;
 		}
 		setup_to_parse(line, &data);
-		// execute(data);
+		execute(data);
 		// printf("%s", line);
 	}
 }

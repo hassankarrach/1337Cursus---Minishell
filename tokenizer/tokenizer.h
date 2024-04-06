@@ -19,7 +19,9 @@ typedef enum
 	RED_IN,
     RED_OUT,
 	APPEND,
-	HERDOC
+	HERDOC,
+	L_BLOCK,
+	R_BLOCK,
 } token;
 
 token	get_token(char *str);
