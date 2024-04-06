@@ -224,7 +224,11 @@ int	main(int ac, char **av, char **env)
 			continue;
 		}
 		setup_to_parse(line, &data);
-		execute(data);
+		data.main_pid = fork();
+		if (!data.main_pid)
+			execute(data);
+		else
+			wait(&(data.status));
 		// printf("%s", line);
 	}
 }

@@ -13,6 +13,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <sys/types.h>
+# include <sys/wait.h>
 # include <stdio.h>
 # include <stddef.h>
 # include <string.h>
@@ -44,6 +46,8 @@ typedef struct s_data
 	int				error;
 	int				pipes_nbr;
 	char			**my_env;
+    int             *status;
+    pid_t           main_pid;
 	t_environment	*environment;
 	t_line			*line;
 	t_tree			*root;
@@ -62,6 +66,14 @@ typedef struct s_logical_operations
 	struct s_logical_operations	*left;
     struct s_logical_operations	*right;
 } l_op;
+
+typedef struct s_redir
+{
+	int	type;
+    char *file_name;
+	struct s_redir	*left;
+    struct s_redir	*right;
+} t_redir;
 
 typedef struct s_block
 {
@@ -87,10 +99,7 @@ typedef struct s_cmd
 typedef struct s_pip
 {
 	int	type;
-	union
-	{
-		int		fd[2];
-	};
+	int		fd[2];
 	struct s_pip	*left;
     struct s_pip	*right;
 } t_pip;
