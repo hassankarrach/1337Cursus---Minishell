@@ -10,50 +10,113 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int	exec_cmd(t_tree *node);
-int	exec_pip(t_tree *node);
-int	exec_block(t_tree *node);
+#include "../minishell.h"
 
-void	exec_redir(t_tree *node)
+static int	exec_block(t_tree *node)
 {
-	if (node->type == RED_IN)
-	{
-		close(0);
-		open(data->file_name, O_RDONLY);
-	}
+	int		status;
+	t_block	*block;
+	pid_t	id;
+
+	block = (t_block *)node;
+	id = fork();
+	if (id == 0)
+		status = specify_types(block->child);
 	else
-	{
-		close(1);
-		open(data->file_name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	}
+		waitpid(id, &status, 0);
+	return(status);
 }
 
-int	exec_and_or(t_tree *node)
+static int	exec_and_or(t_tree *node)
 {
 	int	status;
+	int id;
+	l_op *and_or;
 
-	if (node->type == O_AND)
+	and_or = (l_op *)node;
+	if (and_or->type == O_AND)
 	{
-		status = specify_types(node->left);
-		if (status == 0)
-			status = specify_types(node->right);
+		id = fork();
+		if (id == 0)
+			status = specify_types(and_or->left);
+		else
+		{
+			waitpid(id, &status, 0);
+			if (status == 0)
+				status = specify_types(and_or->right);
+		}
 	}
-	else if (node->type == O_OR)
+	else if (and_or->type == O_OR)
 	{
-		status = specify_types(node->left);
-		if (status != 0)
-			status = specify_types(node->right);
+		id = fork();
+		if (id == 0)
+			status = specify_types(and_or->left);
+		else
+		{
+			waitpid(id, &status, 0);
+			if (status != 0)
+				status = specify_types(and_or->right);
+		}
 	}
 	return (status);
 }
 
+static int	exec_pipe(t_tree *node)
+{
+	pid_t	id;
+	t_pipe	*va_pipe;
+	int		status;
+
+	va_pipe = (t_pipe *)node;
+	pipe(va_pipe->pipe_fd);
+	id = fork();
+	if (id == 0)
+	{
+		dup2(va_pipe->pipe_fd[1], 1);
+		status = specify_types(va_pipe->left);
+	}
+	else
+	{
+		waitpid(id, &status,0);
+		dup2(va_pipe->pipe_fd[0], 0);
+		status = specify_types(va_pipe->right);
+	}
+	return(status);
+}
+
+static void	exec_cmd(t_tree *node)
+{
+	int		status;
+	t_cmd	*cmd;
+	
+	cmd = (t_cmd *)node;
+	check_cmd(cmd->args);
+	execve((cmd->args)[0], cmd->args, cmd->env);
+}
+
+static void	exec_redir(t_tree *node)
+{
+	t_redir *redir;
+
+	redir = (t_redir *)node;
+	if (redir->type == RED_IN)
+	{
+		close(0);
+		open(redir->file_name, O_RDONLY);
+	}
+	else
+	{
+		close(1);
+		open(redir->file_name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	}
+}
 
 int	specify_types(t_tree *node)
 {
 	if (node->type == WORD)
-		return (exec_cmd(node));
+		exec_cmd(node);
 	else if (node->type == PIP)
-		return (exec_pip(node));
+		return (exec_pipe(node));
 	else if (node->type == RED_IN || node->type == RED_OUT)
 		exec_redir(node);
 	else if (node->type ==  O_AND || node->type == O_OR)
@@ -65,7 +128,7 @@ int	specify_types(t_tree *node)
 
 void	execute(t_data *data)
 {
-	if (!(data.root))
+	if (!(data->root))
 		return ;
-	data.status = specify_types(data.root);
+	data->status = specify_types(data->root);
 }

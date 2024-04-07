@@ -16,6 +16,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <stdio.h>
+# include <fcntl.h>
 # include <stddef.h>
 # include <string.h>
 # include <stdlib.h>
@@ -41,24 +42,22 @@ typedef struct s_line
 	struct s_line *next;
 } t_line;
 
-typedef struct s_data
+typedef struct s_tree
 {
+	int	type;
+} t_tree;
+
+typedef struct s_data
+{	
 	int				error;
 	int				pipes_nbr;
 	char			**my_env;
-    int             *status;
-    pid_t           main_pid;
+	int				status;
+	pid_t			main_pid;
 	t_environment	*environment;
 	t_line			*line;
 	t_tree			*root;
 } t_data;
-
-typedef struct s_tree
-{
-	int	type;
-    struct s_tree	*left;
-    struct s_tree	*right;
-} t_tree;
 
 typedef struct s_logical_operations
 {
@@ -71,41 +70,35 @@ typedef struct s_redir
 {
 	int	type;
     char *file_name;
-	struct s_redir	*left;
-    struct s_redir	*right;
+	struct s_redir	*child;
 } t_redir;
 
 typedef struct s_block
 {
 	int	type;
-	struct s_block	*left;
-    struct s_block	*right;
+	struct s_block	*child;
 } t_block;
 
 typedef struct s_cmd
 {
 	int	type;
-	union
-	{
-		char	*cmd;
-		char	**args;
-		int		in_f;
-		int		out_f;
-	};
-	struct s_cmd	*left;
-    struct s_cmd	*right;
+	char	**args;
+	char	**env;
 } t_cmd;
 
-typedef struct s_pip
+typedef struct s_pipe
 {
 	int	type;
-	int		fd[2];
-	struct s_pip	*left;
-    struct s_pip	*right;
-} t_pip;
+	int	pipe_fd[2];
+	struct s_pipe	*left;
+    struct s_pipe	*right;
+} t_pipe;
 
 
-int	parse(char *line, t_data *data);
-int	check_just_spaces(int flag, char **line, char *limiter) ;
+int		parse(char *line, t_data *data);
+int		check_just_spaces(int flag, char **line, char *limiter);
+void	execute(t_data *data);
+int		specify_types(t_tree *node);
+void	check_cmd(char **args);
 
 #endif

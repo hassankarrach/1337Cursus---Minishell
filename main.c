@@ -194,7 +194,6 @@ void	setup_to_parse(char *line, t_data *data)
 
 }
 
-
 int	main(int ac, char **av, char **env)
 {
 	t_data	 data;
@@ -228,7 +227,7 @@ int	main(int ac, char **av, char **env)
 		if (!data.main_pid)
 			execute(data);
 		else
-			wait(&(data.status));
+			waitpid(data.main_pid ,&(data.status), 0);
 		// printf("%s", line);
 	}
 }
