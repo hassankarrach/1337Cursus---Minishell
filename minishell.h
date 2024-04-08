@@ -83,7 +83,7 @@ typedef struct s_cmd
 {
 	int	type;
 	char	**args;
-	char	**env;
+	t_environment	*env;
 } t_cmd;
 
 typedef struct s_pipe
@@ -99,6 +99,6 @@ int		parse(char *line, t_data *data);
 int		check_just_spaces(int flag, char **line, char *limiter);
 void	execute(t_data *data);
 int		specify_types(t_tree *node);
-void	check_cmd(char **args);
+void check_cmd(char **args, t_environment *env);
 
 #endif

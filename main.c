@@ -225,7 +225,7 @@ int	main(int ac, char **av, char **env)
 		setup_to_parse(line, &data);
 		data.main_pid = fork();
 		if (!data.main_pid)
-			execute(data);
+			execute(&data);
 		else
 			waitpid(data.main_pid ,&(data.status), 0);
 		// printf("%s", line);

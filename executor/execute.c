@@ -21,7 +21,7 @@ static int	exec_block(t_tree *node)
 	block = (t_block *)node;
 	id = fork();
 	if (id == 0)
-		status = specify_types(block->child);
+		status = specify_types((t_tree *)block->child);
 	else
 		waitpid(id, &status, 0);
 	return(status);
@@ -38,24 +38,24 @@ static int	exec_and_or(t_tree *node)
 	{
 		id = fork();
 		if (id == 0)
-			status = specify_types(and_or->left);
+			status = specify_types((t_tree *)and_or->left);
 		else
 		{
 			waitpid(id, &status, 0);
 			if (status == 0)
-				status = specify_types(and_or->right);
+				status = specify_types((t_tree *)and_or->right);
 		}
 	}
 	else if (and_or->type == O_OR)
 	{
 		id = fork();
 		if (id == 0)
-			status = specify_types(and_or->left);
+			status = specify_types((t_tree *)and_or->left);
 		else
 		{
 			waitpid(id, &status, 0);
 			if (status != 0)
-				status = specify_types(and_or->right);
+				status = specify_types((t_tree *)and_or->right);
 		}
 	}
 	return (status);
@@ -73,13 +73,13 @@ static int	exec_pipe(t_tree *node)
 	if (id == 0)
 	{
 		dup2(va_pipe->pipe_fd[1], 1);
-		status = specify_types(va_pipe->left);
+		status = specify_types((t_tree *)va_pipe->left);
 	}
 	else
 	{
 		waitpid(id, &status,0);
 		dup2(va_pipe->pipe_fd[0], 0);
-		status = specify_types(va_pipe->right);
+		status = specify_types((t_tree *)va_pipe->right);
 	}
 	return(status);
 }
@@ -90,7 +90,7 @@ static void	exec_cmd(t_tree *node)
 	t_cmd	*cmd;
 	
 	cmd = (t_cmd *)node;
-	check_cmd(cmd->args);
+	check_cmd(cmd->args, cmd->env);
 	execve((cmd->args)[0], cmd->args, cmd->env);
 }
 
