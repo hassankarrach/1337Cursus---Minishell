@@ -19,9 +19,9 @@ all : $(NAME)
 
 # Compiling
 .c.o : 
-	cc $(CFLAGS) -c -o $@ $^
+	cc -g $(CFLAGS) -c -o $@ $^
 $(NAME) : $(OBJS)
-	cc $(CFLAGS) $(RDLFLAG) $(OBJS) -o $(NAME) 
+	cc -g $(CFLAGS) $(RDLFLAG) $(OBJS) -o $(NAME) 
 
 # Cleaning
 clean : 
