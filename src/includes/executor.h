@@ -13,18 +13,12 @@
 #ifndef EXECUTOR_H
 # define EXECUTOR_H
 
-// typedef struct s_environment
-// {
-// 	char	*key;
-// 	char	*value;
-// 	struct s_environment	*next;
-// } t_environment;
-
-typedef struct s_tree
+typedef struct s_environment
 {
-	int	type;
-} t_tree;
-
+	char	*key;
+	char	*value;
+	struct s_environment	*next;
+} t_environment;
 
 void	execute();
 int		specify_types(t_tree *node);

@@ -16,6 +16,7 @@ typedef enum tokens{
     TOKEN_SINGLE_QUOTE,
     TOKEN_VARIABLE,
     TOKEN_OPENING_PARENTHESES,
+    TOKEN_BLOCK,
     TOKEN_CLOSING_PARENTHESES
 }               token_type;
 

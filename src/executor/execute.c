@@ -90,8 +90,8 @@ static void	exec_cmd(t_tree *node)
 	t_cmd	*cmd;
 	
 	cmd = (t_cmd *)node;
-	check_cmd(cmd->args, cmd->env);
-	execve((cmd->args)[0], cmd->args, cmd->env);
+	check_cmd(cmd->args, global_minishell.env);
+	execve((cmd->args)[0], cmd->args, global_minishell.env);
 }
 
 static void	exec_redir(t_tree *node)
@@ -121,7 +121,7 @@ int	specify_types(t_tree *node)
 		exec_redir(node);
 	else if (node->type ==  TOKEN_AND || node->type == TOKEN_OR)
 		return (exec_and_or(node));
-	else if (node->type == TOKEN_OPENING_PARENTHESES)
+	else if (node->type == TOKEN_BLOCK)
 		return (exec_block(node));
 	return (0);
 }
