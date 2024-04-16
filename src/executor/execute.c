@@ -72,14 +72,18 @@ static int	exec_pipe(t_tree *node)
 	id = fork();
 	if (id == 0)
 	{
+		close(1);
+		close(va_pipe->pipe_fd[0]);
 		dup2(va_pipe->pipe_fd[1], 1);
-		status = specify_types((t_tree *)va_pipe->left);
+		status = specify_types((t_tree *)(va_pipe->left));
 	}
 	else
 	{
 		waitpid(id, &status,0);
+		close(0);
+		close(va_pipe->pipe_fd[1]);
 		dup2(va_pipe->pipe_fd[0], 0);
-		status = specify_types((t_tree *)va_pipe->right);
+		status = specify_types((t_tree *)(va_pipe->right));
 	}
 	return(status);
 }
@@ -116,7 +120,9 @@ int	specify_types(t_tree *node)
 	if (node->type == TOKEN_WORD)
 		exec_cmd(node);
 	else if (node->type == TOKEN_PIPE)
+	{
 		return (exec_pipe(node));
+	}
 	else if (node->type == TOKEN_INPUT_REDIRECTION || node->type == TOKEN_OUTPUT_REDIRECTION)
 		exec_redir(node);
 	else if (node->type ==  TOKEN_AND || node->type == TOKEN_OR)
@@ -130,5 +136,6 @@ void	execute()
 {
 	if (!(global_minishell.root))
 		return ;
+	// printf("%d\n",(global_minishell.root)->type);
 	global_minishell.status = specify_types(global_minishell.root);
 }

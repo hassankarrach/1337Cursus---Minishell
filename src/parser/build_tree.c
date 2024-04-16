@@ -77,20 +77,43 @@ void	new_block(t_tree **root, t_tree *node)
 {
 	t_block *block;
 
-	block = malloc(sizeof(t_block *));
+	block = malloc(sizeof(t_block));
 	block->child = node;
+	block->type = TOKEN_BLOCK;
 	nodes_link((t_tree *)block, root);
 }
-void	new_redir(t_token **head, t_tree **root, t_tree *node)
+void	new_redir(t_token **head, t_tree **root, t_tree *node, int type)
 {
 	t_redir *redir;
 
-	redir = malloc(sizeof(t_redir *));
+	redir = malloc(sizeof(t_redir));
+	redir->type = type;
 	redir->child = node;
 	if ((*head)->next->type == TOKEN_WORD)
 		redir->file_name = (*head)->next->value;
-	(*head) = (*head)->next;
+	(*head) = (*head)->next->next;
 	nodes_link((t_tree *)redir, root);
+}
+void	new_pipe(t_tree **root)
+{
+	t_pipe	*n_pipe;
+
+	n_pipe = malloc(sizeof(t_pipe));
+	n_pipe->type = TOKEN_PIPE;
+	n_pipe->left = NULL;
+	n_pipe->right = NULL;
+	nodes_link((t_tree *)n_pipe, root);
+}
+
+void	new_op(t_tree **root, int type)
+{
+	l_op	*n_op;
+
+	n_op = malloc(sizeof(l_op));
+	n_op->type = type;
+	n_op->left = NULL;
+	n_op->right = NULL;
+	nodes_link((t_tree *)n_op, root);
 }
 /*================================================================*/
 // linking utils
@@ -100,6 +123,7 @@ void	logical_operations_link(l_op *n_op, t_tree **root)
 		n_op->left = *root;
 	else
 		n_op->right = *root;
+	*root = (t_tree *)n_op;
 }
 void	pipe_link(t_pipe *n_pipe, t_tree **root)
 {
@@ -107,6 +131,7 @@ void	pipe_link(t_pipe *n_pipe, t_tree **root)
 		n_pipe->left = *root;
 	else
 		n_pipe->right = *root;
+	*root = (t_tree *)n_pipe;
 }
 //1 principal function for link 
 void	nodes_link(t_tree *node, t_tree **root)
@@ -161,12 +186,11 @@ t_tree	*build_tree(t_token *head, int flag)
 
 	root = NULL;
 	tmp = NULL;
-	if(!head)
-		root = NULL;
 	while (head)
 	{
 		if (head->type == TOKEN_WORD)
 		{
+			// printf("hello");
 			new_cmd(&head, &root);
 			if (flag == 1)
 				return (root);
@@ -176,8 +200,20 @@ t_tree	*build_tree(t_token *head, int flag)
 		|| head->type == TOKEN_OUTPUT_REDIRECTION || head->type == TOKEN_HEREDOC)
 		{
 			tmp = build_tree(head->next->next, 1);
-			new_redir(&head, &root, tmp);
+			// printf("head => %d\n", head->type);
+			// printf("node => %d\n", tmp->type);
+			new_redir(&head, &root, tmp, head->type);
 			continue;
+		}
+		// TODO
+		else if (head->type == TOKEN_PIPE)
+			new_pipe(&root);
+		// TODO
+		else if (head->type == TOKEN_AND || head->type == TOKEN_OR)
+		{
+			// printf("here\n");
+			new_op(&root, head->type);
+			// printf("%d\n", root->type);
 		}
 		else if (head->type == TOKEN_OPENING_PARENTHESES)
 		{
@@ -188,6 +224,7 @@ t_tree	*build_tree(t_token *head, int flag)
 			break;
 		head = head->next;
 	}
+	// printf("%d\n", root->type);
 	return (root);
 }
 
