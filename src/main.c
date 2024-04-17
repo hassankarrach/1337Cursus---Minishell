@@ -64,6 +64,7 @@ void	setup_environment()
 
 int main(int argc, char **argv, char **env)
 {
+    l_op *tmp;
     // char *av[] = {"/usr/bin/ls", NULL};
     char *input;
     t_token *head = NULL;
@@ -86,6 +87,19 @@ int main(int argc, char **argv, char **env)
         head = ft_tokenize();
         setup_environment();
         global_minishell.root = build_tree(head, 0);
+        // if (global_minishell.root->type == TOKEN_BLOCK)
+        //     printf("TOKEN_BLOCK\n");
+        // tmp = ((l_op *)global_minishell.root);
+        // if (tmp->type == TOKEN_AND)
+        //     printf("TOKEN_AND\n");
+        // if (tmp->left->type == TOKEN_OR)
+        //     printf("TOKEN_OR\n");
+        // if (tmp->right->type == TOKEN_WORD)
+        //     printf("TOKEN_WORD\n");
+        //  if (((l_op *)(tmp->left))->left->type == TOKEN_WORD)
+        //     printf("TOKEN_WORD\n");
+        //  if (((l_op *)(tmp->left))->right->type == TOKEN_WORD)
+        //     printf("TOKEN_WORD\n");
         global_minishell.main_pid = fork();
         if (!global_minishell.main_pid)
 			execute();
