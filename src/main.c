@@ -86,14 +86,6 @@ int main(int argc, char **argv, char **env)
         head = ft_tokenize();
         setup_environment();
         global_minishell.root = build_tree(head, 0);
-        // if ((global_minishell.root)->type == TOKEN_OR)
-        //     printf("TOKEN_OR\n");
-        // if ((global_minishell.root)->type == TOKEN_AND)
-        // {
-        //     printf("TOKEN_AND\n");
-        //     printf("%d\n", ((l_op *)(global_minishell.root))->left->type);
-        //     printf("%d\n", ((l_op *)(global_minishell.root))->right->type);
-        // }
         global_minishell.main_pid = fork();
         if (!global_minishell.main_pid)
 			execute();

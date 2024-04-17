@@ -1,7 +1,7 @@
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 
-# define PROMPT "\033[1;32m > minishell-1.0$ \033[0m "
+# define PROMPT "> minishell-1.0$ "
 
 typedef enum tokens{
     TOKEN_WORD,

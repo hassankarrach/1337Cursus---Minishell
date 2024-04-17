@@ -29,7 +29,7 @@ static int	exec_block(t_tree *node)
 
 static int	exec_and_or(t_tree *node)
 {
-	int	status;
+	int	status = 0;
 	int id;
 	l_op *and_or;
 
@@ -38,7 +38,10 @@ static int	exec_and_or(t_tree *node)
 	{
 		id = fork();
 		if (id == 0)
+		{
 			status = specify_types((t_tree *)and_or->left);
+			exit(status);
+		}
 		else
 		{
 			waitpid(id, &status, 0);
@@ -50,7 +53,10 @@ static int	exec_and_or(t_tree *node)
 	{
 		id = fork();
 		if (id == 0)
+		{
 			status = specify_types((t_tree *)and_or->left);
+			exit(status);
+		}
 		else
 		{
 			waitpid(id, &status, 0);
@@ -72,7 +78,6 @@ static int	exec_pipe(t_tree *node)
 	id = fork();
 	if (id == 0)
 	{
-		close(1);
 		close(va_pipe->pipe_fd[0]);
 		dup2(va_pipe->pipe_fd[1], 1);
 		status = specify_types((t_tree *)(va_pipe->left));
@@ -80,7 +85,6 @@ static int	exec_pipe(t_tree *node)
 	else
 	{
 		waitpid(id, &status,0);
-		close(0);
 		close(va_pipe->pipe_fd[1]);
 		dup2(va_pipe->pipe_fd[0], 0);
 		status = specify_types((t_tree *)(va_pipe->right));
@@ -95,7 +99,8 @@ static void	exec_cmd(t_tree *node)
 	
 	cmd = (t_cmd *)node;
 	check_cmd(cmd->args, global_minishell.env);
-	execve((cmd->args)[0], cmd->args, global_minishell.env);
+	if (execve((cmd->args)[0], cmd->args, global_minishell.env) != 0)
+		exit(1);
 }
 
 static void	exec_redir(t_tree *node)
@@ -117,12 +122,11 @@ static void	exec_redir(t_tree *node)
 
 int	specify_types(t_tree *node)
 {
+	// printf("last %d\n", node->type);
 	if (node->type == TOKEN_WORD)
 		exec_cmd(node);
 	else if (node->type == TOKEN_PIPE)
-	{
 		return (exec_pipe(node));
-	}
 	else if (node->type == TOKEN_INPUT_REDIRECTION || node->type == TOKEN_OUTPUT_REDIRECTION)
 		exec_redir(node);
 	else if (node->type ==  TOKEN_AND || node->type == TOKEN_OR)
