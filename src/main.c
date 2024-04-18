@@ -87,6 +87,8 @@ int main(int argc, char **argv, char **env)
         head = ft_tokenize();
         setup_environment();
         global_minishell.root = build_tree(head, 0);
+		// printf("here == %d\n", (global_minishell.root)->type);
+        // printf("here == %d\n", ((t_redir *)global_minishell.root)->child->type);
         // if (global_minishell.root->type == TOKEN_BLOCK)
         //     printf("TOKEN_BLOCK\n");
         // tmp = ((l_op *)global_minishell.root);
@@ -105,6 +107,7 @@ int main(int argc, char **argv, char **env)
 			execute();
 		else
 			waitpid(global_minishell.main_pid ,&(global_minishell.status), 0);
+        // printf("%s\n",strerror(global_minishell.status));
     }
     return 0;
 }

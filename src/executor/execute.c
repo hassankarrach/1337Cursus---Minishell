@@ -97,6 +97,7 @@ static void	exec_cmd(t_tree *node)
 	int		status;
 	t_cmd	*cmd;
 	
+	// printf("ja khona l hna ??");
 	cmd = (t_cmd *)node;
 	check_cmd(cmd->args, global_minishell.env);
 	if (execve((cmd->args)[0], cmd->args, global_minishell.env) != 0)
@@ -111,12 +112,22 @@ static void	exec_redir(t_tree *node)
 	if (redir->type == TOKEN_INPUT_REDIRECTION)
 	{
 		close(0);
-		open(redir->file_name, O_RDONLY);
+		// printf("hello %s\n", redir->file_name);
+		open(redir->file_name, O_CREAT | O_RDONLY ,0644);
+		specify_types((t_tree *)redir->child);
+		// printf("%d\n", fd);
 	}
-	else
+	else if (redir->type == TOKEN_OUTPUT_REDIRECTION)
 	{
 		close(1);
 		open(redir->file_name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		specify_types((t_tree *)redir->child);
+	}
+	else if (redir->type == TOKEN_APPEND_REDIRECTION)
+	{
+		close(1);
+		open(redir->file_name, O_CREAT | O_WRONLY | O_APPEND, 0644);
+		specify_types((t_tree *)redir->child);
 	}
 }
 
@@ -127,7 +138,7 @@ int	specify_types(t_tree *node)
 		exec_cmd(node);
 	else if (node->type == TOKEN_PIPE)
 		return (exec_pipe(node));
-	else if (node->type == TOKEN_INPUT_REDIRECTION || node->type == TOKEN_OUTPUT_REDIRECTION)
+	else if (node->type == TOKEN_APPEND_REDIRECTION || node->type == TOKEN_INPUT_REDIRECTION || node->type == TOKEN_OUTPUT_REDIRECTION)
 		exec_redir(node);
 	else if (node->type ==  TOKEN_AND || node->type == TOKEN_OR)
 		return (exec_and_or(node));
@@ -140,6 +151,5 @@ void	execute()
 {
 	if (!(global_minishell.root))
 		return ;
-	// printf("%d\n",(global_minishell.root)->type);
 	global_minishell.status = specify_types(global_minishell.root);
 }

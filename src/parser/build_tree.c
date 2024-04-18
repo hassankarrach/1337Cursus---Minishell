@@ -55,23 +55,80 @@ t_cmd	*_cmd(char **args ,int type)
 	new->type = type;
 	return(new);
 }
+
+t_redir	 *new_redir(t_token **head, int type)
+{
+	t_redir *redir;
+
+	redir = malloc(sizeof(t_redir));
+	redir->type = type;
+	redir->child = NULL;
+	redir->file_name = (*head)->next->value;
+	(*head) = (*head)->next->next;
+	return (redir);
+}
 // new_nodes
 void	new_cmd(t_token **head, t_tree **root)
 {
 	char	**args;
 	char	**tmp;
+	t_redir *redir;
+	t_redir *hold;
+	t_redir *hold2;
+	t_redir *tmp1;
 	t_cmd	*cmd;
 
 	args = NULL;
-	while ((*head) != NULL && (*head)->type == TOKEN_WORD)
+	redir = NULL;
+	hold = NULL;
+	while ((*head) != NULL && (*head)->type != TOKEN_AND &&\
+	(*head)->type != TOKEN_OR && (*head)->type != TOKEN_PIPE)
 	{
 		tmp = args;
+		if ((*head)->type == TOKEN_APPEND_REDIRECTION || (*head)->type == TOKEN_INPUT_REDIRECTION\
+		|| (*head)->type == TOKEN_OUTPUT_REDIRECTION || (*head)->type == TOKEN_HEREDOC)
+		{
+			tmp1 = new_redir(head, (*head)->type);
+			// printf("duko == %s\n", tmp1->file_name);
+			if (redir != NULL)
+			{
+				redir->child = (t_tree *)tmp1;
+				redir = (t_redir *)redir->child;
+			}
+			else
+			{
+				redir = tmp1;
+				hold = redir;
+			}
+			continue ;
+		}
+		// printf("duko2 == %s\n", hold->file_name);
+		// printf("duko2 == %s\n", ((t_redir *)(hold->child))->file_name);
+		// printf("duko2 == %s\n", ((t_redir *)(((t_redir *)(hold->child))->child))->file_name);
+		// exit(0);
 		args = join_arg(tmp, (*head)->value);
 		ft_free(tmp);
 		(*head) = (*head)->next;
 	}
 	cmd = _cmd(args, TOKEN_WORD);
-	nodes_link((t_tree *)cmd, root);
+	hold2 = hold;
+	if (hold != NULL)
+	{
+		while (1)
+		{
+			// printf("%s\n", hold->file_name);
+			if ((t_redir *)(hold->child) == NULL)
+			{
+				hold->child = (t_tree *)cmd;
+				break ;
+			}
+			hold = (t_redir *)(hold->child);
+		}
+		// hold->child = (t_tree *)cmd;
+		nodes_link((t_tree *)hold2, root);
+	}
+	else
+		nodes_link((t_tree *)cmd, root);
 }
 void	new_block(t_tree **root, t_tree *node, t_token **head)
 {
@@ -83,18 +140,6 @@ void	new_block(t_tree **root, t_tree *node, t_token **head)
 	block->child = node;
 	block->type = TOKEN_BLOCK;
 	nodes_link((t_tree *)block, root);
-}
-void	new_redir(t_token **head, t_tree **root, t_tree *node, int type)
-{
-	t_redir *redir;
-
-	redir = malloc(sizeof(t_redir));
-	redir->type = type;
-	redir->child = node;
-	if ((*head)->next->type == TOKEN_WORD)
-		redir->file_name = (*head)->next->value;
-	(*head) = (*head)->next->next;
-	nodes_link((t_tree *)redir, root);
 }
 void	new_pipe(t_tree **root)
 {
@@ -178,9 +223,6 @@ void	nodes_link(t_tree *node, t_tree **root)
 
 //2 loop for the list come from tokenizer
 
-/* TODO : update tokenizer to change the order of 
-node cmd and nodes redir "redir alwas first" */
-
 t_tree	*build_tree(t_token *head, int flag)
 {
 	t_tree	*root;
@@ -190,24 +232,14 @@ t_tree	*build_tree(t_token *head, int flag)
 	tmp = NULL;
 	while (head)
 	{
-		if (head->type == TOKEN_WORD)
-		{
-			new_cmd(&head, &root);
-			if (flag == 1)
-				return (root);
-			continue;
-		}
-		else if (head->type == TOKEN_APPEND_REDIRECTION || head->type == TOKEN_INPUT_REDIRECTION\
+		if (head->type == TOKEN_WORD || head->type == TOKEN_APPEND_REDIRECTION || head->type == TOKEN_INPUT_REDIRECTION\
 		|| head->type == TOKEN_OUTPUT_REDIRECTION || head->type == TOKEN_HEREDOC)
 		{
-			tmp = build_tree(head->next->next, 1);
-			new_redir(&head, &root, tmp, head->type);
-			continue;
+			new_cmd(&head, &root);
+			continue ;
 		}
-		// TODO
 		else if (head->type == TOKEN_PIPE)
 			new_pipe(&root);
-		// TODO
 		else if (head->type == TOKEN_AND || head->type == TOKEN_OR)
 			new_op(&root, head->type);
 		else if (head->type == TOKEN_OPENING_PARENTHESES)
@@ -224,34 +256,3 @@ t_tree	*build_tree(t_token *head, int flag)
 	}
 	return (root);
 }
-
-        // switch (head->type) {
-        // case TOKEN_WORD:
-		// 	new_cmd(head->value);
-        //     break;
-        // case TOKEN_PIPE:
-        //     new_pipe(head->value);
-        //     break;
-        // case TOKEN_INPUT_REDIRECTION:
-        //     new_in_red(head->value);
-        //     break;
-        // case TOKEN_OUTPUT_REDIRECTION:
-        //     new_out_red(head->value);
-        //     break;
-        // case TOKEN_APPEND_REDIRECTION:
-        //     new_append(head->value);
-        //     break;
-        // case TOKEN_AND:
-        //     new_and(head->value);
-        //     break;
-        // case TOKEN_OR:
-        //     new_or(head->value);
-        //     break;
-        // case TOKEN_OPENING_PARENTHESES:
-        //     new_block(head);
-        //     break;
-        // default:
-        //     break;            
-        // }
-        // if (head != NULL)
-        //     head = head->next;
