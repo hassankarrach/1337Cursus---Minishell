@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+size_t	ft_strcmp(char *s1, char *s2);
 void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t elements_count, size_t element_size);
 void	ft_free(char **splited);

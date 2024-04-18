@@ -89,7 +89,6 @@ void	new_cmd(t_token **head, t_tree **root)
 		|| (*head)->type == TOKEN_OUTPUT_REDIRECTION || (*head)->type == TOKEN_HEREDOC)
 		{
 			tmp1 = new_redir(head, (*head)->type);
-			// printf("duko == %s\n", tmp1->file_name);
 			if (redir != NULL)
 			{
 				redir->child = (t_tree *)tmp1;
@@ -102,10 +101,6 @@ void	new_cmd(t_token **head, t_tree **root)
 			}
 			continue ;
 		}
-		// printf("duko2 == %s\n", hold->file_name);
-		// printf("duko2 == %s\n", ((t_redir *)(hold->child))->file_name);
-		// printf("duko2 == %s\n", ((t_redir *)(((t_redir *)(hold->child))->child))->file_name);
-		// exit(0);
 		args = join_arg(tmp, (*head)->value);
 		ft_free(tmp);
 		(*head) = (*head)->next;
@@ -116,7 +111,6 @@ void	new_cmd(t_token **head, t_tree **root)
 	{
 		while (1)
 		{
-			// printf("%s\n", hold->file_name);
 			if ((t_redir *)(hold->child) == NULL)
 			{
 				hold->child = (t_tree *)cmd;
@@ -124,7 +118,6 @@ void	new_cmd(t_token **head, t_tree **root)
 			}
 			hold = (t_redir *)(hold->child);
 		}
-		// hold->child = (t_tree *)cmd;
 		nodes_link((t_tree *)hold2, root);
 	}
 	else
@@ -219,7 +212,6 @@ void	nodes_link(t_tree *node, t_tree **root)
 			pipe_link((t_pipe *)(*root), &node);
 	}
 }
-
 
 //2 loop for the list come from tokenizer
 

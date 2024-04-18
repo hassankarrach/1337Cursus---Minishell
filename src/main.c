@@ -65,7 +65,6 @@ void	setup_environment()
 int main(int argc, char **argv, char **env)
 {
     l_op *tmp;
-    // char *av[] = {"/usr/bin/ls", NULL};
     char *input;
     t_token *head = NULL;
     t_cmd *root;
@@ -87,79 +86,15 @@ int main(int argc, char **argv, char **env)
         head = ft_tokenize();
         setup_environment();
         global_minishell.root = build_tree(head, 0);
-		// printf("here == %d\n", (global_minishell.root)->type);
-        // printf("here == %d\n", ((t_redir *)global_minishell.root)->child->type);
-        // if (global_minishell.root->type == TOKEN_BLOCK)
-        //     printf("TOKEN_BLOCK\n");
-        // tmp = ((l_op *)global_minishell.root);
-        // if (tmp->type == TOKEN_AND)
-        //     printf("TOKEN_AND\n");
-        // if (tmp->left->type == TOKEN_OR)
-        //     printf("TOKEN_OR\n");
-        // if (tmp->right->type == TOKEN_WORD)
-        //     printf("TOKEN_WORD\n");
-        //  if (((l_op *)(tmp->left))->left->type == TOKEN_WORD)
-        //     printf("TOKEN_WORD\n");
-        //  if (((l_op *)(tmp->left))->right->type == TOKEN_WORD)
-        //     printf("TOKEN_WORD\n");
         global_minishell.main_pid = fork();
         if (!global_minishell.main_pid)
 			execute();
 		else
+		{
 			waitpid(global_minishell.main_pid ,&(global_minishell.status), 0);
-        // printf("%s\n",strerror(global_minishell.status));
+			if (access("/tmp/heredoc", F_OK))
+				unlink("/tmp/heredoc");
+		}
     }
     return 0;
 }
-
-    // execve("/usr/bin/ls", av,env);
-    //Test Tokenizer.
-    // while (head)
-    // {
-    //     printf (" => ");
-    //     switch (head->type) {
-    //     case TOKEN_WORD:
-    //         printf("TOKEN_WORD {%s}\n", head->value);
-    //         break;
-    //     case TOKEN_PIPE:
-    //         printf("TOKEN_PIPE {%s}\n", head->value);
-    //         break;
-    //     case TOKEN_INPUT_REDIRECTION:
-    //         printf("TOKEN_INPUT_REDIRECTION {%s}\n", head->value);
-    //         break;
-    //     case TOKEN_OUTPUT_REDIRECTION:
-    //         printf("TOKEN_OUTPUT_REDIRECTION {%s}\n", head->value);
-    //         break;
-    //     case TOKEN_APPEND_REDIRECTION:
-    //         printf("TOKEN_APPEND_REDIRECTION {%s}\n", head->value);
-    //         break;
-    //     case TOKEN_HEREDOC:
-    //         printf("TOKEN_HEREDOC {%s}\n", head->value);
-    //         break;
-    //     case TOKEN_AND:
-    //         printf("TOKEN_AND {%s}\n", head->value);
-    //         break;
-    //     case TOKEN_OR:
-    //         printf("TOKEN_OR {%s}\n", head->value);
-    //         break;
-    //     case TOKEN_DOUBLE_QUOTE:
-    //         printf("TOKEN_DOUBLE_QUOTE {%s}\n", head->value);
-    //         break;
-    //     case TOKEN_SINGLE_QUOTE:
-    //         printf("TOKEN_SINGLE_QUOTE {%s}\n", head->value);
-    //         break;
-    //     case TOKEN_VARIABLE:
-    //         printf("TOKEN_VARIABLE {%s}\n", head->value);
-    //         break;
-    //     case TOKEN_OPENING_PARENTHESES:
-    //         printf("TOKEN_OPENING_PARENTHESES {%s}\n", head->value);
-    //         break;
-    //     case TOKEN_CLOSING_PARENTHESES:
-    //         printf("TOKEN_CLOSING_PARENTHESES {%s}\n", head->value);
-    //         break;
-    //     default:
-    //         printf("UNKNOWN_TOKEN");
-    //         break;            
-    //     }
-    //     head = head->next;
-    // }
