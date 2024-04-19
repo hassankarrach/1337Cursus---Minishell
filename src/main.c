@@ -9,10 +9,12 @@ int main(int argc, char **argv, char **env)
     global_minishell.line = input;
 
     t_token *head = NULL;
+    t_token *head_cpy = NULL;
     
     head = ft_tokenize();
-
-    //Test Tokenizer.
+    head_cpy = head;
+    
+    // Test Tokenizer.
     while (head)
     {
         switch (head->type) {
@@ -55,6 +57,9 @@ int main(int argc, char **argv, char **env)
         case TOKEN_CLOSING_PARENTHESES:
             printf("TOKEN_CLOSING_PARENTHESES");
             break;
+        case TOKEN_WHITE_SPACE:
+            printf("TOKEN_WHITE_SPACE");
+            break;
         default:
             printf("UNKNOWN_TOKEN");
             break;            
@@ -63,6 +68,10 @@ int main(int argc, char **argv, char **env)
         printf (" => ");
         head = head->next;
     }
+    printf("\n\n");
+
+
     
+    parser(head_cpy);
     return 0;
 }

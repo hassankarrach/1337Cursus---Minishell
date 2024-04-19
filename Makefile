@@ -5,11 +5,12 @@ CFLAGS = #-Wall -Wextra -Werror
 RDLFLAG  = -lreadline
 
 # Libs-Srcs
-LIBFT = $(addprefix ./src/utils/libft/, ft_bzero.c ft_calloc.c ft_is_space.c ft_putstr_fd.c ft_split.c ft_strchr.c ft_strdup.c ft_strjoin.c ft_strlen.c ft_strncmp.c ft_substr.c)
+LIBFT = $(addprefix ./src/utils/libft/, ft_strlcpy.c ft_strrchr.c ft_strtrim.c ft_bzero.c ft_calloc.c ft_is_space.c ft_putstr_fd.c ft_split.c ft_strchr.c ft_strdup.c ft_strjoin.c ft_strlen.c ft_strncmp.c ft_substr.c)
 
 # MiniShell-Srcs
 SRC_TOKENIZER = $(addprefix ./src/tokenizer/, handle_tokens.c tokenizer_list.c tokenizer_utils.c tokenizer.c)
-SRCS = $(SRC_TOKENIZER) $(LIBFT) ./src/main.c
+SRC_PARSER = $(addprefix ./src/parser/, parser.c)
+SRCS = $(SRC_TOKENIZER) $(SRC_PARSER) $(LIBFT) ./src/main.c
 
 # Objects
 OBJS = $(SRCS:.c=.o)
@@ -19,9 +20,9 @@ all : $(NAME)
 
 # Compiling
 .c.o : 
-	cc $(CFLAGS) -c -o $@ $^
+	cc -g $(CFLAGS) -c -o $@ $^
 $(NAME) : $(OBJS)
-	cc $(CFLAGS) $(RDLFLAG) $(OBJS) -o $(NAME) 
+	cc -g $(CFLAGS) $(RDLFLAG) $(OBJS) -o $(NAME) 
 
 # Cleaning
 clean : 

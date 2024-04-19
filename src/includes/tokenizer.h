@@ -16,12 +16,14 @@ typedef enum tokens{
     TOKEN_SINGLE_QUOTE,
     TOKEN_VARIABLE,
     TOKEN_OPENING_PARENTHESES,
-    TOKEN_CLOSING_PARENTHESES
+    TOKEN_CLOSING_PARENTHESES,
+    TOKEN_WHITE_SPACE
 }               token_type;
 
 typedef struct s_token{
     token_type  type;
     char        *value;
+    int         is_double_quote;
     struct s_token  *next;
     struct s_token  *prev; 
 }   t_token;

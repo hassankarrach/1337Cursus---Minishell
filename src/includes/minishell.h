@@ -13,6 +13,7 @@
 // inner includes ===>
 # include "./tokenizer.h"
 # include "./garbage_collector.h"
+# include "./parser.h"
 
 // colors         ===>
 # define GREEN "\033[1;32m"

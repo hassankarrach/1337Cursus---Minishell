@@ -9,6 +9,9 @@ t_token	*new_token(char *value, token_type type)
 		return (NULL);
 	new_token->value = value;
 	new_token->type = type;
+	new_token->next = NULL;
+	new_token->prev = NULL;
+	new_token->is_double_quote = 0;
 	return (new_token);
 }
 
