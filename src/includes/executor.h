@@ -23,5 +23,8 @@ typedef struct s_environment
 void	execute();
 int		specify_types(t_tree *node);
 void	check_cmd(char **args, char	**env);
+void	expand(char **str);
+void	check_to_expand(char **str);
+void	expansion(char ***args);
 
 #endif

@@ -12,6 +12,91 @@
 
 #include "../includes/minishell.h"
 
+void	expand(char **str)
+{
+	t_environment *tmp;
+
+	if (*str == NULL)
+		return ;
+	(*str) = ft_strdup(((*str) +  1));
+	tmp = global_minishell.environment;
+	while (tmp != NULL)
+	{
+		if (ft_strcmp(tmp->key, *str) == 0)
+		{
+			(*str) = ft_strdup(tmp->value);
+			return ;
+		}
+		tmp = tmp->next;
+	}
+	(*str) = ft_strdup(NULL);
+}
+size_t	ft_sublen(const char *s, char c)
+{
+	size_t	i;
+
+	i = 0;
+	if (c == ' ')
+	{	
+		while (s[i] != '\0' && ft_is_space(s[i]) != 1)
+			i++;
+	}
+	else
+	{
+		while (s[i] != '\0' && s[i] != c)
+			i++;
+	}
+	return (i);
+}
+
+void	check_to_expand(char **str)
+{
+	int		i;
+	int		j;
+	char	*tmp;
+	char 	**tmp1;
+	char	*tmp2;
+
+	tmp1 = (char **)malloc(sizeof(char *) * 4);
+	i = 0;
+	while(i < 4)
+		tmp1[i++] = NULL;
+	tmp = *str;
+	i = 0;
+	while (tmp[i] != '\0')
+	{
+		if (tmp[i] == '$')
+		{
+			tmp1[0] = ft_substr(tmp, 0, ft_sublen(tmp, '$'));
+			j = ft_sublen((tmp + i), ' ');
+			tmp1[1] = ft_substr(tmp, i, j);
+			tmp1[2] = ft_substr(tmp, (i + j), ft_strlen(tmp + j));
+		}
+		i++;
+	}
+	if (tmp1[1] != NULL)
+	{
+		expand(&(tmp1[1]));
+		i = 0;
+		tmp2 = ft_strjoin(tmp1[0], tmp1[1]);
+		*str = ft_strjoin(tmp2, tmp1[2]);
+	}
+}
+
+void	expansion(char ***args)
+{
+	char **tmp;
+	int 	i;
+
+	tmp = *args;
+	i = 0;
+	while (tmp != NULL && tmp[i] != NULL)
+	{
+		check_to_expand(&(tmp[i]));
+		i++;
+	}
+}
+
 char	**set_cmds(char **args, char *cmd)
 {
 	char	**paths;

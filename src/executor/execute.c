@@ -98,6 +98,8 @@ static void	exec_cmd(t_tree *node)
 	t_cmd	*cmd;
 	
 	cmd = (t_cmd *)node;
+	expansion(&(cmd->args));
+	// printf("%s\n", (cmd->args)[0]);
 	check_cmd(cmd->args, global_minishell.env);
 	if (execve((cmd->args)[0], cmd->args, global_minishell.env) != 0)
 		exit(1);
