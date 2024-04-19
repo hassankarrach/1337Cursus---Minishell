@@ -9,6 +9,7 @@ int main(int argc, char **argv, char **env)
     global_minishell.line = input;
 
     t_token *head = NULL;
+    t_token *head_cpy = NULL;
     
     head = ft_tokenize();
 
@@ -63,6 +64,8 @@ int main(int argc, char **argv, char **env)
         printf (" => ");
         head = head->next;
     }
-    
+
+    printf("\n");
+    parser(head_cpy);
     return 0;
 }

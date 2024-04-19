@@ -16,7 +16,8 @@ typedef enum tokens{
     TOKEN_SINGLE_QUOTE,
     TOKEN_VARIABLE,
     TOKEN_OPENING_PARENTHESES,
-    TOKEN_CLOSING_PARENTHESES
+    TOKEN_CLOSING_PARENTHESES,
+    TOKEN_WHITE_SPACE
 }               token_type;
 
 typedef struct s_token{
