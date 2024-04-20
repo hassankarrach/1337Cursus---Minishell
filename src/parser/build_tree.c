@@ -23,6 +23,19 @@ int	count(char **args)
 	return(i);
 }
 
+// void	add_quotes(char **str)
+// {
+// 	char	*tmp;
+// 	char	*tmp1;
+
+// 	tmp = (char *)malloc(1);
+// 	tmp[0] = '\'';
+// 	tmp1 = ft_strjoin(tmp, *str);
+// 	*str = ft_strjoin(tmp1, "\'");
+// 	tmp1 = tmp + 1;
+	 
+// }
+
 char	**join_arg(char **args, char *value)
 {
 	char	**args1;
@@ -55,6 +68,25 @@ t_cmd	*_cmd(char **args ,int type)
 	new->type = type;
 	return(new);
 }
+void	add_single_quote_list(int i)
+{
+	int 		*j;
+	int			k;
+
+	global_minishell.a_counter += 1;
+	j = (int *)malloc(sizeof(int) * global_minishell.a_counter);
+	k = 0;
+	while (k < global_minishell.a_counter)
+	{
+		if (global_minishell.a_counter == 1)
+			j[k++] = i;
+		else
+			j[k] = (global_minishell.quote)[k];
+		k++;
+	}
+	j[k] = i;
+	global_minishell.quote = j;
+}
 
 t_redir	 *new_redir(t_token **head, int type)
 {
@@ -72,6 +104,7 @@ void	new_cmd(t_token **head, t_tree **root)
 {
 	char	**args;
 	char	**tmp;
+	int		i;
 	t_redir *redir;
 	t_redir *hold;
 	t_redir *hold2;
@@ -81,6 +114,7 @@ void	new_cmd(t_token **head, t_tree **root)
 	args = NULL;
 	redir = NULL;
 	hold = NULL;
+	i = 0;
 	while ((*head) != NULL && (*head)->type != TOKEN_AND &&\
 	(*head)->type != TOKEN_OR && (*head)->type != TOKEN_PIPE)
 	{
@@ -101,7 +135,10 @@ void	new_cmd(t_token **head, t_tree **root)
 			}
 			continue ;
 		}
+		if ((*head)->is_single_quote == 1)
+			add_single_quote_list(i);
 		args = join_arg(tmp, (*head)->value);
+		i++;
 		ft_free(tmp);
 		(*head) = (*head)->next;
 	}

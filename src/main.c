@@ -82,8 +82,9 @@ int main(int argc, char **argv, char **env)
 			add_history(input);
         global_minishell.env = env;
         global_minishell.line = input;
+		global_minishell.a_counter = 0;
         global_minishell.root = NULL;
-        head = ft_tokenize();
+		head = ft_tokenize();
         setup_environment();
         global_minishell.root = build_tree(head, 0);
         global_minishell.main_pid = fork();
@@ -92,6 +93,8 @@ int main(int argc, char **argv, char **env)
 		else
 		{
 			waitpid(global_minishell.main_pid ,&(global_minishell.status), 0);
+			if (WIFEXITED(global_minishell.status) != 0)
+				global_minishell.status = WEXITSTATUS(global_minishell.status);
 			if (access("/tmp/heredoc", F_OK))
 				unlink("/tmp/heredoc");
 		}

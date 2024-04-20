@@ -8,6 +8,7 @@
 # include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/types.h>
@@ -27,6 +28,8 @@
 typedef struct s_minishell
 {	
 	int				error;
+	int				*quote;
+	int				a_counter;
 	int				pipes_nbr;
 	char			**my_env;
 	int				status;

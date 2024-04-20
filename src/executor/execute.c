@@ -23,7 +23,10 @@ static int	exec_block(t_tree *node)
 	if (id == 0)
 		status = specify_types((t_tree *)block->child);
 	else
+	{
+		global_minishell.status = status;
 		waitpid(id, &status, 0);
+	}
 	return(status);
 }
 
@@ -45,6 +48,7 @@ static int	exec_and_or(t_tree *node)
 		else
 		{
 			waitpid(id, &status, 0);
+			global_minishell.status = status;
 			if (status == 0)
 				status = specify_types((t_tree *)and_or->right);
 		}
@@ -60,6 +64,7 @@ static int	exec_and_or(t_tree *node)
 		else
 		{
 			waitpid(id, &status, 0);
+			global_minishell.status = status;
 			if (status != 0)
 				status = specify_types((t_tree *)and_or->right);
 		}
@@ -85,6 +90,7 @@ static int	exec_pipe(t_tree *node)
 	else
 	{
 		waitpid(id, &status,0);
+		global_minishell.status = status;
 		close(va_pipe->pipe_fd[1]);
 		dup2(va_pipe->pipe_fd[0], 0);
 		status = specify_types((t_tree *)(va_pipe->right));
@@ -99,10 +105,9 @@ static void	exec_cmd(t_tree *node)
 	
 	cmd = (t_cmd *)node;
 	expansion(&(cmd->args));
-	// printf("%s\n", (cmd->args)[0]);
 	check_cmd(cmd->args, global_minishell.env);
 	if (execve((cmd->args)[0], cmd->args, global_minishell.env) != 0)
-		exit(1);
+		exit(global_minishell.status);
 }
 
 static void	exec_redir(t_tree *node)
@@ -114,18 +119,54 @@ static void	exec_redir(t_tree *node)
 	redir = (t_redir *)node;
 	if (redir->type == TOKEN_INPUT_REDIRECTION)
 	{
+		if (access(redir->file_name, F_OK) != 0)
+		{
+			ft_putstr_fd("minishell-1.0: No such file or directory", 2);
+			global_minishell.status = 1;
+			exit(global_minishell.status);
+		}
+		else if (access(redir->file_name, R_OK) != 0)
+		{
+			ft_putstr_fd("minishell-1.0: Permission denied", 2);
+			global_minishell.status = 1;
+			exit(global_minishell.status);
+		}
 		close(0);
 		open(redir->file_name, O_CREAT | O_RDONLY ,0644);
 		specify_types((t_tree *)redir->child);
 	}
 	else if (redir->type == TOKEN_OUTPUT_REDIRECTION)
 	{
+		if (ft_strcmp(redir->file_name, "\0") == 0)
+		{
+			ft_putstr_fd("minishell-1.0: No such file or directory", 2);
+			global_minishell.status = 1;
+			exit(global_minishell.status);
+		}
+		else if (access(redir->file_name, F_OK) != 0 && access(redir->file_name, W_OK) != 0)
+		{
+			ft_putstr_fd("minishell-1.0: Permission denied", 2);
+			global_minishell.status = 1;
+			exit(global_minishell.status);
+		}
 		close(1);
 		open(redir->file_name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		specify_types((t_tree *)redir->child);
 	}
 	else if (redir->type == TOKEN_APPEND_REDIRECTION)
 	{
+		if (ft_strcmp(redir->file_name, "\0") == 0)
+		{
+			ft_putstr_fd("minishell-1.0: No such file or directory", 2);
+			global_minishell.status = 1;
+			exit(global_minishell.status);
+		}
+		else if (access(redir->file_name, F_OK) != 0 && access(redir->file_name, W_OK) != 0)
+		{
+			ft_putstr_fd("minishell-1.0: Permission denied", 2);
+			global_minishell.status = 1;
+			exit(global_minishell.status);
+		}
 		close(1);
 		open(redir->file_name, O_CREAT | O_WRONLY | O_APPEND, 0644);
 		specify_types((t_tree *)redir->child);
@@ -150,7 +191,9 @@ static void	exec_redir(t_tree *node)
 int	specify_types(t_tree *node)
 {
 	if (node->type == TOKEN_WORD)
+	{
 		exec_cmd(node);
+	}
 	else if (node->type == TOKEN_PIPE)
 		return (exec_pipe(node));
 	else if (node->type == TOKEN_APPEND_REDIRECTION || node->type == TOKEN_INPUT_REDIRECTION\

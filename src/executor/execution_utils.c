@@ -38,7 +38,7 @@ size_t	ft_sublen(const char *s, char c)
 	i = 0;
 	if (c == ' ')
 	{	
-		while (s[i] != '\0' && ft_is_space(s[i]) != 1)
+		while (s[i] != '\0' && ft_is_space(s[i]) != 1 && s[i] != '\'')
 			i++;
 	}
 	else
@@ -76,11 +76,27 @@ void	check_to_expand(char **str)
 	}
 	if (tmp1[1] != NULL)
 	{
-		expand(&(tmp1[1]));
+		if (ft_strcmp(tmp1[1], "$?") == 0)
+			tmp1[1] = ft_itoa(global_minishell.status);
+		else
+			expand(&(tmp1[1]));
 		i = 0;
 		tmp2 = ft_strjoin(tmp1[0], tmp1[1]);
 		*str = ft_strjoin(tmp2, tmp1[2]);
 	}
+}
+int	exist_in_list(int i)
+{
+	int j;
+
+	j = 0;
+	while (j < global_minishell.a_counter)
+	{
+		if (i == global_minishell.quote[j])
+			return (1);
+		j++;
+	}
+	return (0);
 }
 
 void	expansion(char ***args)
@@ -92,7 +108,8 @@ void	expansion(char ***args)
 	i = 0;
 	while (tmp != NULL && tmp[i] != NULL)
 	{
-		check_to_expand(&(tmp[i]));
+		if(exist_in_list(i) == 0)
+				check_to_expand(&(tmp[i]));
 		i++;
 	}
 }
@@ -141,6 +158,8 @@ char	*check_access(char **paths)
 		}
 		i++;
 	}
+	global_minishell.status = 127;
+	ft_putstr_fd("minishell-1.0: Command not found", 2);
 	return (NULL);
 }
 
