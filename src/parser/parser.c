@@ -10,7 +10,7 @@ static int check_syntax_redirections(t_token *curr_token)
     || curr_token->next->type == TOKEN_APPEND_REDIRECTION
     || curr_token->next->type == TOKEN_HEREDOC
     || curr_token->next->type == TOKEN_INPUT_REDIRECTION
-    || curr_token->next->type == TOKEN_OU TPUT_REDIRECTION))
+    || curr_token->next->type == TOKEN_OUTPUT_REDIRECTION))
         return (1);
     else if (!curr_token->next)
         return (1);

@@ -45,8 +45,8 @@ static int append_identifier(char **line_ptr, t_token **tokens_list)
         return (0);
     trimmed_value = ft_strtrim(value, "\"\'");
     token = new_token(trimmed_value, TOKEN_WORD);
-    if (*value == '\"')
-        token->is_double_quote = 1;
+    if (*value == '\'')
+        token->is_single_quote = 1;
     if (!token)
         return (0);
     (*line_ptr) += i;
