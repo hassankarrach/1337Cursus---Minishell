@@ -143,9 +143,9 @@ static void	exec_redir(t_tree *node)
 			global_minishell.status = 1;
 			exit(global_minishell.status);
 		}
-		else if (access(redir->file_name, F_OK) != 0 && access(redir->file_name, W_OK) != 0)
+		else if (access(redir->file_name, F_OK) == 0 && access(redir->file_name, W_OK) != 0)
 		{
-			ft_putstr_fd("minishell-1.0: Permission denied", 2);
+			ft_putstr_fd("minishell-1.0: Permission 1denied", 2);
 			global_minishell.status = 1;
 			exit(global_minishell.status);
 		}

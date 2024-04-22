@@ -16,15 +16,14 @@ static int append_seperator(token_type type, char **line_ptr, t_token **tokens_l
 
 static int append_identifier(char **line_ptr, t_token **tokens_list)
 {
-    char    *tmp;
+        char    *tmp;
     char    *value;
-    char    *trimmed_value;
     t_token *token;
     size_t  i;
 
     tmp = (*line_ptr);
     i = 0;
-    // printf("hello\n");
+
     while (tmp[i] && !is_separator(tmp + i))
     {
         if (is_quote(tmp[i]))
@@ -41,10 +40,7 @@ static int append_identifier(char **line_ptr, t_token **tokens_list)
     value = ft_substr(tmp, 0, i); //TB free.
     if (!value)
         return (0);
-    trimmed_value = ft_strtrim(value, "\"\'");
-    token = new_token(trimmed_value, TOKEN_WORD);
-    if (*value == '\'')
-        token->is_single_quote = 1;
+    token = new_token(value, TOKEN_WORD);
     if (!token)
         return (0);
     (*line_ptr) += i;

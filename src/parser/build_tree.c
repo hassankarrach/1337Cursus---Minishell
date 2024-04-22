@@ -68,25 +68,25 @@ t_cmd	*_cmd(char **args ,int type)
 	new->type = type;
 	return(new);
 }
-void	add_single_quote_list(int i)
-{
-	int 		*j;
-	int			k;
+// void	add_single_quote_list(int i)
+// {
+// 	int 		*j;
+// 	int			k;
 
-	global_minishell.a_counter += 1;
-	j = (int *)malloc(sizeof(int) * global_minishell.a_counter);
-	k = 0;
-	while (k < global_minishell.a_counter)
-	{
-		if (global_minishell.a_counter == 1)
-			j[k++] = i;
-		else
-			j[k] = (global_minishell.quote)[k];
-		k++;
-	}
-	j[k] = i;
-	global_minishell.quote = j;
-}
+// 	global_minishell.a_counter += 1;
+// 	j = (int *)malloc(sizeof(int) * global_minishell.a_counter);
+// 	k = 0;
+// 	while (k < global_minishell.a_counter)
+// 	{
+// 		if (global_minishell.a_counter == 1)
+// 			j[k++] = i;
+// 		else
+// 			j[k] = (global_minishell.quote)[k];
+// 		k++;
+// 	}
+// 	j[k] = i;
+// 	global_minishell.quote = j;
+// }
 
 t_redir	 *new_redir(t_token **head, int type)
 {
@@ -135,8 +135,8 @@ void	new_cmd(t_token **head, t_tree **root)
 			}
 			continue ;
 		}
-		if ((*head)->is_single_quote == 1)
-			add_single_quote_list(i);
+		// if ((*head)->is_single_quote == 1)
+		// 	add_single_quote_list(i);
 		args = join_arg(tmp, (*head)->value);
 		i++;
 		ft_free(tmp);

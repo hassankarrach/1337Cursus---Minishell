@@ -49,54 +49,100 @@ size_t	ft_sublen(const char *s, char c)
 	return (i);
 }
 
-void	check_to_expand(char **str)
+void	add_the_word(t_list **head, int flag, char *str, int start, int end)
 {
 	int		i;
 	int		j;
 	char	*tmp;
-	char 	**tmp1;
+	char	*tmp2;
+	char	**tmp1;
+	t_list	*node;
+
+	i = 0;
+	if (str[start] == '\"' || str[start] == '\'')
+		start++;
+	if (start >= end)
+		return ;
+	tmp = ft_substr(str, start, end - start);
+	if (flag == 0 || flag == 1)
+	{
+		tmp1 = (char **)malloc(sizeof(char *) * 4);
+		i = 0;
+		while(i < 4)
+			tmp1[i++] = NULL;
+		i = 0;
+		while(tmp[i] != '\0')
+		{
+			if (tmp[i] == '$')
+			{
+				tmp1[0] = ft_substr(tmp, 0, ft_sublen(tmp, '$'));
+				j = ft_sublen((tmp + i), ' ');
+				tmp1[1] = ft_substr(tmp, i, j);
+				tmp1[2] = ft_substr(tmp, (i + j), ft_strlen(tmp + j));
+			}
+			i++;
+		}
+		if (tmp1[1] != NULL)
+		{
+			if (ft_strcmp(tmp1[1], "$?") == 0)
+				tmp1[1] = ft_itoa(global_minishell.status);
+			else if (ft_strcmp(tmp1[1], "$") != 0)
+				expand(&(tmp1[1]));
+			i = 0;
+			tmp2 = ft_strjoin(tmp1[0], tmp1[1]);
+			tmp = ft_strjoin(tmp2, tmp1[2]);
+		}
+	}
+	node = ft_lstnew(tmp);
+	ft_lstadd_back(head, node);
+}
+
+void	check_to_expand(char **str)
+{
+	int		i;
+	int		j;
+	t_list	*head;
+	int		start;
+	int		end;
+	int		flag;
+	char	*tmp;
+	char 	*tmp1;
 	char	*tmp2;
 
-	tmp1 = (char **)malloc(sizeof(char *) * 4);
 	i = 0;
-	while(i < 4)
-		tmp1[i++] = NULL;
+	flag = 0;
+	start = 0;
 	tmp = *str;
-	i = 0;
+	head = NULL;
+	tmp1 = NULL;
+	end = ft_strlen(*str);
 	while (tmp[i] != '\0')
 	{
-		if (tmp[i] == '$')
+		if (tmp[i] == '\'' || tmp[i] == '\"')
 		{
-			tmp1[0] = ft_substr(tmp, 0, ft_sublen(tmp, '$'));
-			j = ft_sublen((tmp + i), ' ');
-			tmp1[1] = ft_substr(tmp, i, j);
-			tmp1[2] = ft_substr(tmp, (i + j), ft_strlen(tmp + j));
+			end = i;
+			if (tmp[i] == '\'' && flag != 2)
+				flag = 2;
+			else if (tmp[i] == '\'' && flag == 2)
+				flag = 0;
+			else if (tmp[i] == '\"' && flag == 0)
+				flag = 1;
+			else if (tmp[i] == '\"' && flag == 1)
+				flag = 0;
+			add_the_word(&head, flag, *str, start, end);
+			start = end;
 		}
 		i++;
 	}
-	if (tmp1[1] != NULL)
+	add_the_word(&head, flag, *str, start, i);
+	while (head != NULL)
 	{
-		if (ft_strcmp(tmp1[1], "$?") == 0)
-			tmp1[1] = ft_itoa(global_minishell.status);
-		else
-			expand(&(tmp1[1]));
-		i = 0;
-		tmp2 = ft_strjoin(tmp1[0], tmp1[1]);
-		*str = ft_strjoin(tmp2, tmp1[2]);
+		*str = ft_strjoin(tmp1, (char *)(head->content));
+		tmp1 = *str;
+		head = head->next;
 	}
-}
-int	exist_in_list(int i)
-{
-	int j;
-
-	j = 0;
-	while (j < global_minishell.a_counter)
-	{
-		if (i == global_minishell.quote[j])
-			return (1);
-		j++;
-	}
-	return (0);
+	// printf("%s\n", *str);
+	// exit(1);
 }
 
 void	expansion(char ***args)
@@ -108,8 +154,7 @@ void	expansion(char ***args)
 	i = 0;
 	while (tmp != NULL && tmp[i] != NULL)
 	{
-		if(exist_in_list(i) == 0)
-				check_to_expand(&(tmp[i]));
+		check_to_expand(&(tmp[i]));
 		i++;
 	}
 }
