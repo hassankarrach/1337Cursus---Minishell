@@ -38,8 +38,13 @@ size_t	ft_sublen(const char *s, char c)
 	i = 0;
 	if (c == ' ')
 	{	
+		// printf("2= %s\n", s);
 		while (s[i] != '\0' && ft_is_space(s[i]) != 1 && s[i] != '\'')
+		{
 			i++;
+			if (s[i] == '$')
+				break;
+		}
 	}
 	else
 	{
@@ -62,7 +67,11 @@ void	add_the_word(t_list **head, int flag, char *str, int start, int end)
 	if (str[start] == '\"' || str[start] == '\'')
 		start++;
 	if (start >= end)
+	{
+		node = ft_lstnew("");
+		ft_lstadd_back(head, node);
 		return ;
+	}
 	tmp = ft_substr(str, start, end - start);
 	if (flag == 0 || flag == 1)
 	{
@@ -84,8 +93,8 @@ void	add_the_word(t_list **head, int flag, char *str, int start, int end)
 		}
 		if (tmp1[1] != NULL)
 		{
-			if (ft_strcmp(tmp1[1], "$?") == 0)
-				tmp1[1] = ft_itoa(global_minishell.status);
+			if (ft_strncmp(tmp1[1], "$?", 2) == 0)
+				tmp1[1] = ft_strjoin(ft_itoa(global_minishell.status), (tmp1[1]) + 2);
 			else if (ft_strcmp(tmp1[1], "$") != 0)
 				expand(&(tmp1[1]));
 			i = 0;
@@ -120,18 +129,34 @@ void	check_to_expand(char **str)
 	{
 		if (tmp[i] == '\'' || tmp[i] == '\"')
 		{
-			end = i;
-			if (tmp[i] == '\'' && flag != 2)
+			if (tmp[i] == '\'' && flag == 0)
+			{
+				end = i;
+				add_the_word(&head, flag, *str, start, end);
 				flag = 2;
+			}
 			else if (tmp[i] == '\'' && flag == 2)
+			{
+				end = i;
+				add_the_word(&head, flag, *str, start, end);
 				flag = 0;
+			}
 			else if (tmp[i] == '\"' && flag == 0)
+			{
+				end = i;
+				add_the_word(&head, flag, *str, start, end);
 				flag = 1;
+			}
 			else if (tmp[i] == '\"' && flag == 1)
+			{
+				end = i;
+				add_the_word(&head, flag, *str, start, end);
 				flag = 0;
-			add_the_word(&head, flag, *str, start, end);
+			}
 			start = end;
 		}
+		else if (tmp[i] == '$' && flag != 2)
+			add_the_word(&head, flag, *str, start, i);
 		i++;
 	}
 	add_the_word(&head, flag, *str, start, i);
