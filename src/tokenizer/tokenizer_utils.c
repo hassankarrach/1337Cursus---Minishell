@@ -36,10 +36,3 @@ int skip_quotes(char *line, size_t *i)
     }
     return (0);
 }
-
-void	print_quote_err(char c)
-{
-	ft_putstr_fd("minishell error : unclosed `", 2);
-	write(2, &c, 1);
-	ft_putstr_fd("'\n", 2);
-}

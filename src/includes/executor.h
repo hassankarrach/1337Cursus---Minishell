@@ -27,4 +27,7 @@ void	expand(char **str);
 void	check_to_expand(char **str);
 void	expansion(char ***args);
 
+int		builtins(char **args);
+int		echo_builtin(char **args);
+
 #endif

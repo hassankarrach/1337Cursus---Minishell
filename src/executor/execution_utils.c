@@ -229,7 +229,7 @@ char	*check_access(char **paths)
 		i++;
 	}
 	global_minishell.status = 127;
-	ft_putstr_fd("minishell-1.0: Command not found", 2);
+	ft_putstr_fd("minishell-1.0: Command not found", 2, '\n');
 	return (NULL);
 }
 

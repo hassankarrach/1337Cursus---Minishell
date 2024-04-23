@@ -72,7 +72,7 @@ int main(int argc, char **argv, char **env)
     (void)argv;
 	if (argc != 1)
 	{
-		ft_putstr_fd("Error: invalid arguments", 2);
+		ft_putstr_fd("Error: invalid arguments", 2, '\n');
 		exit(1); 
 	}
     while (1)

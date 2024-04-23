@@ -105,6 +105,8 @@ static void	exec_cmd(t_tree *node)
 	
 	cmd = (t_cmd *)node;
 	expansion(&(cmd->args));
+	if (builtins(cmd->args) == 1)
+		exit(global_minishell.status);
 	check_cmd(cmd->args, global_minishell.env);
 	if (execve((cmd->args)[0], cmd->args, global_minishell.env) != 0)
 		exit(global_minishell.status);
@@ -121,13 +123,15 @@ static void	exec_redir(t_tree *node)
 	{
 		if (access(redir->file_name, F_OK) != 0)
 		{
-			ft_putstr_fd("minishell-1.0: No such file or directory", 2);
+			ft_putstr_fd("minishell-1.0: No such file or directory: ", 2, '\0');
+			ft_putstr_fd(redir->file_name, 2, '\n');
 			global_minishell.status = 1;
 			exit(global_minishell.status);
 		}
 		else if (access(redir->file_name, R_OK) != 0)
 		{
-			ft_putstr_fd("minishell-1.0: Permission denied", 2);
+			ft_putstr_fd("minishell-1.0: Permission denied: ", 2, '\0');
+			ft_putstr_fd(redir->file_name, 2, '\n');
 			global_minishell.status = 1;
 			exit(global_minishell.status);
 		}
@@ -139,13 +143,15 @@ static void	exec_redir(t_tree *node)
 	{
 		if (ft_strcmp(redir->file_name, "\0") == 0)
 		{
-			ft_putstr_fd("minishell-1.0: No such file or directory", 2);
+			ft_putstr_fd("minishell-1.0: No such file or directory: ", 2, '\0');
+			ft_putstr_fd(redir->file_name, 2, '\n');
 			global_minishell.status = 1;
 			exit(global_minishell.status);
 		}
 		else if (access(redir->file_name, F_OK) == 0 && access(redir->file_name, W_OK) != 0)
 		{
-			ft_putstr_fd("minishell-1.0: Permission 1denied", 2);
+			ft_putstr_fd("minishell-1.0: Permission 1denied: ", 2, '\0');
+			ft_putstr_fd(redir->file_name, 2, '\n');
 			global_minishell.status = 1;
 			exit(global_minishell.status);
 		}
@@ -157,13 +163,15 @@ static void	exec_redir(t_tree *node)
 	{
 		if (ft_strcmp(redir->file_name, "\0") == 0)
 		{
-			ft_putstr_fd("minishell-1.0: No such file or directory", 2);
+			ft_putstr_fd("minishell-1.0: No such file or directory: ", 2, '\0');
+			ft_putstr_fd(redir->file_name, 2, '\n');
 			global_minishell.status = 1;
 			exit(global_minishell.status);
 		}
 		else if (access(redir->file_name, F_OK) != 0 && access(redir->file_name, W_OK) != 0)
 		{
-			ft_putstr_fd("minishell-1.0: Permission denied", 2);
+			ft_putstr_fd("minishell-1.0: Permission denied", 2, '\0');
+			ft_putstr_fd(redir->file_name, 2, '\n');
 			global_minishell.status = 1;
 			exit(global_minishell.status);
 		}
@@ -179,7 +187,7 @@ static void	exec_redir(t_tree *node)
 			heredoc = readline("heredoc> ");
 			if (ft_strcmp(heredoc ,redir->file_name) == 0)
 				break;
-			ft_putstr_fd(heredoc, fd);
+			ft_putstr_fd(heredoc, fd, '\n');
 		}
 		close(fd);
 		fd = open("/tmp/heredoc", O_RDONLY, 0644);

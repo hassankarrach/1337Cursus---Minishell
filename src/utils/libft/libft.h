@@ -30,7 +30,7 @@ char	*ft_strchr(const char *s, int c);
 int		ft_strncmp(const char *str1, const char *str2, size_t n);
 size_t	ft_strlen(const char *s);
 char	**ft_split(char const *s, char c);
-void	ft_putstr_fd(char *s, int fd);
+void	ft_putstr_fd(char *s, int fd, char end_l);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strdup(const char *s);
 char	*ft_substr(char const *s, unsigned int start, size_t len);

@@ -30,7 +30,7 @@ static int append_identifier(char **line_ptr, t_token **tokens_list)
         {
             if (!skip_quotes(tmp, &i))
             {
-                print_quote_err(tmp[i]);
+	            ft_putstr_fd("minishell-1.0: unclosed `\"\'", 2, '\n');
                 return (0);
             }
         }
