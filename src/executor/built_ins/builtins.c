@@ -12,23 +12,69 @@
 
 #include "../../includes/minishell.h"
 /*
-export and unset change envirenment and env(the therd argument i execv)
+export, cd, unset change envirenment and env(the therd argument i execv)
 */
-int		builtins(char **args)
+
+int	args_number(char **args)
 {
-	if (ft_strcmp(args[0], "echo") == 0)
-		return(echo_builtin(args));
-	// else if (ft_strcmp(args[0], "cd") == 0)
-	// 	return(cd_builtin(args));
-	// else if (ft_strcmp(args[0], "pwd") == 0)
-	// 	return(pwd_builtin(args));
-	// else if (ft_strcmp(args[0], "export") == 0)
-	// 	return(export_builtin(args));
-	// else if (ft_strcmp(args[0], "unset") == 0)
-	// 	return(unset_builtin(args));
-	// else if (ft_strcmp(args[0], "env") == 0)
-	// 	return(env_builtin(args));
-	// else if (ft_strcmp(args[0], "exit") == 0)
-	// 	return(exit_builtin(args));
-	return(0);
+	int	i;
+
+	i = 0;
+	while(args[i] != 0)
+		i++;
+	return (i);
+}
+
+void	edit_environment(char *str, char *new)
+{
+	t_environment	*env;
+
+	env = global_minishell.environment;
+	while (env != NULL)
+	{
+		if(ft_strcmp(env->key, str) == 0)
+		{
+			free(env->value);
+			env->value = new;
+			return ;
+		}
+		env = env->next;
+	}
+}
+
+int	check_builtins(char *cmd)
+{
+	if (ft_strcmp(cmd, "echo") == 0)
+		return (0);
+	else if (ft_strcmp(cmd, "cd") == 0)
+		return (1);
+	else if (ft_strcmp(cmd, "pwd") == 0)
+		return (2);
+	else if (ft_strcmp(cmd, "export") == 0)
+		return (3);
+	else if (ft_strcmp(cmd, "unset") == 0)
+		return(4);
+	else if (ft_strcmp(cmd, "env") == 0)
+		return(5);
+	else if (ft_strcmp(cmd, "exit") == 0)
+		return(6);
+	return (-1);
+}
+
+void	builtins(char **args, int flag)
+{
+	if (flag == 0)
+		echo_builtin(args);
+	else if (flag == 1)
+		cd_builtin(args);
+	else if (flag == 2)
+		pwd_builtin(args);
+	else if (flag == 3)
+		export_builtin(args);
+	else if (flag == 4)
+		unset_builtin(args);
+	else if (flag == 5)
+		return(env_builtin(args));
+	else if (flag == 6)
+		return(exit_builtin(args));
 }

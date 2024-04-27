@@ -62,11 +62,19 @@ void ft_print(char **str, int index)
 
 }
 // if index != 0 print without \n 
-int	echo_builtin(char **args)
+void	echo_builtin(char **args)
 {
 	int	index;
+	int	i = 0;
 
+	// printf("start\n");
+	// while (i < 4)
+	// {
+	// 	printf("echo %s\n", args[i]);
+	// 	i++;
+	// }
+	// printf("end\n");
 	index = check_options(args);
 	ft_print(args, index);
-	return (1);
+	global_minishell.status = 0;
 }

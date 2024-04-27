@@ -59,13 +59,14 @@ char	**join_arg(char **args, char *value)
 	return(args1);
 }
 
-t_cmd	*_cmd(char **args ,int type)
+t_cmd	*_cmd(char **args ,int type, int i)
 {
 	t_cmd	*new;
 
 	new = malloc(sizeof(t_cmd));
 	new->args = args;
 	new->type = type;
+	new->args_number = i;
 	return(new);
 }
 // void	add_single_quote_list(int i)
@@ -135,14 +136,12 @@ void	new_cmd(t_token **head, t_tree **root)
 			}
 			continue ;
 		}
-		// if ((*head)->is_single_quote == 1)
-		// 	add_single_quote_list(i);
 		args = join_arg(tmp, (*head)->value);
 		i++;
 		ft_free(tmp);
 		(*head) = (*head)->next;
 	}
-	cmd = _cmd(args, TOKEN_WORD);
+	cmd = _cmd(args, TOKEN_WORD, i);
 	hold2 = hold;
 	if (hold != NULL)
 	{

@@ -1,26 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   pwd_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/05 09:08:04 by aelbasri          #+#    #+#             */
-/*   Updated: 2023/11/06 11:53:07 by aelbasri         ###   ########.fr       */
+/*   Created: 2024/04/24 11:21:58 by aelbasri          #+#    #+#             */
+/*   Updated: 2024/04/24 11:22:01 by aelbasri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../includes/minishell.h"
 
-t_list	*ft_lstnew(void *content)
+void	pwd_builtin(char **args)
 {
-	t_list	*node;
+	char	*pwd;
 
-	node = malloc(sizeof(t_list));
-	if (!node)
-		return (NULL);
-	node->content = content;
-	node->next = NULL;
-	// printf("node===%s\n", node->content);
-	return (node);
+	pwd = getcwd(NULL, 0);
+	printf("%s\n", pwd);
 }

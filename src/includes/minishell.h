@@ -7,6 +7,7 @@
 # include <stddef.h>
 # include <string.h>
 # include <stdlib.h>
+# include <limits.h>
 # include <unistd.h>
 # include <errno.h>
 # include <readline/readline.h>

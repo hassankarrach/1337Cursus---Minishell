@@ -41,6 +41,7 @@ typedef struct s_block
 typedef struct s_cmd
 {
 	int		type;
+	int		args_number;
 	char	**args;
 } t_cmd;
 

@@ -1,26 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   env_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/05 09:08:04 by aelbasri          #+#    #+#             */
-/*   Updated: 2023/11/06 11:53:07 by aelbasri         ###   ########.fr       */
+/*   Created: 2024/04/27 17:10:57 by aelbasri          #+#    #+#             */
+/*   Updated: 2024/04/27 17:10:59 by aelbasri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../includes/minishell.h"
 
-t_list	*ft_lstnew(void *content)
+void	env_builtin(char **args)
 {
-	t_list	*node;
-
-	node = malloc(sizeof(t_list));
-	if (!node)
-		return (NULL);
-	node->content = content;
-	node->next = NULL;
-	// printf("node===%s\n", node->content);
-	return (node);
+	if (args[1] != NULL)
+	{
+		ft_putstr_fd("minishell-1.0: too many arguments: env", 2, '\n');
+		global_minishell.status = 1;
+	}
+	else
+		printf_varibles(0);
 }
+

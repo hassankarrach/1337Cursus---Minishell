@@ -1,26 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/05 09:08:04 by aelbasri          #+#    #+#             */
-/*   Updated: 2023/11/06 11:53:07 by aelbasri         ###   ########.fr       */
+/*   Created: 2023/11/01 18:11:51 by aelbasri          #+#    #+#             */
+/*   Updated: 2023/11/02 14:23:39 by aelbasri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list	*ft_lstnew(void *content)
+int	ft_atoi(const char *n)
 {
-	t_list	*node;
+	int	i;
+	int	j;
+	int	nb;
 
-	node = malloc(sizeof(t_list));
-	if (!node)
-		return (NULL);
-	node->content = content;
-	node->next = NULL;
-	// printf("node===%s\n", node->content);
-	return (node);
+	i = 0;
+	j = 1;
+	while ((n[i] >= 9 && n[i] <= 13) || n[i] == 32)
+		i++;
+	if (n[i] == '-' || n[i] == '+')
+	{
+		if (n[i] == '-')
+			j = -1;
+		i++;
+	}
+	nb = 0;
+	while (n[i] != '\0')
+	{
+		if (ft_isdigit(n[i]) == 0)
+			return (nb * j);
+		nb = nb * 10;
+		nb += (n[i] - 48);
+		i++;
+	}
+	return (nb * j);
 }
