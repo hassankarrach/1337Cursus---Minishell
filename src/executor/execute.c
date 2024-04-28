@@ -127,6 +127,13 @@ static void	exec_redir(t_tree *node)
 	redir = (t_redir *)node;
 	if (redir->type == TOKEN_INPUT_REDIRECTION)
 	{
+		check_to_expand(&(redir->file_name));
+		if (redir->file_name == NULL)
+		{
+			ft_putstr_fd("minishell-1.0: ambiguous redirect ", 2, '\n');
+			global_minishell.status = 1;
+			exit(global_minishell.status);
+		}
 		if (access(redir->file_name, F_OK) != 0)
 		{
 			ft_putstr_fd("minishell-1.0: No such file or directory: ", 2, 4);
@@ -147,6 +154,13 @@ static void	exec_redir(t_tree *node)
 	}
 	else if (redir->type == TOKEN_OUTPUT_REDIRECTION)
 	{
+		check_to_expand(&(redir->file_name));
+		if (redir->file_name == NULL)
+		{
+			ft_putstr_fd("minishell-1.0: ambiguous redirect ", 2, '\n');
+			global_minishell.status = 1;
+			exit(global_minishell.status);
+		}
 		if (ft_strcmp(redir->file_name, "\0") == 0)
 		{
 			ft_putstr_fd("minishell-1.0: No such file or directory: ", 2, 4);
@@ -167,6 +181,13 @@ static void	exec_redir(t_tree *node)
 	}
 	else if (redir->type == TOKEN_APPEND_REDIRECTION)
 	{
+		check_to_expand(&(redir->file_name));
+		if (redir->file_name == NULL)
+		{
+			ft_putstr_fd("minishell-1.0: ambiguous redirect ", 2, '\n');
+			global_minishell.status = 1;
+			exit(global_minishell.status);
+		}
 		if (ft_strcmp(redir->file_name, "\0") == 0)
 		{
 			ft_putstr_fd("minishell-1.0: No such file or directory: ", 2, 4);

@@ -118,5 +118,6 @@ void	export_builtin(char **args)
 				add_back_env(new_env(key, value, 1));
 			i++;
 		}
+		re_create_env();
 	}
 }

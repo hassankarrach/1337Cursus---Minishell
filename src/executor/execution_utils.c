@@ -12,6 +12,35 @@
 
 #include "../includes/minishell.h"
 
+void	re_create_env()
+{
+	int				i;
+	int				j;
+	char			*tmp1;
+	char			**env;
+	t_environment	*tmp;
+
+	tmp = global_minishell.environment ;
+	i = 0; 
+	while (tmp != NULL)
+	{
+		tmp = tmp->next;
+		i++;
+	}
+	env = (char **)malloc(sizeof(char *) * (i + 1));
+	j = 0;
+	tmp = global_minishell.environment;
+	while (tmp != NULL)
+	{
+		tmp1 = ft_strjoin(tmp->key, "=");
+		env[j] = ft_strjoin(tmp1, tmp->value);
+		tmp = tmp->next;
+		j++;
+	}
+	env[j] = NULL;
+	global_minishell.env = env;
+}
+
 void	expand(char **str)
 {
 	t_environment *tmp;
@@ -38,7 +67,6 @@ size_t	ft_sublen(const char *s, char c)
 	i = 0;
 	if (c == ' ')
 	{	
-		// printf("2= %s\n", s);
 		while (s[i] != '\0' && ft_is_space(s[i]) != 1 && s[i] != '\'')
 		{
 			i++;
@@ -73,10 +101,8 @@ void	add_the_word(t_list **head, int flag, char *str, int start, int end)
 		ft_lstadd_back(head, node);
 		return ;
 	}
-	// printf("%d--%d\n", start ,end);
 	if (start <= end)
 		tmp = ft_substr(str, start, end - start);
-	// printf("---?0(%s)\n", tmp);
 	if (flag == 0 || flag == 1)
 	{
 		tmp1 = (char **)malloc(sizeof(char *) * 4);
@@ -100,18 +126,7 @@ void	add_the_word(t_list **head, int flag, char *str, int start, int end)
 			if (ft_strncmp(tmp1[1], "$?", 2) == 0)
 				tmp1[1] = ft_strjoin(ft_itoa(global_minishell.status), (tmp1[1]) + 2);
 			else if (ft_strcmp(tmp1[1], "$") != 0)
-			{
 				expand(&(tmp1[1]));
-				// if (tmp1[1] == NULL)
-				// {
-				// 	if (flag == 1)
-				// 		node = ft_lstnew("");
-				// 	else if (flag == 0)
-				// 		node = ft_lstnew(NULL);
-				// 	ft_lstadd_back(head, node);
-				// 	return;
-				// }
-			}
 			i = 0;
 			tmp2 = ft_strjoin(tmp1[0], tmp1[1]);
 			tmp = ft_strjoin(tmp2, tmp1[2]);
@@ -119,7 +134,6 @@ void	add_the_word(t_list **head, int flag, char *str, int start, int end)
 	}
 	if (flag == 0 && ft_strcmp(tmp, "") == 0)
 		tmp = NULL;
-	// printf("---?1(%s)\n", tmp);
 	node = ft_lstnew(tmp);
 	ft_lstadd_back(head, node);
 }
@@ -333,5 +347,13 @@ void check_cmd(char **args, char **env)
 		}		
 	}
 	else
+	{
 		*args = find_path(cmd, env);
+		if (*args == NULL)
+		{
+			global_minishell.status = 127;
+			ft_putstr_fd("minishell-1.0: Command not found: ", 2, 4);
+			ft_putstr_fd(cmd, 2, '\n');
+		}
+	}
 }

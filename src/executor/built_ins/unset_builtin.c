@@ -47,4 +47,5 @@ void	unset_builtin(char **args)
 		check_to_delete(args[i]);
 		i++;
 	}
+	re_create_env();
 }

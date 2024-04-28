@@ -39,6 +39,7 @@ void	ft_chdir(char *args)
 		global_minishell.status = 0;
 		edit_environment("OLDPWD", oldpwd);
 		edit_environment("PWD", getcwd(NULL, 0));
+		re_create_env();
 	}
 }
 
