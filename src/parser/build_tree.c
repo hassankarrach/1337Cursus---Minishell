@@ -115,9 +115,11 @@ void	new_cmd(t_token **head, t_tree **root)
 	args = NULL;
 	redir = NULL;
 	hold = NULL;
+	cmd = NULL;
 	i = 0;
 	while ((*head) != NULL && (*head)->type != TOKEN_AND &&\
-	(*head)->type != TOKEN_OR && (*head)->type != TOKEN_PIPE)
+	(*head)->type != TOKEN_OR && (*head)->type != TOKEN_PIPE &&\
+	 (*head)->type != TOKEN_CLOSING_PARENTHESES)
 	{
 		tmp = args;
 		if ((*head)->type == TOKEN_APPEND_REDIRECTION || (*head)->type == TOKEN_INPUT_REDIRECTION\
@@ -136,12 +138,14 @@ void	new_cmd(t_token **head, t_tree **root)
 			}
 			continue ;
 		}
+		// printf("seg\n");
 		args = join_arg(tmp, (*head)->value);
 		i++;
 		ft_free(tmp);
 		(*head) = (*head)->next;
 	}
-	cmd = _cmd(args, TOKEN_WORD, i);
+	if (args != NULL)
+		cmd = _cmd(args, TOKEN_WORD, i);
 	hold2 = hold;
 	if (hold != NULL)
 	{
@@ -158,6 +162,11 @@ void	new_cmd(t_token **head, t_tree **root)
 	}
 	else
 		nodes_link((t_tree *)cmd, root);
+	// printf("-->%d\n", (*root)->type);
+	// if (((t_redir *)(*root))->child == NULL)
+	// {
+	// 	printf("hello\n");
+	// }
 }
 void	new_block(t_tree **root, t_tree *node, t_token **head)
 {
@@ -263,7 +272,10 @@ t_tree	*build_tree(t_token *head, int flag)
 		if (head->type == TOKEN_WORD || head->type == TOKEN_APPEND_REDIRECTION || head->type == TOKEN_INPUT_REDIRECTION\
 		|| head->type == TOKEN_OUTPUT_REDIRECTION || head->type == TOKEN_HEREDOC)
 		{
+			// printf("start\n");
 			new_cmd(&head, &root);
+			// printf("==>%d\n", head->type);
+			// exit(1);
 			continue ;
 		}
 		else if (head->type == TOKEN_PIPE)
@@ -272,7 +284,10 @@ t_tree	*build_tree(t_token *head, int flag)
 			new_op(&root, head->type);
 		else if (head->type == TOKEN_OPENING_PARENTHESES)
 		{
+			// printf("==>1%d\n", head->type);
 			tmp = build_tree(head->next, 2);
+			// printf("==>%d\n", tmp->type);
+			// printf("==>2%d\n", head->type);
 			new_block(&root, tmp, &head);
 		}
 		else if (head->type == TOKEN_CLOSING_PARENTHESES)

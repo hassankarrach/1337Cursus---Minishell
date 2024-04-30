@@ -63,6 +63,28 @@ void	setup_environment()
 	}
 }
 
+int	check_just_spaces(int flag, char **line, char *limiter)
+{
+	int	i;
+
+	i = 0;
+	(void)limiter;
+	if (line == 0 || *line == 0)
+		return (1);
+	while ((*line)[i] != 0)
+	{
+		if ((*line)[i] != ' ' && (*line)[i] != '\t' && (*line)[i] != '\n')
+		{
+			if (flag == 1)
+				*line = ft_strdup((*line) + i);
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
+
 int main(int argc, char **argv, char **env)
 {
     l_op *tmp;
@@ -87,6 +109,8 @@ int main(int argc, char **argv, char **env)
 			printf("exit\n");
 			exit(global_minishell.status);
 		}
+		if (check_just_spaces(1, &input, "\0") || input[0] == '\0')
+			continue ;
         if (input != NULL)
 			add_history(input);
         global_minishell.line = input;
@@ -94,6 +118,13 @@ int main(int argc, char **argv, char **env)
         global_minishell.root = NULL;
 		head = ft_tokenize();
         global_minishell.root = build_tree(head, 0);
+		// printf("%d\n", (global_minishell.root)->type);
+		// printf("%d\n", ((t_redir *)(((global_minishell.root))))->child->type);
+		// printf("%d\n", ((t_redir *)(((t_redir *)(global_minishell.root))->child))->child->type);
+		// printf("%d\n", ((t_redir *)(global_minishell.root))->left->type);
+		// exit(0);
+		// exit(0);
+		// printf("%d\n", ((t_pipe *)(global_minishell.root))->right->type);
 		if (global_minishell.root != NULL && (global_minishell.root)->type == TOKEN_WORD)
 		{
 			expansion(&(((t_cmd *)(global_minishell.root))->args), ((t_cmd *)(global_minishell.root))->args_number);
@@ -101,22 +132,7 @@ int main(int argc, char **argv, char **env)
 			if ((flag >= 0 &&  flag <= 6))
 			{
 				builtins(((t_cmd *)(global_minishell.root))->args, flag);
-				// printf_varibles(1);
-				// exit(1);
-				// t_environment	*envp;
-
-				// envp = global_minishell.environment;
-				// while (envp != NULL)
-				// {
-				// 	// printf("%s\n", env->key);
-				// 	if(ft_strcmp(envp->key, "PWD") == 0)
-				// 	{
-				// 		printf("==>%s\n", envp->value);
-				// 	}
-				// 	envp = envp->next;
-				// }
 				continue ;
-				// exit(global_minishell.status);
 			}
 		}
         global_minishell.main_pid = fork();
@@ -127,8 +143,6 @@ int main(int argc, char **argv, char **env)
 			waitpid(global_minishell.main_pid ,&(global_minishell.status), 0);
 			if (WIFEXITED(global_minishell.status) != 0)
 				global_minishell.status = WEXITSTATUS(global_minishell.status);
-			if (access("/tmp/heredoc", F_OK))
-				unlink("/tmp/heredoc");
 		}
     }
     return 0;

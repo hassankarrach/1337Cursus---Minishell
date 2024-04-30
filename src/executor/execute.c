@@ -14,19 +14,11 @@
 
 static int	exec_block(t_tree *node)
 {
-	int		status;
+	int		status = 0;
 	t_block	*block;
-	pid_t	id;
 
 	block = (t_block *)node;
-	id = fork();
-	if (id == 0)
-		status = specify_types((t_tree *)block->child);
-	else
-	{
-		global_minishell.status = status;
-		waitpid(id, &status, 0);
-	}
+	status = specify_types((t_tree *)block->child);
 	return(status);
 }
 
@@ -85,14 +77,14 @@ static int	exec_pipe(t_tree *node)
 	{
 		close(va_pipe->pipe_fd[0]);
 		dup2(va_pipe->pipe_fd[1], 1);
+		close(va_pipe->pipe_fd[1]);
 		status = specify_types((t_tree *)(va_pipe->left));
 	}
 	else
 	{
-		waitpid(id, &status,0);
-		global_minishell.status = status;
 		close(va_pipe->pipe_fd[1]);
 		dup2(va_pipe->pipe_fd[0], 0);
+		close(va_pipe->pipe_fd[0]);
 		status = specify_types((t_tree *)(va_pipe->right));
 	}
 	return(status);
@@ -122,9 +114,12 @@ static void	exec_redir(t_tree *node)
 {
 	t_redir *redir;
 	char	*heredoc;
+	char	*tmp;
+	static int	h;
 	int		fd;
 
 	redir = (t_redir *)node;
+	// h = 0;
 	if (redir->type == TOKEN_INPUT_REDIRECTION)
 	{
 		check_to_expand(&(redir->file_name));
@@ -150,6 +145,7 @@ static void	exec_redir(t_tree *node)
 		}
 		close(0);
 		open(redir->file_name, O_CREAT | O_RDONLY ,0644);
+		global_minishell.status = 0;
 		specify_types((t_tree *)redir->child);
 	}
 	else if (redir->type == TOKEN_OUTPUT_REDIRECTION)
@@ -177,6 +173,7 @@ static void	exec_redir(t_tree *node)
 		}
 		close(1);
 		open(redir->file_name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		global_minishell.status = 0;
 		specify_types((t_tree *)redir->child);
 	}
 	else if (redir->type == TOKEN_APPEND_REDIRECTION)
@@ -204,28 +201,36 @@ static void	exec_redir(t_tree *node)
 		}
 		close(1);
 		open(redir->file_name, O_CREAT | O_WRONLY | O_APPEND, 0644);
+		global_minishell.status = 0;
 		specify_types((t_tree *)redir->child);
 	}
 	else if (redir->type == TOKEN_HEREDOC)
 	{
-		fd = open("/tmp/heredoc", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		
+		tmp = ft_strjoin("/tmp/.heredoc", ft_itoa(h));
+		fd = open(tmp, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		h++;
 		while(1)
 		{
 			heredoc = readline("heredoc> ");
 			if (ft_strcmp(heredoc ,redir->file_name) == 0)
-				break;
+				break ;
 			ft_putstr_fd(heredoc, fd, '\n');
 		}
 		close(fd);
-		fd = open("/tmp/heredoc", O_RDONLY, 0644);
-		dup2(fd, 0);
+		fd = open(tmp, O_RDONLY, 0644);
+		if (redir->child->type == TOKEN_WORD)
+			dup2(fd, 0);
+		global_minishell.status = 0;
 		specify_types((t_tree *)redir->child);
 	}
 }
 
 int	specify_types(t_tree *node)
 {
-	if (node->type == TOKEN_WORD)
+	if (node == NULL)
+		exit(0);
+	else if (node->type == TOKEN_WORD)
 		exec_cmd(node);
 	else if (node->type == TOKEN_PIPE)
 		return (exec_pipe(node));
@@ -233,7 +238,9 @@ int	specify_types(t_tree *node)
 	|| node->type == TOKEN_OUTPUT_REDIRECTION || node->type == TOKEN_HEREDOC)
 		exec_redir(node);
 	else if (node->type ==  TOKEN_AND || node->type == TOKEN_OR)
+	{
 		return (exec_and_or(node));
+	}
 	else if (node->type == TOKEN_BLOCK)
 		return (exec_block(node));
 	return (0);
