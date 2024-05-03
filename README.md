@@ -1,7 +1,8 @@
 ## TODO
-- expand in herdoc
-- Fix wildcards
-- systeme calls errors
-- edit makefile (.secondary...)
-- merge syntax error
 - norminette
+- heredoc problems (<< $f)
+- edit makefile (.secondary...)
+- systeme calls errors
+- leack
+- merge syntax error
+- Fix wildcards

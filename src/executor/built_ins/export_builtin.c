@@ -93,6 +93,13 @@ void	export_builtin(char **args)
 			j = 0;
 			flag = 0;
 			c = '=';
+			if (args[i][j] == '=')
+			{
+				ft_putstr_fd("minishell-1.0: Not a valid identifier: ", 2, 4);
+				ft_putstr_fd(args[i], 2, '\n');
+				global_minishell.status = 1;
+				return ;
+			}
 			while (args[i][j] != '=' &&  args[i][j] != '\0')
 			{
 				if (args[i][j] == '+' && args[i][j + 1] == '=')

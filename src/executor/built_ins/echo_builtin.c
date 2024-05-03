@@ -55,11 +55,9 @@ void ft_print(char **str, int index)
 	while (str[index] != NULL)
 	{
 		if (str[index + 1] == NULL)
-			c1 = 4;
+			c1 = c;
 		printf("%s%c", str[index++], c1);
 	}
-	printf("%c",c);
-
 }
 // if index != 0 print without \n 
 void	echo_builtin(char **args)

@@ -48,6 +48,7 @@ typedef struct s_cmd
 typedef struct s_pipe
 {
 	int				type;
+	int				index;
 	int				pipe_fd[2];
 	t_tree			*left;
     t_tree			*right;

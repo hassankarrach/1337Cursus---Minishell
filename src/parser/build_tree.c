@@ -12,7 +12,6 @@
 
 #include "../includes/minishell.h"
 
-/*================================================================*/
 int	count(char **args)
 {
 	int	i;
@@ -22,19 +21,6 @@ int	count(char **args)
 		i++;
 	return(i);
 }
-
-// void	add_quotes(char **str)
-// {
-// 	char	*tmp;
-// 	char	*tmp1;
-
-// 	tmp = (char *)malloc(1);
-// 	tmp[0] = '\'';
-// 	tmp1 = ft_strjoin(tmp, *str);
-// 	*str = ft_strjoin(tmp1, "\'");
-// 	tmp1 = tmp + 1;
-	 
-// }
 
 char	**join_arg(char **args, char *value)
 {
@@ -69,25 +55,6 @@ t_cmd	*_cmd(char **args ,int type, int i)
 	new->args_number = i;
 	return(new);
 }
-// void	add_single_quote_list(int i)
-// {
-// 	int 		*j;
-// 	int			k;
-
-// 	global_minishell.a_counter += 1;
-// 	j = (int *)malloc(sizeof(int) * global_minishell.a_counter);
-// 	k = 0;
-// 	while (k < global_minishell.a_counter)
-// 	{
-// 		if (global_minishell.a_counter == 1)
-// 			j[k++] = i;
-// 		else
-// 			j[k] = (global_minishell.quote)[k];
-// 		k++;
-// 	}
-// 	j[k] = i;
-// 	global_minishell.quote = j;
-// }
 
 t_redir	 *new_redir(t_token **head, int type)
 {
@@ -100,7 +67,6 @@ t_redir	 *new_redir(t_token **head, int type)
 	(*head) = (*head)->next->next;
 	return (redir);
 }
-// new_nodes
 void	new_cmd(t_token **head, t_tree **root)
 {
 	char	**args;
@@ -138,7 +104,6 @@ void	new_cmd(t_token **head, t_tree **root)
 			}
 			continue ;
 		}
-		// printf("seg\n");
 		args = join_arg(tmp, (*head)->value);
 		i++;
 		ft_free(tmp);
@@ -162,11 +127,6 @@ void	new_cmd(t_token **head, t_tree **root)
 	}
 	else
 		nodes_link((t_tree *)cmd, root);
-	// printf("-->%d\n", (*root)->type);
-	// if (((t_redir *)(*root))->child == NULL)
-	// {
-	// 	printf("hello\n");
-	// }
 }
 void	new_block(t_tree **root, t_tree *node, t_token **head)
 {
@@ -181,12 +141,16 @@ void	new_block(t_tree **root, t_tree *node, t_token **head)
 }
 void	new_pipe(t_tree **root)
 {
+	static int	i;
 	t_pipe	*n_pipe;
 
+	i++;
+	global_minishell.pipes_nbr = i;
 	n_pipe = malloc(sizeof(t_pipe));
 	n_pipe->type = TOKEN_PIPE;
 	n_pipe->left = NULL;
 	n_pipe->right = NULL;
+	n_pipe->index = i;
 	nodes_link((t_tree *)n_pipe, root);
 }
 
@@ -200,8 +164,7 @@ void	new_op(t_tree **root, int type)
 	n_op->right = NULL;
 	nodes_link((t_tree *)n_op, root);
 }
-/*================================================================*/
-// linking utils
+
 void	logical_operations_link(l_op *n_op, t_tree **root)
 {
 	if (n_op->left == NULL)
@@ -218,7 +181,6 @@ void	pipe_link(t_pipe *n_pipe, t_tree **root)
 		n_pipe->right = *root;
 	*root = (t_tree *)n_pipe;
 }
-//1 principal function for link 
 void	nodes_link(t_tree *node, t_tree **root)
 {
 	t_pipe	*n_pipe;
@@ -258,7 +220,6 @@ void	nodes_link(t_tree *node, t_tree **root)
 	}
 }
 
-//2 loop for the list come from tokenizer
 
 t_tree	*build_tree(t_token *head, int flag)
 {
@@ -272,10 +233,7 @@ t_tree	*build_tree(t_token *head, int flag)
 		if (head->type == TOKEN_WORD || head->type == TOKEN_APPEND_REDIRECTION || head->type == TOKEN_INPUT_REDIRECTION\
 		|| head->type == TOKEN_OUTPUT_REDIRECTION || head->type == TOKEN_HEREDOC)
 		{
-			// printf("start\n");
 			new_cmd(&head, &root);
-			// printf("==>%d\n", head->type);
-			// exit(1);
 			continue ;
 		}
 		else if (head->type == TOKEN_PIPE)
@@ -284,10 +242,7 @@ t_tree	*build_tree(t_token *head, int flag)
 			new_op(&root, head->type);
 		else if (head->type == TOKEN_OPENING_PARENTHESES)
 		{
-			// printf("==>1%d\n", head->type);
 			tmp = build_tree(head->next, 2);
-			// printf("==>%d\n", tmp->type);
-			// printf("==>2%d\n", head->type);
 			new_block(&root, tmp, &head);
 		}
 		else if (head->type == TOKEN_CLOSING_PARENTHESES)

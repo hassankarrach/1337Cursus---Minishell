@@ -12,6 +12,7 @@ SRC_TOKENIZER = $(addprefix ./src/tokenizer/, handle_tokens.c tokenizer_list.c t
 SRC_PARSER = $(addprefix ./src/parser/, build_tree.c)
 SRC_EXECUTOR = $(addprefix ./src/executor/, execute.c execution_utils.c)
 SRC_BUILT_INS = $(addprefix ./src/executor/built_ins/, builtins.c echo_builtin.c cd_builtin.c pwd_builtin.c export_builtin.c unset_builtin.c env_builtin.c exit_builtin.c)
+HEADERS = $(addprefix ./src/includes/, executor.h minishell.h parser.h tokenizer.h)
 
 SRCS = $(SRC_TOKENIZER) $(SRC_EXECUTOR) $(SRC_BUILT_INS) $(LIBFT) $(SRC_PARSER) ./src/main.c
 
@@ -24,7 +25,7 @@ all : $(NAME)
 # Compiling
 .c.o : 
 	cc -g $(CFLAGS) -c -o $@ $^
-$(NAME) : $(OBJS)
+$(NAME) : $(OBJS) $(HEADERS)
 	cc $(CFLAGS) $(RDLFLAG) $(OBJS) -o $(NAME) 
 
 # Cleaning

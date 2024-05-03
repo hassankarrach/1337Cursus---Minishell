@@ -74,7 +74,9 @@ void	builtins(char **args, int flag)
 	else if (flag == 4)
 		unset_builtin(args);
 	else if (flag == 5)
-		return(env_builtin(args));
+		env_builtin(args);
 	else if (flag == 6)
-		return(exit_builtin(args));
+		exit_builtin(args);
+	dup2(global_minishell.old_stdin, 0);
+	dup2(global_minishell.old_stdout, 1);
 }

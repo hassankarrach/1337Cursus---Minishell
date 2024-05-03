@@ -29,12 +29,14 @@
 typedef struct s_minishell
 {	
 	int				error;
+	int				pipes_nbr;
 	int				*quote;
 	int				a_counter;
-	int				pipes_nbr;
 	char			**my_env;
 	int				status;
 	pid_t			main_pid;
+	int				old_stdin;
+	int				old_stdout;
 	char			**env;
 	t_environment	*environment;
 	t_token			*tokens;

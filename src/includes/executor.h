@@ -25,6 +25,7 @@ char			*ft_strdup_key(const char *s, char c);
 t_environment	*new_env(char *key, char *value, int flag);
 
 void	execute();
+void	start_execution(t_cmd *cmd);
 int		specify_types(t_tree *node);
 void	check_cmd(char **args, char	**env);
 void	expand(char **str);
