@@ -136,7 +136,7 @@ static void	exec_redir(t_tree *node)
 			dup2(global_minishell.old_stdout, 1);
 			if (access(redir->file_name, F_OK) == 0)
 				ft_putstr_fd("minishell-1.0: Permission denied: ", 2, 4);
-			else
+			else 
 				ft_putstr_fd("minishell-1.0: No such file or directory: ", 2, 4);
 			ft_putstr_fd(redir->file_name, 2, '\n');
 			global_minishell.status = 1;

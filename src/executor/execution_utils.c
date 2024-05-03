@@ -327,7 +327,8 @@ char	*find_path(char *cmd, char **env)
 void check_cmd(char **args, char **env)
 {
 	char *cmd;
-	
+	struct  stat *buf;
+
 	cmd = *args;
 	if (ft_strcmp(cmd, "") == 0)
 	{
@@ -339,14 +340,21 @@ void check_cmd(char **args, char **env)
 	else if ((cmd[0] == '.' && cmd[1] == '/') || (cmd[0] == '/'))
 	{
 		printf("hello=%s\n", cmd); 
-		if (access(cmd, X_OK) == 1)
+		if (access(cmd, X_OK) == -1)
 		{
 			ft_putstr_fd("minishell-1.0: Command not found: ", 2, 4);
 			ft_putstr_fd(cmd, 2, '\n');
 			global_minishell.status = 127;
 			exit(global_minishell.status);
 		}
-		printf("hello=%s\n", cmd); 
+		else if (stat(cmd, buf) != 0)
+		{
+			ft_putstr_fd("minishell-1.0: is directory: ", 2, 4);
+			ft_putstr_fd(cmd, 2, '\n');
+			global_minishell.status = 127;
+			exit(global_minishell.status);
+
+		}
 	}
 	else
 	{
