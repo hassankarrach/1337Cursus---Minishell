@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-int check_n_option(char *str)
+int	check_n_option(char *str)
 {
 	int	i;
 
@@ -33,7 +33,7 @@ int	check_options(char **args)
 	int	i;
 
 	i = 1;
-	while(args[i] != NULL)
+	while (args[i] != NULL)
 	{
 		if (check_n_option(args[i]) == 0)
 			return (i);
@@ -42,7 +42,7 @@ int	check_options(char **args)
 	return (i);
 }
 
-void ft_print(char **str, int index)
+void	ft_print(char **str, int index)
 {
 	char	c;
 	char	c1;
@@ -52,6 +52,8 @@ void ft_print(char **str, int index)
 	else
 		c = 4;
 	c1 = ' ';
+	if (str[index] == NULL)
+		printf("%c", c);
 	while (str[index] != NULL)
 	{
 		if (str[index + 1] == NULL)
@@ -59,20 +61,12 @@ void ft_print(char **str, int index)
 		printf("%s%c", str[index++], c1);
 	}
 }
-// if index != 0 print without \n 
+
 void	echo_builtin(char **args)
 {
 	int	index;
-	int	i = 0;
 
-	// printf("start\n");
-	// while (i < 4)
-	// {
-	// 	printf("echo %s\n", args[i]);
-	// 	i++;
-	// }
-	// printf("end\n");
 	index = check_options(args);
 	ft_print(args, index);
-	global_minishell.status = 0;
+	g_lobal_minishell.status = 0;
 }

@@ -17,14 +17,14 @@ void	check_to_delete(char *str)
 	t_environment	*tmp;
 	t_environment	*prev;
 
-	tmp = global_minishell.environment;
+	tmp = g_lobal_minishell.environment;
 	prev = NULL;
 	while (tmp != NULL)
 	{
 		if (ft_strcmp(tmp->key, str) == 0)
 		{
 			if (prev == NULL)
-				global_minishell.environment = tmp->next;
+				g_lobal_minishell.environment = tmp->next;
 			else
 				prev->next = tmp->next;
 			free(tmp->key);

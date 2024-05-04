@@ -46,5 +46,6 @@ void	unset_builtin(char **args);
 void	env_builtin(char **args);
 void	exit_builtin(char **args);
 void	re_create_env();
+void	setup_environment();
 
 #endif

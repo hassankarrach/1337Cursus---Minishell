@@ -12,35 +12,44 @@
 
 #include "../../includes/minishell.h"
 
+void	check_directory(char *args)
+{
+	if (access(args, F_OK) != 0)
+	{
+		ft_putstr_fd("minishell-1.0: Not sush file or directory: ", 2, 4);
+		ft_putstr_fd(args, 2, '\n');
+	}
+	else
+	{
+		ft_putstr_fd("minishell-1.0: Not a directory: ", 2, 4);
+		ft_putstr_fd(args, 2, '\n');
+	}
+	g_lobal_minishell.status = 1;
+}
 
 void	ft_chdir(char *args)
 {
 	int				j;
 	char			*oldpwd;
-	
+
 	oldpwd = getcwd(NULL, 0);
 	j = chdir(args);
 	if (j != 0)
-	{
-		if (access(args, F_OK) != 0)
-		{
-			ft_putstr_fd("minishell-1.0: Not a directory: ", 2, 4);
-			ft_putstr_fd(args, 2, '\n');
-		}
-		else
-		{
-			ft_putstr_fd("minishell-1.0: Not sush a directory: ", 2, 4);
-			ft_putstr_fd(args, 2, '\n');
-		}
-		global_minishell.status = 1;
-	}
+		check_directory(args);
 	else
 	{
-		global_minishell.status = 0;
+		g_lobal_minishell.status = 0;
 		edit_environment("OLDPWD", oldpwd);
 		edit_environment("PWD", getcwd(NULL, 0));
 		re_create_env();
 	}
+}
+
+void	custom_error(char *s1, char *s2, int status)
+{
+	ft_putstr_fd(s1, 2, 4);
+	ft_putstr_fd(s2, 2, '\n');
+	g_lobal_minishell.status = status;
 }
 
 void	cd_builtin(char **args)
@@ -50,13 +59,10 @@ void	cd_builtin(char **args)
 
 	i = args_number(args);
 	if (i > 2)
-	{
-		ft_putstr_fd("minishell-1.0: too many arguments: cd", 2, '\n');
-		global_minishell.status = 1;
-	}
+		custom_error("minishell-1.0: too many arguments: ", "cd", 1);
 	else if (i == 1)
 	{
-		env = global_minishell.environment;
+		env = g_lobal_minishell.environment;
 		while (env != NULL)
 		{
 			if (ft_strcmp("HOME", env->key) == 0)
@@ -66,9 +72,7 @@ void	cd_builtin(char **args)
 			}
 			env = env->next;
 		}
-		ft_putstr_fd("minishell-1.0: HOME not set: ", 2, 4);
-		ft_putstr_fd("cd", 2, '\n');
-		return ;
+		custom_error("minishell-1.0: HOME not set: ", "cd", 1);
 	}
 	else
 		ft_chdir(args[1]);

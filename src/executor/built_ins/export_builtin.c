@@ -14,7 +14,7 @@
 
 int	ft_strlen_end(char *str, char end)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i] != 0 || str[i] != end)
@@ -26,7 +26,7 @@ void	add_back_env(t_environment *new)
 {
 	t_environment	*tmp;
 
-	tmp = global_minishell.environment;
+	tmp = g_lobal_minishell.environment;
 	if (tmp != NULL)
 	{
 		while (tmp->next != NULL)
@@ -39,8 +39,8 @@ int	is_exist(char *key, char *value, int flag, int flag2)
 {
 	int				i;
 	t_environment	*tmp;
-	tmp = global_minishell.environment;
 
+	tmp = g_lobal_minishell.environment;
 	i = 0;
 	while (tmp != NULL)
 	{
@@ -56,12 +56,13 @@ int	is_exist(char *key, char *value, int flag, int flag2)
 	}
 	return (0);
 }
+
 void	printf_varibles(int flag)
 {
 	t_environment	*tmp;
 
-	tmp = global_minishell.environment;
-	while(tmp != NULL)
+	tmp = g_lobal_minishell.environment;
+	while (tmp != NULL)
 	{
 		if (tmp->flag == 1 && flag == 0)
 		{
@@ -94,24 +95,20 @@ void	export_builtin(char **args)
 			flag = 0;
 			c = '=';
 			if (args[i][j] == '=')
-			{
-				ft_putstr_fd("minishell-1.0: Not a valid identifier: ", 2, 4);
-				ft_putstr_fd(args[i], 2, '\n');
-				global_minishell.status = 1;
-				return ;
-			}
-			while (args[i][j] != '=' &&  args[i][j] != '\0')
+				custom_error("minishell-1.0\
+				: Not a valid identifier: ", args[i], 1);
+			while (args[i][j] != '=' && args[i][j] != '\0')
 			{
 				if (args[i][j] == '+' && args[i][j + 1] == '=')
 				{
 					flag = 1;
 					c = '+';
 				}
-				else if ((ft_isalnum(args[i][j]) == 0 && args[i][0] != '_') || (ft_isdigit(args[i][0]) == 1))
+				else if ((ft_isalnum(args[i][j]) == 0 && args[i][0] != '_') \
+				|| (ft_isdigit(args[i][0]) == 1))
 				{
-					ft_putstr_fd("minishell-1.0: Not a valid identifier: ", 2, 4);
-					ft_putstr_fd(args[i], 2, '\n');
-					global_minishell.status = 1;
+					custom_error("minishell-1.0\
+					: Not a valid identifier: ", args[i], 1);
 					return ;
 				}
 				j++;

@@ -20,7 +20,7 @@ void	re_create_env()
 	char			**env;
 	t_environment	*tmp;
 
-	tmp = global_minishell.environment ;
+	tmp = g_lobal_minishell.environment ;
 	i = 0; 
 	while (tmp != NULL)
 	{
@@ -29,7 +29,7 @@ void	re_create_env()
 	}
 	env = (char **)malloc(sizeof(char *) * (i + 1));
 	j = 0;
-	tmp = global_minishell.environment;
+	tmp = g_lobal_minishell.environment;
 	while (tmp != NULL)
 	{
 		tmp1 = ft_strjoin(tmp->key, "=");
@@ -38,7 +38,7 @@ void	re_create_env()
 		j++;
 	}
 	env[j] = NULL;
-	global_minishell.env = env;
+	g_lobal_minishell.env = env;
 }
 
 void	expand(char **str)
@@ -48,7 +48,7 @@ void	expand(char **str)
 	if (*str == NULL)
 		return ;
 	(*str) = ft_strdup(((*str) +  1));
-	tmp = global_minishell.environment;
+	tmp = g_lobal_minishell.environment;
 	while (tmp != NULL)
 	{
 		if (ft_strcmp(tmp->key, *str) == 0)
@@ -126,7 +126,7 @@ void	add_the_word(t_list **head, int flag, char *str, int start, int end)
 		if (tmp1[1] != NULL)
 		{
 			if (ft_strncmp(tmp1[1], "$?", 2) == 0)
-				tmp1[1] = ft_strjoin(ft_itoa(global_minishell.status), (tmp1[1]) + 2);
+				tmp1[1] = ft_strjoin(ft_itoa(g_lobal_minishell.status), (tmp1[1]) + 2);
 			else if (ft_strcmp(tmp1[1], "$") != 0)
 				expand(&(tmp1[1]));
 			i = 0;
@@ -334,25 +334,33 @@ void check_cmd(char **args, char **env)
 	{
 		ft_putstr_fd("minishell-1.0: Command not found: ", 2, 4);
 		ft_putstr_fd("''", 2, '\n');
-		global_minishell.status = 127;
-		exit(global_minishell.status);
+		g_lobal_minishell.status = 127;
+		exit(g_lobal_minishell.status);
 	}
 	else if ((cmd[0] == '.' && cmd[1] == '/') || (cmd[0] == '/'))
 	{
-		printf("hello=%s\n", cmd); 
+
 		if (access(cmd, X_OK) == -1)
 		{
-			ft_putstr_fd("minishell-1.0: Command not found: ", 2, 4);
+			if (access(cmd, F_OK) == 0)
+			{
+				ft_putstr_fd("minishell-1.0: Permission denied: ", 2, 4);
+				g_lobal_minishell.status = 126;
+			}
+			else
+			{
+				ft_putstr_fd("minishell-1.0: Command not found: ", 2, 4);
+				g_lobal_minishell.status = 127;
+			}
 			ft_putstr_fd(cmd, 2, '\n');
-			global_minishell.status = 127;
-			exit(global_minishell.status);
+			exit(g_lobal_minishell.status);
 		}
 		else if (stat(cmd, buf) != 0)
 		{
 			ft_putstr_fd("minishell-1.0: is directory: ", 2, 4);
 			ft_putstr_fd(cmd, 2, '\n');
-			global_minishell.status = 127;
-			exit(global_minishell.status);
+			g_lobal_minishell.status = 126;
+			exit(g_lobal_minishell.status);
 
 		}
 	}
@@ -363,8 +371,8 @@ void check_cmd(char **args, char **env)
 		{
 			ft_putstr_fd("minishell-1.0: Command not found: ", 2, 4);
 			ft_putstr_fd(cmd, 2, '\n');
-			global_minishell.status = 127;
-			exit(global_minishell.status);
+			g_lobal_minishell.status = 127;
+			exit(g_lobal_minishell.status);
 		}
 	}
 }

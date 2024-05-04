@@ -57,4 +57,6 @@ typedef struct s_pipe
 t_tree	*build_tree(t_token *head, int flag);
 void	nodes_link(t_tree *node, t_tree **root);
 void	logical_operations_link(l_op *n_op, t_tree **root);
+int	check_just_spaces(int flag, char **line, char *limiter);
+
 #endif

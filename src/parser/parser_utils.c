@@ -1,24 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_builtin.c                                      :+:      :+:    :+:   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/27 17:10:57 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/04/27 17:10:59 by aelbasri         ###   ########.fr       */
+/*   Created: 2024/05/04 17:05:04 by aelbasri          #+#    #+#             */
+/*   Updated: 2024/05/04 17:05:06 by aelbasri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../includes/minishell.h"
 
-void	env_builtin(char **args)
+int	check_just_spaces(int flag, char **line, char *limiter)
 {
-	if (args[1] != NULL)
+	int	i;
+
+	i = 0;
+	(void)limiter;
+	if (line == 0 || *line == 0)
+		return (1);
+	while ((*line)[i] != 0)
 	{
-		ft_putstr_fd("minishell-1.0: too many arguments: env", 2, '\n');
-		g_lobal_minishell.status = 1;
+		if ((*line)[i] != ' ' && (*line)[i] != '\t' && (*line)[i] != '\n')
+		{
+			if (flag == 1)
+				*line = ft_strdup((*line) + i);
+			return (0);
+		}
+		i++;
 	}
-	else
-		printf_varibles(0);
+	return (1);
 }

@@ -25,16 +25,16 @@ static int	exec_block(t_tree *node)
 void	ft_and(l_op *and_or, int status)
 {
 	status = specify_types((t_tree *)and_or->left);
-	global_minishell.status = status;
-	if (global_minishell.status == 0)
-		global_minishell.status = specify_types((t_tree *)and_or->right);
+	g_lobal_minishell.status = status;
+	if (g_lobal_minishell.status == 0)
+		g_lobal_minishell.status = specify_types((t_tree *)and_or->right);
 }
 void	ft_or(l_op *and_or, int status)
 {
 	status = specify_types((t_tree *)and_or->left);
-	global_minishell.status = status;
-	if (global_minishell.status != 0)
-		global_minishell.status = specify_types((t_tree *)and_or->right);
+	g_lobal_minishell.status = status;
+	if (g_lobal_minishell.status != 0)
+		g_lobal_minishell.status = specify_types((t_tree *)and_or->right);
 }
 
 static int	exec_and_or(t_tree *node)
@@ -68,14 +68,21 @@ static int	exec_pipe(t_tree *node)
 		dup2(va_pipe->pipe_fd[1], 1);
 		close(va_pipe->pipe_fd[1]);
 		status = specify_types((t_tree *)(va_pipe->left));
-		exit(global_minishell.status);
+		exit(g_lobal_minishell.status);
 	}
 	else
 	{
+		// printf("%d\n", va_pipe->index);
+		// printf("%d\n", g_lobal_minishell.pipes_nbr);
+		if (va_pipe->index == g_lobal_minishell.pipes_nbr)
+			waitpid(id, &(g_lobal_minishell.status), 0);
 		close(va_pipe->pipe_fd[1]);
 		dup2(va_pipe->pipe_fd[0], 0);
 		close(va_pipe->pipe_fd[0]);
 		status = specify_types((t_tree *)(va_pipe->right));
+		int j = 0;
+		while (j++ < g_lobal_minishell.pipes_nbr)
+				wait(NULL);
 	}
 	return(status);
 }
@@ -86,7 +93,7 @@ static void	exec_cmd(t_tree *node)
 	int		flag;
 	
 	cmd = (t_cmd *)node;
-	if ((global_minishell.root)->type != TOKEN_WORD)
+	if ((g_lobal_minishell.root)->type != TOKEN_WORD)
 		expansion(&(cmd->args), cmd->args_number);
 	flag = check_builtins((cmd->args)[0]);
 	if (flag >= 0 &&  flag <= 6)
@@ -107,42 +114,42 @@ static void	exec_redir(t_tree *node)
 
 	redir = (t_redir *)node;
 	flag = 0;
-	global_minishell.status = 0;
+	g_lobal_minishell.status = 0;
 	if (redir->type == TOKEN_INPUT_REDIRECTION)
 	{
 		check_to_expand(&(redir->file_name));
 		if (redir->file_name == NULL)
 		{
-			dup2(global_minishell.old_stdin, 0);
-			dup2(global_minishell.old_stdout, 1);
+			dup2(g_lobal_minishell.old_stdin, 0);
+			dup2(g_lobal_minishell.old_stdout, 1);
 			ft_putstr_fd("minishell-1.0: ambiguous redirect ", 2, '\n');
-			global_minishell.status = 1;
+			g_lobal_minishell.status = 1;
 			return ;
 		}
 		if (access(redir->file_name, F_OK) != 0)
 		{
-			dup2(global_minishell.old_stdin, 0);
-			dup2(global_minishell.old_stdout, 1);
+			dup2(g_lobal_minishell.old_stdin, 0);
+			dup2(g_lobal_minishell.old_stdout, 1);
 			ft_putstr_fd("minishell-1.0: No such file or directory: ", 2, 4);
 			ft_putstr_fd(redir->file_name, 2, '\n');
-			global_minishell.status = 1;
+			g_lobal_minishell.status = 1;
 			return ;
 		}
 		close(0);
 		fd1 = open(redir->file_name, O_CREAT | O_RDONLY ,0644);
 		if (fd1 == -1)
 		{
-			dup2(global_minishell.old_stdin, 0);
-			dup2(global_minishell.old_stdout, 1);
+			dup2(g_lobal_minishell.old_stdin, 0);
+			dup2(g_lobal_minishell.old_stdout, 1);
 			if (access(redir->file_name, F_OK) == 0)
 				ft_putstr_fd("minishell-1.0: Permission denied: ", 2, 4);
 			else 
 				ft_putstr_fd("minishell-1.0: No such file or directory: ", 2, 4);
 			ft_putstr_fd(redir->file_name, 2, '\n');
-			global_minishell.status = 1;
+			g_lobal_minishell.status = 1;
 			return ;
 		}
-		global_minishell.status = 0;
+		g_lobal_minishell.status = 0;
 		specify_types((t_tree *)redir->child);
 	}
 	else if (redir->type == TOKEN_OUTPUT_REDIRECTION)
@@ -150,36 +157,36 @@ static void	exec_redir(t_tree *node)
 		check_to_expand(&(redir->file_name));
 		if (redir->file_name == NULL)
 		{
-			dup2(global_minishell.old_stdin, 0);
-			dup2(global_minishell.old_stdout, 1);
+			dup2(g_lobal_minishell.old_stdin, 0);
+			dup2(g_lobal_minishell.old_stdout, 1);
 			ft_putstr_fd("minishell-1.0: ambiguous redirect ", 2, '\n');
-			global_minishell.status = 1;
+			g_lobal_minishell.status = 1;
 			return ;
 		}
 		if (ft_strcmp(redir->file_name, "\0") == 0)
 		{
-			dup2(global_minishell.old_stdin, 0);
-			dup2(global_minishell.old_stdout, 1);
+			dup2(g_lobal_minishell.old_stdin, 0);
+			dup2(g_lobal_minishell.old_stdout, 1);
 			ft_putstr_fd("minishell-1.0: No such file or directory: ", 2, 4);
 			ft_putstr_fd(redir->file_name, 2, '\n');
-			global_minishell.status = 1;
+			g_lobal_minishell.status = 1;
 			return ;
 		}
 		close(1);
 		fd1 = open(redir->file_name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (fd1 == -1)
 		{
-			dup2(global_minishell.old_stdin, 0);
-			dup2(global_minishell.old_stdout, 1);
+			dup2(g_lobal_minishell.old_stdin, 0);
+			dup2(g_lobal_minishell.old_stdout, 1);
 			if (access(redir->file_name, F_OK) == 0)
 				ft_putstr_fd("minishell-1.0: Permission denied", 2, 4);
 			else
 				ft_putstr_fd("minishell-1.0: No such file or directory: ", 2, 4);
 			ft_putstr_fd(redir->file_name, 2, '\n');
-			global_minishell.status = 1;
+			g_lobal_minishell.status = 1;
 			return ;
 		}
-		global_minishell.status = 0;
+		g_lobal_minishell.status = 0;
 		specify_types((t_tree *)redir->child);
 	}
 	else if (redir->type == TOKEN_APPEND_REDIRECTION)
@@ -187,42 +194,43 @@ static void	exec_redir(t_tree *node)
 		check_to_expand(&(redir->file_name));
 		if (redir->file_name == NULL)
 		{
-			dup2(global_minishell.old_stdin, 0);
-			dup2(global_minishell.old_stdout, 1);
+			dup2(g_lobal_minishell.old_stdin, 0);
+			dup2(g_lobal_minishell.old_stdout, 1);
 			ft_putstr_fd("minishell-1.0: ambiguous redirect ", 2, '\n');
-			global_minishell.status = 1;
+			g_lobal_minishell.status = 1;
 			return ;
 		}
 		if (ft_strcmp(redir->file_name, "\0") == 0)
 		{
-			dup2(global_minishell.old_stdin, 0);
-			dup2(global_minishell.old_stdout, 1);
+			dup2(g_lobal_minishell.old_stdin, 0);
+			dup2(g_lobal_minishell.old_stdout, 1);
 			ft_putstr_fd("minishell-1.0: No such file or directory: ", 2, 4);
 			ft_putstr_fd(redir->file_name, 2, '\n');
-			global_minishell.status = 1;
+			g_lobal_minishell.status = 1;
 			return ;
 		}
 		close(1);
 		fd1 = open(redir->file_name, O_CREAT | O_WRONLY | O_APPEND, 0644);
 		if (fd1 == -1)
 		{
-			dup2(global_minishell.old_stdin, 0);
-			dup2(global_minishell.old_stdout, 1);
+			dup2(g_lobal_minishell.old_stdin, 0);
+			dup2(g_lobal_minishell.old_stdout, 1);
 			if (access(redir->file_name, F_OK) == 0)
 				ft_putstr_fd("minishell-1.0: Permission denied", 2, 4);
 			else
 				ft_putstr_fd("minishell-1.0: No such file or directory: ", 2, 4);
 			ft_putstr_fd(redir->file_name, 2, '\n');
-			global_minishell.status = 1;
+			g_lobal_minishell.status = 1;
 			return ;
 		}
-		global_minishell.status = 0;
+		g_lobal_minishell.status = 0;
 		specify_types((t_tree *)redir->child);
 	}
 	else if (redir->type == TOKEN_HEREDOC)
 	{
-		printf("-->%s", redir->file_name);
-		if ((redir->file_name)[0] != '\'' && (redir->file_name)[0] != '\"')
+		dup2(g_lobal_minishell.old_stdin, 0);
+		dup2(g_lobal_minishell.old_stdout, 1);
+		if (redir->file_name != NULL && (redir->file_name)[0] != '\'' && (redir->file_name)[0] != '\"' && (redir->file_name)[0] != '$')
 			flag = 1;
 		tmp = ft_strjoin("/tmp/.heredoc", ft_itoa(h));
 		fd = open(tmp, O_CREAT | O_WRONLY | O_TRUNC, 0644);
@@ -230,6 +238,8 @@ static void	exec_redir(t_tree *node)
 		while(1)
 		{
 			heredoc = readline("heredoc> ");
+			if (heredoc == NULL)
+				break ;
 			if(flag == 1)
 				check_to_expand(&heredoc);
 			if (ft_strcmp(heredoc ,redir->file_name) == 0)
@@ -241,6 +251,7 @@ static void	exec_redir(t_tree *node)
 		{	
 			fd = open(tmp, O_RDONLY, 0644);
 			dup2(fd, 0);
+			close(fd);
 		}
 		specify_types((t_tree *)redir->child);
 	}
@@ -249,7 +260,11 @@ static void	exec_redir(t_tree *node)
 int	specify_types(t_tree *node)
 {
 	if (node == NULL)
-		exit(0);
+	{
+		dup2(g_lobal_minishell.old_stdin, 0);
+		dup2(g_lobal_minishell.old_stdout, 1);
+		return(0);
+	}
 	else if (node->type == TOKEN_WORD)
 		exec_cmd(node);
 	else if (node->type == TOKEN_PIPE)
@@ -266,7 +281,7 @@ int	specify_types(t_tree *node)
 
 void	execute()
 {
-	if (!(global_minishell.root))
+	if (!(g_lobal_minishell.root))
 		return ;
-	specify_types(global_minishell.root);
+	specify_types(g_lobal_minishell.root);
 }

@@ -18,6 +18,7 @@
 # include "../utils/libft/libft.h"
 
 // inner includes ===>
+# include "./error.h"
 # include "./tokenizer.h"
 # include "./parser.h"
 # include "./executor.h"
@@ -45,7 +46,8 @@ typedef struct s_minishell
 	t_tree			*root;
 } t_minishell;
 
-extern t_minishell global_minishell;
+extern t_minishell g_lobal_minishell;
 
+void	init_minishell(char *input);
 
 #endif

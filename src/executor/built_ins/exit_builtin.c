@@ -12,43 +12,53 @@
 
 #include "../../includes/minishell.h"
 
+void	b_exit(char *str)
+{
+	int	nbr;
+
+	if (str == NULL)
+	{
+		printf("exit\n");
+		exit(0);
+	}
+	nbr = ft_atoi(str);
+	printf("exit\n");
+	exit(nbr % 256);
+}
+
+void	check_is_digit(char *str, int *j)
+{
+	if (ft_isdigit(str[*j]) == 0)
+	{
+		printf("exit\n");
+		custom_error("minishell-1.0: Numeric argument required: ", str, 2);
+		exit(g_lobal_minishell.status);
+	}
+	(*j)++;
+}
+
 void	exit_builtin(char **args)
 {
 	int	i;
 	int	j;
 	int	k;
-	int	nbr;
 
 	i = 1;
 	j = 0;
-	while (args[i][j] != '\0')
+	while (args[i] != NULL && args[i][j] != '\0')
 	{
 		if (j == 0 && (args[i][j] == '-' || args[i][j] == '+'))
 		{
 			j++;
 			continue ;
 		}
-		if (ft_isdigit(args[i][j]) == 0)
-		{
-			printf("exit\n");
-			ft_putstr_fd("minishell-1.0: Numeric argument required: ", 2, 4);
-			ft_putstr_fd(args[i], 2, '\n');
-			global_minishell.status = 2;
-			exit(global_minishell.status);
-		}
-		j++;
+		check_is_digit(args[i], &j);
 	}
 	if (args[2] != NULL)
 	{
 		printf("exit\n");
-		ft_putstr_fd("minishell-1.0: too many arguments: exit", 2, '\n');
-		global_minishell.status = 1;
+		custom_error("minishell-1.0: too many arguments: ", "exit", 1);
 	}
 	else
-	{
-		nbr = ft_atoi(args[i]);
-		printf("exit\n");
-		exit(nbr%256);
-	}
+		b_exit(args[i]);
 }
-

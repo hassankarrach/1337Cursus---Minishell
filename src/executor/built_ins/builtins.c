@@ -11,16 +11,13 @@
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-/*
-export, cd, unset change envirenment and env(the therd argument i execv)
-*/
 
 int	args_number(char **args)
 {
 	int	i;
 
 	i = 0;
-	while(args[i] != 0)
+	while (args[i] != 0)
 		i++;
 	return (i);
 }
@@ -29,10 +26,10 @@ void	edit_environment(char *str, char *new)
 {
 	t_environment	*env;
 
-	env = global_minishell.environment;
+	env = g_lobal_minishell.environment;
 	while (env != NULL)
 	{
-		if(ft_strcmp(env->key, str) == 0)
+		if (ft_strcmp(env->key, str) == 0)
 		{
 			free(env->value);
 			env->value = new;
@@ -53,11 +50,11 @@ int	check_builtins(char *cmd)
 	else if (ft_strcmp(cmd, "export") == 0)
 		return (3);
 	else if (ft_strcmp(cmd, "unset") == 0)
-		return(4);
+		return (4);
 	else if (ft_strcmp(cmd, "env") == 0)
-		return(5);
+		return (5);
 	else if (ft_strcmp(cmd, "exit") == 0)
-		return(6);
+		return (6);
 	return (-1);
 }
 
@@ -77,6 +74,6 @@ void	builtins(char **args, int flag)
 		env_builtin(args);
 	else if (flag == 6)
 		exit_builtin(args);
-	dup2(global_minishell.old_stdin, 0);
-	dup2(global_minishell.old_stdout, 1);
+	dup2(g_lobal_minishell.old_stdin, 0);
+	dup2(g_lobal_minishell.old_stdout, 1);
 }

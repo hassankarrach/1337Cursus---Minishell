@@ -141,16 +141,14 @@ void	new_block(t_tree **root, t_tree *node, t_token **head)
 }
 void	new_pipe(t_tree **root)
 {
-	static int	i;
 	t_pipe	*n_pipe;
 
-	i++;
-	global_minishell.pipes_nbr = i;
+	g_lobal_minishell.pipes_nbr++;
 	n_pipe = malloc(sizeof(t_pipe));
 	n_pipe->type = TOKEN_PIPE;
 	n_pipe->left = NULL;
 	n_pipe->right = NULL;
-	n_pipe->index = i;
+	n_pipe->index = g_lobal_minishell.pipes_nbr;
 	nodes_link((t_tree *)n_pipe, root);
 }
 
