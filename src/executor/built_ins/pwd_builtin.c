@@ -12,10 +12,11 @@
 
 #include "../../includes/minishell.h"
 
-void	pwd_builtin(char **args)
+void	pwd_builtin(char *str)
 {
 	char	*pwd;
 
+	(void)str;
 	pwd = getcwd(NULL, 0);
 	printf("%s\n", pwd);
 }

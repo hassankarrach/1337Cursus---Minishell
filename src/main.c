@@ -46,7 +46,6 @@ void	ctrl_d(char *input)
 int	main(int argc, char **argv, char **env)
 {
 	char	*input;
-	int		i;
 
 	(void)argv;
 	if (argc != 1)
@@ -56,14 +55,14 @@ int	main(int argc, char **argv, char **env)
 	}
 	g_lobal_minishell.env = env;
 	g_lobal_minishell.status = 0;
-	setup_environment();
+	setup_environment(1);
 	while (1)
 	{
 		input = readline(PROMPT);
 		ctrl_d(input);
 		if (check_just_spaces(1, &input, "\0") || input[0] == '\0')
 			continue ;
-		if (input != NULL)
+		if (input[0] != '\0')
 			add_history(input);
 		init_minishell(input);
 		if (check_single_cmd(0) == 1)

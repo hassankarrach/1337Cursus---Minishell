@@ -12,6 +12,37 @@
 
 #include "../includes/minishell.h"
 
+void	ft_and(l_op *and_or, int status)
+{
+	status = specify_types((t_tree *)and_or->left);
+	g_lobal_minishell.status = status;
+	if (g_lobal_minishell.status == 0)
+		g_lobal_minishell.status = specify_types((t_tree *)and_or->right);
+}
+
+void	ft_or(l_op *and_or, int status)
+{
+	status = specify_types((t_tree *)and_or->left);
+	g_lobal_minishell.status = status;
+	if (g_lobal_minishell.status != 0)
+		g_lobal_minishell.status = specify_types((t_tree *)and_or->right);
+}
+
+void	wait_loop(void)
+{
+	int	j;
+
+	j = 0;
+	while (j++ < g_lobal_minishell.pipes_nbr)
+		wait(NULL);
+}
+void	setup_in_out_fds(int p_fd1, int p_fd2, int std_fd)
+{
+	close(p_fd1);
+	dup2(p_fd2, std_fd);
+	close(p_fd2);
+}
+
 void	re_create_env()
 {
 	int				i;
@@ -116,7 +147,6 @@ void	add_the_word(t_list **head, int flag, char *str, int start, int end)
 		{
 			if (tmp[i] == '$')
 			{
-				// tmp1[0] = ft_substr(tmp, 0, ft_sublen(tmp, '$'));
 				j = ft_sublen((tmp + i), ' ');
 				tmp1[1] = ft_substr(tmp, i, j);
 				tmp1[2] = ft_substr(tmp, (i + j), ft_strlen(tmp + j));
@@ -139,48 +169,83 @@ void	add_the_word(t_list **head, int flag, char *str, int start, int end)
 	node = ft_lstnew(tmp);
 	ft_lstadd_back(head, node);
 }
+void	va_init(int *start, int *i, t_list **head, int *end, char *str)
+{
+	*i = 0;
+	*start = 0;
+	*head = NULL;
+	*end = ft_strlen(str);
+}
+
+// void	check_to_expand2(char *str, int *flag, &head)
+// {
+// 	if ((str)[i] == '\'' || (str)[i] == '\"')
+// 	{
+// 		if ((str)[i] == '\'' && (*flag) == 0)
+// 		{
+// 			end = i;
+// 			add_the_word(&head, (*flag), str, start, end);
+// 			(*flag) = 2;
+// 		}
+// 		else if ((str)[i] == '\'' && (*flag) == 2)
+// 		{
+// 			end = i;
+// 			add_the_word(&head, (*flag), str, start, end);
+// 			(*flag) = 0;
+// 		}
+// 		else if ((str)[i] == '\"' && (*flag) == 0)
+// 		{
+// 			end = i;
+// 			add_the_word(&head, (*flag), str, start, end);
+// 			(*flag) = 1;
+// 		}
+// 		else if ((str)[i] == '\"' && (*flag) == 1)
+// 		{
+// 			end = i;
+// 			add_the_word(&head, (*flag), str, start, end);
+// 			(*flag) = 0;
+// 		}
+// 		start = end;
+// 	}
+// }
 
 void	check_to_expand(char **str)
 {
 	int		i;
-	int		j;
 	t_list	*head;
 	int		start;
 	int		end;
 	int		flag;
 	char	*tmp;
 	char 	*tmp1;
-	char	*tmp2;
 
-	i = 0;
 	flag = 0;
-	start = 0;
-	tmp = *str;
-	head = NULL;
-	end = ft_strlen(*str);
-	while (tmp[i] != '\0')
+	tmp = (*str);
+	va_init(&start, &i, &head, &end, *str);
+	while ((*str)[i] != '\0')
 	{
-		if (tmp[i] == '\'' || tmp[i] == '\"')
+		// check_to_expand2();
+		if ((*str)[i] == '\'' || (*str)[i] == '\"')
 		{
-			if (tmp[i] == '\'' && flag == 0)
+			if ((*str)[i] == '\'' && flag == 0)
 			{
 				end = i;
 				add_the_word(&head, flag, *str, start, end);
 				flag = 2;
 			}
-			else if (tmp[i] == '\'' && flag == 2)
+			else if ((*str)[i] == '\'' && flag == 2)
 			{
 				end = i;
 				add_the_word(&head, flag, *str, start, end);
 				flag = 0;
 			}
-			else if (tmp[i] == '\"' && flag == 0)
+			else if ((*str)[i] == '\"' && flag == 0)
 			{
 				end = i;
 				add_the_word(&head, flag, *str, start, end);
 				flag = 1;
 			}
-			else if (tmp[i] == '\"' && flag == 1)
+			else if ((*str)[i] == '\"' && flag == 1)
 			{
 				end = i;
 				add_the_word(&head, flag, *str, start, end);
@@ -188,7 +253,7 @@ void	check_to_expand(char **str)
 			}
 			start = end;
 		}
-		else if (tmp[i] == '$' && flag != 2)
+		else if ((*str)[i] == '$' && flag != 2)
 			add_the_word(&head, flag, *str, start, i);
 		i++;
 	}
@@ -197,7 +262,6 @@ void	check_to_expand(char **str)
 	tmp1 = NULL;
 	while (head != NULL)
 	{
-		// printf("-->%s\n", (char *)(head->content));
 		*str = ft_strjoin(tmp1, (char *)(head->content));
 		tmp1 = *str;
 		head = head->next;
@@ -219,7 +283,6 @@ void	edit_args(char ***args, int nb)
 		if (tmp[i] != NULL)
 		{
 			new_args[j] = ft_strdup(tmp[i]);
-			// free(tmp[i]);
 			j++;
 		}
 		i++;
@@ -227,10 +290,6 @@ void	edit_args(char ***args, int nb)
 	while(j < nb + 1)
 		new_args[j++] = NULL;
 	*args = new_args;
-	// printf("%d new_args = (%s)\n", j, new_args[0]);
-	// printf("%d new_args = (%s)\n", j, new_args[1]);
-	// printf("new_args = %s\n", (*args)[0]);
-
 }
 
 void	expansion(char ***args, int nb)
@@ -245,12 +304,7 @@ void	expansion(char ***args, int nb)
 		check_to_expand(&(tmp[i]));
 		i++;
 	}
-	// printf("(%s)\n", (*args)[0]);
 	edit_args(args, nb);
-	// printf("(%s)\n", (*args)[0]);
-	// int k = 0;
-	// while (k < 4)
-	// 	printf("here meme = (%s)\n", tmp[k++]);
 }
 
 char	**set_cmds(char **args, char *cmd)
@@ -282,7 +336,7 @@ char	**set_cmds(char **args, char *cmd)
 	return (paths[i] = 0, paths);
 }
 
-char	*check_access(char **paths, char *cmd1)
+char	*check_access(char **paths)
 {
 	int		i;
 	char	*cmd;
@@ -318,10 +372,28 @@ char	*find_path(char *cmd, char **env)
 		return (NULL);
 	args = ft_split((env[i] + 5), ':');
 	paths = set_cmds(args, cmd);
-	check = check_access(paths, cmd);
+	check = check_access(paths);
 	ft_free(args);
 	ft_free(paths);
 	return (check);
+}
+void	check1(char *cmd)
+{
+	struct  stat buf;
+
+	if (access(cmd, X_OK) == -1)
+	{
+		if (access(cmd, F_OK) == 0)
+			custom_error("minishell-1.0: Permission denied: ", cmd, 126);
+		else
+			custom_error("minishell-1.0: Command not found: ", cmd, 127);
+		exit(g_lobal_minishell.status);
+	}
+	else if (stat(cmd, &buf) == -1)
+	{
+		custom_error("minishell-1.0: is directory: ", cmd, 126);
+		exit(g_lobal_minishell.status);
+	}
 }
 
 void check_cmd(char **args, char **env)
@@ -330,48 +402,20 @@ void check_cmd(char **args, char **env)
 	struct  stat *buf;
 
 	cmd = *args;
+	buf = NULL;
 	if (ft_strcmp(cmd, "") == 0)
 	{
-		ft_putstr_fd("minishell-1.0: Command not found: ", 2, 4);
-		ft_putstr_fd("''", 2, '\n');
-		g_lobal_minishell.status = 127;
+		custom_error("minishell-1.0: Command not found: ", "''", 127);
 		exit(g_lobal_minishell.status);
 	}
 	else if ((cmd[0] == '.' && cmd[1] == '/') || (cmd[0] == '/'))
-	{
-
-		if (access(cmd, X_OK) == -1)
-		{
-			if (access(cmd, F_OK) == 0)
-			{
-				ft_putstr_fd("minishell-1.0: Permission denied: ", 2, 4);
-				g_lobal_minishell.status = 126;
-			}
-			else
-			{
-				ft_putstr_fd("minishell-1.0: Command not found: ", 2, 4);
-				g_lobal_minishell.status = 127;
-			}
-			ft_putstr_fd(cmd, 2, '\n');
-			exit(g_lobal_minishell.status);
-		}
-		else if (stat(cmd, buf) != 0)
-		{
-			ft_putstr_fd("minishell-1.0: is directory: ", 2, 4);
-			ft_putstr_fd(cmd, 2, '\n');
-			g_lobal_minishell.status = 126;
-			exit(g_lobal_minishell.status);
-
-		}
-	}
+		check1(cmd);
 	else
 	{
 		*args = find_path(cmd, env);
 		if (*args == NULL)
 		{
-			ft_putstr_fd("minishell-1.0: Command not found: ", 2, 4);
-			ft_putstr_fd(cmd, 2, '\n');
-			g_lobal_minishell.status = 127;
+			custom_error("minishell-1.0: Command not found: ", cmd, 127);
 			exit(g_lobal_minishell.status);
 		}
 	}

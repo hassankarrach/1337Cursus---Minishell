@@ -65,7 +65,7 @@ void	builtins(char **args, int flag)
 	else if (flag == 1)
 		cd_builtin(args);
 	else if (flag == 2)
-		pwd_builtin(args);
+		pwd_builtin(*args);
 	else if (flag == 3)
 		export_builtin(args);
 	else if (flag == 4)

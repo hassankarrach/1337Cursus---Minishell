@@ -12,29 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-int	ft_strlen_end(char *str, char end)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != 0 || str[i] != end)
-		i++;
-	return (i);
-}
-
-void	add_back_env(t_environment *new)
-{
-	t_environment	*tmp;
-
-	tmp = g_lobal_minishell.environment;
-	if (tmp != NULL)
-	{
-		while (tmp->next != NULL)
-			tmp = tmp->next;
-		tmp->next = new;
-	}
-}
-
 int	is_exist(char *key, char *value, int flag, int flag2)
 {
 	int				i;
@@ -74,14 +51,49 @@ void	printf_varibles(int flag)
 	}
 }
 
+int	check_to_create(char *str, int *j, int *flag, char *c)
+{
+	int	i;
+
+	i = *j;
+	if (str[i] == '+' && str[i + 1] == '=')
+	{
+		(*flag) = 1;
+		(*c) = '+';
+	}
+	else if ((ft_isalnum(str[i]) == 0 && str[0] != '_') \
+	|| (ft_isdigit(str[0]) == 1))
+	{
+		custom_error("minishell-1.0: Not a valid identifier: ", str, 1);
+		return (1);
+	}
+	(*j)++;
+	return (0);
+}
+
+void	create_env_var(char **args, int *i, int flag, char c)
+{
+	int		flag2;
+	int		j;
+	char	*key;
+	char	*value;
+
+	flag2 = 0;
+	j = *i;
+	key = ft_strdup_key(args[j], c);
+	if (args[j][ft_strlen(key)] == '=')
+		flag2 = 1;
+	value = ft_strdup((*(args + j)) + ft_strlen(key) + 1) + flag;
+	if (is_exist(key, value, flag, flag2) == 0)
+		add_back_env(new_env(key, value, 1));
+	(*i)++;
+}
+
 void	export_builtin(char **args)
 {
 	int		i;
 	int		j;
 	int		flag;
-	int		flag2;
-	char	*key;
-	char	*value;
 	char	c;
 
 	if (args[1] == NULL)
@@ -92,35 +104,13 @@ void	export_builtin(char **args)
 		while (args[i] != 0)
 		{
 			j = 0;
-			flag = 0;
-			c = '=';
-			if (args[i][j] == '=')
-				custom_error("minishell-1.0\
-				: Not a valid identifier: ", args[i], 1);
+			check_validity(&flag, &c, args[i], j);
 			while (args[i][j] != '=' && args[i][j] != '\0')
 			{
-				if (args[i][j] == '+' && args[i][j + 1] == '=')
-				{
-					flag = 1;
-					c = '+';
-				}
-				else if ((ft_isalnum(args[i][j]) == 0 && args[i][0] != '_') \
-				|| (ft_isdigit(args[i][0]) == 1))
-				{
-					custom_error("minishell-1.0\
-					: Not a valid identifier: ", args[i], 1);
+				if (check_to_create(args[i], &j, &flag, &c) == 1)
 					return ;
-				}
-				j++;
 			}
-			flag2 = 0;
-			key = ft_strdup_key(args[i], c);
-			if (args[i][ft_strlen(key)] == '=')
-				flag2 = 1;
-			value = ft_strdup((*(args + i)) + ft_strlen(key) + 1) + flag;
-			if (is_exist(key, value, flag, flag2) == 0)
-				add_back_env(new_env(key, value, 1));
-			i++;
+			create_env_var(args, &i, flag, c);
 		}
 		re_create_env();
 	}

@@ -41,7 +41,6 @@ void	exit_builtin(char **args)
 {
 	int	i;
 	int	j;
-	int	k;
 
 	i = 1;
 	j = 0;

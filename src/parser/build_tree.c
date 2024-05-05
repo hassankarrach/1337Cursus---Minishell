@@ -128,6 +128,7 @@ void	new_cmd(t_token **head, t_tree **root)
 	else
 		nodes_link((t_tree *)cmd, root);
 }
+
 void	new_block(t_tree **root, t_tree *node, t_token **head)
 {
 	t_block *block;
@@ -181,9 +182,6 @@ void	pipe_link(t_pipe *n_pipe, t_tree **root)
 }
 void	nodes_link(t_tree *node, t_tree **root)
 {
-	t_pipe	*n_pipe;
-	l_op	*n_op;
-
 	if (*root == NULL)
 		*root = node;
 	else if (node->type == TOKEN_AND || node->type == TOKEN_OR)
