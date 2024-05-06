@@ -12,6 +12,28 @@
 
 #include "../includes/minishell.h"
 
+size_t	ft_sublen(const char *s, char c)
+{
+	size_t	i;
+
+	i = 0;
+	if (c == ' ')
+	{
+		while (s[i] != '\0' && ft_is_space(s[i]) != 1 && s[i] != '\'')
+		{
+			i++;
+			if (s[i] == '$')
+				break ;
+		}
+	}
+	else
+	{
+		while (s[i] != '\0' && s[i] != c)
+			i++;
+	}
+	return (i);
+}
+
 char	*ft_strdup_key(const char *s, char c)
 {
 	int		i;

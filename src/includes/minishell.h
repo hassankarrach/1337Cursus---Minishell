@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/06 15:46:27 by aelbasri          #+#    #+#             */
+/*   Updated: 2024/05/06 15:46:29 by aelbasri         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -16,20 +28,16 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include "../utils/libft/libft.h"
-
-// inner includes ===>
 # include "./error.h"
 # include "./tokenizer.h"
 # include "./parser.h"
 # include "./executor.h"
 # include "./garbage_collector.h"
-
-// colors         ===>
 # define GREEN "\033[1;32m"
 # define RED "\033[1;31m"
 
 typedef struct s_minishell
-{	
+{
 	int				error;
 	int				pipes_nbr;
 	int				*quote;
@@ -42,11 +50,11 @@ typedef struct s_minishell
 	char			**env;
 	t_environment	*environment;
 	t_token			*tokens;
-    char			*line;
+	char			*line;
 	t_tree			*root;
-} t_minishell;
+}	t_minishell;
 
-extern t_minishell g_lobal_minishell;
+extern t_minishell	g_lobal_minishell;
 
 void	init_minishell(char *input);
 

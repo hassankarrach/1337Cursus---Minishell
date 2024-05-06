@@ -16,11 +16,10 @@ t_minishell	g_lobal_minishell;
 
 int	check_single_cmd(int flag)
 {
-	int		type;
 	t_cmd	*tmp;
 
-	type = (g_lobal_minishell.root)->type;
-	if (g_lobal_minishell.root != NULL && type == TOKEN_WORD)
+	if (g_lobal_minishell.root != NULL && \
+		(g_lobal_minishell.root)->type == TOKEN_WORD)
 	{
 		tmp = (t_cmd *)(g_lobal_minishell.root);
 		expansion(&(tmp->args), tmp->args_number);

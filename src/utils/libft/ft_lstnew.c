@@ -21,6 +21,5 @@ t_list	*ft_lstnew(void *content)
 		return (NULL);
 	node->content = content;
 	node->next = NULL;
-	// printf("node===%s\n", node->content);
 	return (node);
 }

@@ -26,10 +26,10 @@ int	exec_block(t_tree *node)
 int	exec_and_or(t_tree *node)
 {
 	int		status;
-	l_op	*and_or;
+	t_op	*and_or;
 
 	status = 0;
-	and_or = (l_op *)node;
+	and_or = (t_op *)node;
 	if (and_or->type == TOKEN_AND)
 		ft_and(and_or, status);
 	else if (and_or->type == TOKEN_OR)
