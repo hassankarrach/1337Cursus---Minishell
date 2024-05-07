@@ -34,6 +34,8 @@ int	ft_open_red(char *file_name, int flag)
 
 int	in_redirection(char *file_name, int flag)
 {
+	int	fd;
+
 	if (file_name == NULL)
 	{
 		recover_stdio();
@@ -44,25 +46,24 @@ int	in_redirection(char *file_name, int flag)
 	{
 		recover_stdio();
 		custom_error("minishell-1.0: \
-		No such file or directory: ", file_name, 1);
+No such file or directory: ", file_name, 1);
 		return (1);
 	}
-	close(flag);
-	if (ft_open_red(file_name, flag) == -1)
+	fd = ft_open_red(file_name, flag);
+	if (fd == -1)
 	{
-		recover_stdio();
-		if (access(file_name, F_OK) == 0)
-			custom_error("minishell-1.0: Permission denied: ", file_name, 1);
-		else
-			custom_error("minishell-1.0: \
-			No such file or directory: ", file_name, 1);
+		fd_error(file_name);
 		return (1);
 	}
+	dup2(fd, 0);
+	close(fd);
 	return (0);
 }
 
 int	out_redirection(char *file_name, int flag)
 {
+	int	fd;
+
 	if (file_name == NULL)
 	{
 		recover_stdio();
@@ -76,17 +77,14 @@ int	out_redirection(char *file_name, int flag)
 		No such file or directory: ", file_name, 1);
 		return (1);
 	}
-	close(1);
-	if (ft_open_red(file_name, flag) == -1)
+	fd = ft_open_red(file_name, flag);
+	if (fd == -1)
 	{
-		recover_stdio();
-		if (access(file_name, F_OK) == 0)
-			custom_error("minishell-1.0: Permission denied: ", file_name, 1);
-		else
-			custom_error("minishell-1.0: \
-			No such file or directory: ", file_name, 1);
+		fd_error(file_name);
 		return (1);
 	}
+	dup2(fd, 1);
+	close(fd);
 	return (0);
 }
 
@@ -106,10 +104,7 @@ void	heredoc_redirection(t_redir *redir, char *tmp, int flag, int *fd)
 		ft_putstr_fd(heredoc, *fd, '\n');
 	}
 	close(*fd);
-	if (redir->child != NULL && redir->child->type == TOKEN_WORD)
-	{
-		*fd = open(tmp, O_RDONLY, 0644);
-		dup2(*fd, 0);
-		close(*fd);
-	}
+	*fd = open(tmp, O_RDONLY, 0644);
+	dup2(*fd, 0);
+	close(*fd);
 }

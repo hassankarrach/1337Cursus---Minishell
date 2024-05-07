@@ -77,7 +77,8 @@ int				in_redirection(char *file_name, int flag);
 int				out_redirection(char *file_name, int flag);
 void			heredoc_redirection(t_redir *redir, \
 				char *tmp, int flag, int *fd);
-int				_redirections(t_redir *redir);
+void			io_redirections(t_redir *redir);
+void			re_heredoc(t_redir *redir);
 void			check_herdoc_to_expand(char *file_name, int *flag);
 void			exec_redir(t_tree *node);
 void			ft_and(t_op *and_or, int status);
@@ -85,5 +86,6 @@ void			ft_or(t_op *and_or, int status);
 void			wait_loop(void);
 void			setup_in_out_fds(int p_fd1, int p_fd2, int std_fd);
 size_t			ft_sublen(const char *s, char c);
+void			fd_error(char *file_name);
 
 #endif

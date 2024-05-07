@@ -105,10 +105,8 @@ void	check1(char *cmd)
 void	check_cmd(char **args, char **env)
 {
 	char		*cmd;
-	struct stat	*buf;
 
 	cmd = *args;
-	buf = NULL;
 	if (ft_strcmp(cmd, "") == 0)
 	{
 		custom_error("minishell-1.0: Command not found: ", "''", 127);
