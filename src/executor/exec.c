@@ -54,8 +54,6 @@ int	exec_pipe(t_tree *node)
 	}
 	else
 	{
-		if (va_pipe->index == g_lobal_minishell.pipes_nbr)
-			waitpid(id, &(g_lobal_minishell.status), 0);
 		setup_in_out_fds(va_pipe->pipe_fd[1], va_pipe->pipe_fd[0], 0);
 		status = specify_types((t_tree *)(va_pipe->right));
 		wait_loop();
