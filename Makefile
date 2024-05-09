@@ -1,7 +1,7 @@
 NAME = minishell
 
 # Flags
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror 
 RDLFLAG  = -lreadline
 
 # Libs-Srcs
@@ -11,7 +11,7 @@ LIBFT = $(addprefix ./src/utils/libft/, ft_strlcpy.c ft_strrchr.c ft_strtrim.c f
 SRC_MAIN = $(addprefix ./src/, main.c minishell.c)
 SRC_TOKENIZER = $(addprefix ./src/tokenizer/, handle_tokens.c tokenizer_list.c tokenizer_utils.c tokenizer.c)
 SRC_PARSER = $(addprefix ./src/parser/, build_tree.c parser_utils.c build_tree_utils.c linking.c node_creation.c)
-SRC_EXECUTOR = $(addprefix ./src/executor/, execute.c execution_utils.c environement.c exec.c redirections.c redirections_utils.c check_cmd.c expansion.c expansion_utils.c)
+SRC_EXECUTOR = $(addprefix ./src/executor/, execute.c execution_utils.c environement.c exec.c redirections.c redirections_utils.c check_cmd.c expansion.c expansion_utils.c setup_signals.c)
 SRC_BUILT_INS = $(addprefix ./src/executor/built_ins/, builtins.c echo_builtin.c cd_builtin.c pwd_builtin.c export_builtin.c unset_builtin.c env_builtin.c exit_builtin.c builtins_utils.c)
 HEADERS = $(addprefix ./src/includes/, executor.h minishell.h parser.h tokenizer.h)
 

@@ -55,6 +55,7 @@ int	main(int argc, char **argv, char **env)
 	g_lobal_minishell.env = env;
 	g_lobal_minishell.status = 0;
 	setup_environment(1);
+	setup_signals();
 	while (1)
 	{
 		input = readline(PROMPT);

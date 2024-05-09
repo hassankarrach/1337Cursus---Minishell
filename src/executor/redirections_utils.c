@@ -94,6 +94,7 @@ void	heredoc_redirection(t_redir *redir, char *tmp, int flag, int *fd)
 
 	while (1)
 	{
+		signal(SIGINT, &my_handler3);
 		heredoc = readline("heredoc> ");
 		if (heredoc == NULL)
 			break ;
@@ -103,6 +104,8 @@ void	heredoc_redirection(t_redir *redir, char *tmp, int flag, int *fd)
 			break ;
 		ft_putstr_fd(heredoc, *fd, '\n');
 	}
+	recover_stdio();
+	setup_signals();
 	close(*fd);
 	*fd = open(tmp, O_RDONLY, 0644);
 	dup2(*fd, 0);

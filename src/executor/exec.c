@@ -78,20 +78,26 @@ void	exec_cmd(t_tree *node)
 
 void	start_execution(t_cmd *cmd)
 {
+	signal(SIGINT, SIG_DFL);
 	g_lobal_minishell.main_pid = fork();
 	if (!g_lobal_minishell.main_pid)
 	{
+		signal(SIGINT, &my_handler2);
 		if ((cmd->args)[0] == NULL)
 			exit(0);
 		check_cmd(cmd->args, g_lobal_minishell.env);
 		if (execve((cmd->args)[0], cmd->args, g_lobal_minishell.env) != 0)
+		{
+			perror("minishell-1.0");
 			exit(g_lobal_minishell.status);
+		}
 	}
 	else
 	{
 		waitpid(g_lobal_minishell.main_pid, &(g_lobal_minishell.status), 0);
 		if (WIFEXITED(g_lobal_minishell.status) != 0)
 			g_lobal_minishell.status = WEXITSTATUS(g_lobal_minishell.status);
+		setup_signals();
 		dup2(g_lobal_minishell.old_stdin, 0);
 		dup2(g_lobal_minishell.old_stdout, 1);
 	}

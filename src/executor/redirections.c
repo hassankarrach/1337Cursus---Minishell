@@ -51,12 +51,25 @@ void	io_redirections(t_redir *redir)
 	return ;
 }
 
-void	check_herdoc_to_expand(char *file_name, int *flag)
+void	check_herdoc_to_expand(char **file_name, int *flag)
 {
+	char	*tmp;
+
+	tmp = *file_name;
 	recover_stdio();
-	if (file_name != NULL && (file_name)[0] != '\'' \
-	&& (file_name)[0] != '\"' && (file_name)[0] != '$')
+	if (*file_name != NULL && (*file_name)[0] != '\'' \
+	&& (*file_name)[0] != '\"' && (*file_name)[0] != '$')
 		*flag = 1;
+	else if ((*file_name)[0] == '\"')
+	{
+		*file_name = ft_strtrim(*file_name, "\"");
+		free(tmp);
+	}
+	else if ((*file_name)[0] == '\'')
+	{
+		*file_name = ft_strtrim(*file_name, "\'");
+		free(tmp);
+	}
 }
 
 void	re_heredoc(t_redir *redir)
@@ -69,7 +82,8 @@ void	re_heredoc(t_redir *redir)
 
 	flag = 0;
 	old_fd = dup(1);
-	check_herdoc_to_expand(redir->file_name, &flag);
+
+	check_herdoc_to_expand(&redir->file_name, &flag);
 	tmp = ft_strjoin("/tmp/.heredoc", ft_itoa(h));
 	fd = open(tmp, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	h++;

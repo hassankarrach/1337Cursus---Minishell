@@ -21,6 +21,7 @@
 # include <stdlib.h>
 # include <limits.h>
 # include <unistd.h>
+# include <signal.h>
 # include <errno.h>
 # include <sys/stat.h>
 # include <readline/readline.h>
@@ -44,6 +45,7 @@ typedef struct s_minishell
 	int				a_counter;
 	char			**my_env;
 	int				status;
+	int				sig;
 	pid_t			main_pid;
 	int				old_stdin;
 	int				old_stdout;

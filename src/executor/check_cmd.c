@@ -85,9 +85,8 @@ char	*find_path(char *cmd, char **env)
 
 void	check1(char *cmd)
 {
-	struct stat	*buf;
+	struct stat	buf;
 
-	buf = NULL;
 	if (access(cmd, X_OK) == -1)
 	{
 		if (access(cmd, F_OK) == 0)
@@ -96,7 +95,7 @@ void	check1(char *cmd)
 			custom_error("minishell-1.0: Command not found: ", cmd, 127);
 		exit(g_lobal_minishell.status);
 	}
-	else if (stat(cmd, buf) != 0)
+	else if (stat(cmd, &buf) != 0)
 	{
 		custom_error("minishell-1.0: is directory: ", cmd, 126);
 		exit(g_lobal_minishell.status);
@@ -108,7 +107,7 @@ void	check_cmd(char **args, char **env)
 	char		*cmd;
 
 	cmd = *args;
-	if (ft_strcmp(cmd, "") == 0)
+	if (ft_strcmp(cmd, "") == 0 || ft_strcmp(cmd, ".") == 0 || ft_strcmp(cmd, "..") == 0)
 	{
 		custom_error("minishell-1.0: Command not found: ", "''", 127);
 		exit(g_lobal_minishell.status);
