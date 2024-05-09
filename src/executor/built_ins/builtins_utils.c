@@ -22,6 +22,7 @@ int	ft_strlen_end(char *str, char end)
 	return (i);
 }
 
+
 void	add_back_env(t_environment *new)
 {
 	t_environment	*tmp;

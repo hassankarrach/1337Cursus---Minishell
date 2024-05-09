@@ -78,11 +78,10 @@ void	exec_cmd(t_tree *node)
 
 void	start_execution(t_cmd *cmd)
 {
-	signal(SIGINT, SIG_DFL);
+	signal(SIGINT, &my_handler2);
 	g_lobal_minishell.main_pid = fork();
 	if (!g_lobal_minishell.main_pid)
 	{
-		signal(SIGINT, &my_handler2);
 		if ((cmd->args)[0] == NULL)
 			exit(0);
 		check_cmd(cmd->args, g_lobal_minishell.env);

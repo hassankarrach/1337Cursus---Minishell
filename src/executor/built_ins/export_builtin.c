@@ -26,7 +26,10 @@ int	is_exist(char *key, char *value, int flag, int flag2)
 			if (flag == 1)
 				tmp->value = ft_strjoin(tmp->value, value);
 			else if (flag2 == 1)
+			{
 				tmp->value = ft_strdup(value);
+				tmp->flag = 0;
+			}
 			return (1);
 		}
 		tmp = tmp->next;
@@ -85,7 +88,13 @@ void	create_env_var(char **args, int *i, int flag, char c)
 		flag2 = 1;
 	value = ft_strdup((*(args + j)) + ft_strlen(key) + 1) + flag;
 	if (is_exist(key, value, flag, flag2) == 0)
-		add_back_env(new_env(key, value, 1));
+	{
+		if (flag2 == 1)
+			flag2 = 0;
+		else
+			flag2 = 1;
+ 		add_back_env(new_env(key, value, flag2));
+	}
 	(*i)++;
 }
 
