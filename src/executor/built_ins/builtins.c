@@ -74,6 +74,5 @@ void	builtins(char **args, int flag)
 		env_builtin(args);
 	else if (flag == 6)
 		exit_builtin(args);
-	dup2(g_lobal_minishell.old_stdin, 0);
-	dup2(g_lobal_minishell.old_stdout, 1);
+	recover_stdio();
 }

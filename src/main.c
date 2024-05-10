@@ -69,4 +69,6 @@ int	main(int argc, char **argv, char **env)
 			continue ;
 		execute();
 	}
+	close(g_lobal_minishell.old_stdin);
+	close(g_lobal_minishell.old_stdout);
 }

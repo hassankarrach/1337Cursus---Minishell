@@ -71,7 +71,10 @@ void	exec_cmd(t_tree *node)
 		expansion(&(cmd->args), cmd->args_number);
 	flag = check_builtins((cmd->args)[0]);
 	if (flag >= 0 && flag <= 6)
+	{
+		printf("sd\n");
 		builtins(cmd->args, flag);
+	}
 	else
 		start_execution(cmd);
 }

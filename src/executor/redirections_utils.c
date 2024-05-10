@@ -15,7 +15,9 @@
 void	recover_stdio(void)
 {
 	dup2(g_lobal_minishell.old_stdin, 0);
+	close(g_lobal_minishell.old_stdin);
 	dup2(g_lobal_minishell.old_stdout, 1);
+	close(g_lobal_minishell.old_stdout);
 }
 
 int	ft_open_red(char *file_name, int flag)
