@@ -93,7 +93,7 @@ void	create_env_var(char **args, int *i, int flag, char c)
 			flag2 = 0;
 		else
 			flag2 = 1;
- 		add_back_env(new_env(key, value, flag2));
+		add_back_env(new_env(key, value, flag2));
 	}
 	(*i)++;
 }

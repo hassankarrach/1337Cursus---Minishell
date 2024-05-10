@@ -62,7 +62,7 @@ int				ft_strlen_end(char *str, char end);
 void			add_back_env(t_environment *new);
 void			check_validity(int *flag, char *c, char *str, int j);
 void			re_create_env(void);
-void			setup_environment(int flag);
+void			setup_environment(char **env, int flag);
 
 /*check_cmd*/
 void			check1(char *cmd);
@@ -91,5 +91,6 @@ void			setup_signals(void);
 void			my_handler(int i);
 void			my_handler2(int i);
 void			my_handler3(int i);
+void			ctrl_d(char *input);
 
 #endif

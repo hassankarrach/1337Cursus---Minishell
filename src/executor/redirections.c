@@ -82,7 +82,6 @@ void	re_heredoc(t_redir *redir)
 
 	flag = 0;
 	old_fd = dup(1);
-
 	check_herdoc_to_expand(&redir->file_name, &flag);
 	tmp = ft_strjoin("/tmp/.heredoc", ft_itoa(h));
 	fd = open(tmp, O_CREAT | O_WRONLY | O_TRUNC, 0644);

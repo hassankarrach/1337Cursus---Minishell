@@ -59,5 +59,9 @@ typedef struct s_minishell
 extern t_minishell	g_lobal_minishell;
 
 void	init_minishell(char *input);
+int		check_input(char **input);
+void	init(char **env);
+void	close_io(void);
+int		check_single_cmd(int flag);
 
 #endif

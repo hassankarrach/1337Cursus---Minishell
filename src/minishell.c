@@ -12,6 +12,48 @@
 
 #include "./includes/minishell.h"
 
+int	check_single_cmd(int flag)
+{
+	t_cmd	*tmp;
+
+	if (g_lobal_minishell.root != NULL && \
+		(g_lobal_minishell.root)->type == TOKEN_WORD)
+	{
+		tmp = (t_cmd *)(g_lobal_minishell.root);
+		expansion(&(tmp->args), tmp->args_number);
+		flag = check_builtins((tmp->args)[0]);
+		if ((flag >= 0 && flag <= 6))
+		{
+			builtins(tmp->args, flag);
+			return (1);
+		}
+	}
+	return (0);
+}
+
+void	close_io(void)
+{
+	close(g_lobal_minishell.old_stdin);
+	close(g_lobal_minishell.old_stdout);
+}
+
+void	init(char **env)
+{
+	g_lobal_minishell.env = env;
+	g_lobal_minishell.status = 0;
+	setup_environment(env, 1);
+	setup_signals();
+}
+
+int	check_input(char **input)
+{
+	if (check_just_spaces(1, input, "\0") || (*input)[0] == '\0')
+		return (1);
+	if ((*input)[0] != '\0')
+		add_history(*input);
+	return (0);
+}
+
 void	init_minishell(char *input)
 {
 	t_token	*head;
