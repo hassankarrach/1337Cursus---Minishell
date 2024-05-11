@@ -51,14 +51,27 @@ void	io_redirections(t_redir *redir)
 	return ;
 }
 
+int	check_quote_existence(char *file_name)
+{
+	int	i;
+
+	i = 0;
+	while (file_name[i] != '\0')
+	{
+		if (file_name[i] == '\'' || file_name[i] == '\"')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 void	check_herdoc_to_expand(char **file_name, int *flag)
 {
 	char	*tmp;
 
 	tmp = *file_name;
 	recover_stdio();
-	if (*file_name != NULL && (*file_name)[0] != '\'' \
-	&& (*file_name)[0] != '\"' && (*file_name)[0] != '$')
+	if (*file_name != NULL && check_quote_existence(*file_name) == 0)
 		*flag = 1;
 	else if ((*file_name)[0] == '\"')
 	{

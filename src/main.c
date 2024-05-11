@@ -24,7 +24,7 @@ int	main(int argc, char **argv, char **env)
 		ft_putstr_fd("minishell-1.0: invalid arguments", 2, '\n');
 		exit(1);
 	}
-	init(env);
+	init(&env);
 	while (1)
 	{
 		input = readline(PROMPT);

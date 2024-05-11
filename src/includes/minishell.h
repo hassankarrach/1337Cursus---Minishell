@@ -40,6 +40,8 @@
 typedef struct s_minishell
 {
 	int				error;
+	int				flag2;
+	int				flag3;
 	int				pipes_nbr;
 	int				*quote;
 	int				a_counter;
@@ -60,7 +62,7 @@ extern t_minishell	g_lobal_minishell;
 
 void	init_minishell(char *input);
 int		check_input(char **input);
-void	init(char **env);
+void	init(char ***env);
 void	close_io(void);
 int		check_single_cmd(int flag);
 

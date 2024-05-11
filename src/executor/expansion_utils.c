@@ -91,7 +91,7 @@ void	add_the_word(t_data data, t_list **head, char *str, int end)
 	}
 	if (data.start <= end)
 		tmp = ft_substr(str, data.start, end - data.start);
-	if (data.flag == 0 || data.flag == 1)
+	if (g_lobal_minishell.flag2 == 0 && (data.flag == 0 || data.flag == 1))
 		_expand(&tmp);
 	if (data.flag == 0 && ft_strcmp(tmp, "") == 0)
 		tmp = NULL;

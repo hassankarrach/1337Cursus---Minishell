@@ -15,9 +15,7 @@
 void	recover_stdio(void)
 {
 	dup2(g_lobal_minishell.old_stdin, 0);
-	close(g_lobal_minishell.old_stdin);
 	dup2(g_lobal_minishell.old_stdout, 1);
-	close(g_lobal_minishell.old_stdout);
 }
 
 int	ft_open_red(char *file_name, int flag)
@@ -94,16 +92,19 @@ void	heredoc_redirection(t_redir *redir, char *tmp, int flag, int *fd)
 {
 	char	*heredoc;
 
+	g_lobal_minishell.flag2 = 1;
+	check_to_expand(&redir->file_name);
+	g_lobal_minishell.flag2 = 0;
 	while (1)
 	{
 		signal(SIGINT, &my_handler3);
 		heredoc = readline("heredoc> ");
 		if (heredoc == NULL)
 			break ;
-		if (flag == 1)
-			check_to_expand(&heredoc);
 		if (ft_strcmp(heredoc, redir->file_name) == 0)
 			break ;
+		if (flag == 1)
+			check_to_expand(&heredoc);
 		ft_putstr_fd(heredoc, *fd, '\n');
 	}
 	recover_stdio();

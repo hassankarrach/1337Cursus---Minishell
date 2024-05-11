@@ -81,7 +81,7 @@ void	setup_environment(char **env ,int flag)
 	t_environment	*tmp;
 
 	(void)flag;
-	if (*env == NULL)
+	if (env != NULL && (*env) == NULL)
 		return ;
 	h_key = ft_strdup_key((g_lobal_minishell.env)[0], '=');
 	h_value = ft_strdup(*(g_lobal_minishell.env) + (ft_strlen(h_key) + 1));
@@ -90,8 +90,10 @@ void	setup_environment(char **env ,int flag)
 	i = 1;
 	while ((g_lobal_minishell.env)[i] != NULL)
 	{
+		// free(h_key);
 		h_key = ft_strdup_key(g_lobal_minishell.env[i], '=');
 		key_len = ft_strlen(h_key) + 1;
+		// free(h_value);
 		h_value = ft_strdup(*(g_lobal_minishell.env + i) + key_len);
 		tmp->next = new_env(h_key, h_value, 0);
 		tmp = tmp->next;

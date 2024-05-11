@@ -48,12 +48,14 @@ int	exec_pipe(t_tree *node)
 	id = fork();
 	if (id == 0)
 	{
+		g_lobal_minishell.flag3 = 1;
 		setup_in_out_fds(va_pipe->pipe_fd[0], va_pipe->pipe_fd[1], 1);
 		status = specify_types((t_tree *)(va_pipe->left));
 		exit(g_lobal_minishell.status);
 	}
 	else
 	{
+		g_lobal_minishell.flag3 = 1;
 		setup_in_out_fds(va_pipe->pipe_fd[1], va_pipe->pipe_fd[0], 0);
 		status = specify_types((t_tree *)(va_pipe->right));
 		wait_loop();
@@ -70,28 +72,36 @@ void	exec_cmd(t_tree *node)
 	if ((g_lobal_minishell.root)->type != TOKEN_WORD)
 		expansion(&(cmd->args), cmd->args_number);
 	flag = check_builtins((cmd->args)[0]);
-	if (flag >= 0 && flag <= 6)
-	{
-		printf("sd\n");
+	if (flag >= 0 && flag <= 6 && g_lobal_minishell.flag3 != 1)
 		builtins(cmd->args, flag);
-	}
 	else
 		start_execution(cmd);
 }
 
 void	start_execution(t_cmd *cmd)
 {
+	int	flag;
+
+	flag = check_builtins((cmd->args)[0]);
 	signal(SIGINT, &my_handler2);
 	g_lobal_minishell.main_pid = fork();
 	if (!g_lobal_minishell.main_pid)
 	{
 		if ((cmd->args)[0] == NULL)
 			exit(0);
-		check_cmd(cmd->args, g_lobal_minishell.env);
-		if (execve((cmd->args)[0], cmd->args, g_lobal_minishell.env) != 0)
+		if (flag >= 0 && flag <= 6)
 		{
-			perror("minishell-1.0");
+			builtins(cmd->args, flag);
 			exit(g_lobal_minishell.status);
+		}
+		else
+		{
+			check_cmd(cmd->args, g_lobal_minishell.env);
+			if (execve((cmd->args)[0], cmd->args, g_lobal_minishell.env) != 0)
+			{
+				perror("minishell-1.0");
+				exit(g_lobal_minishell.status);
+			}
 		}
 	}
 	else

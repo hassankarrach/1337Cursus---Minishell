@@ -21,6 +21,7 @@ int	check_single_cmd(int flag)
 	{
 		tmp = (t_cmd *)(g_lobal_minishell.root);
 		expansion(&(tmp->args), tmp->args_number);
+		// printf("%s\n", (tmp->args)[1]);
 		flag = check_builtins((tmp->args)[0]);
 		if ((flag >= 0 && flag <= 6))
 		{
@@ -37,11 +38,11 @@ void	close_io(void)
 	close(g_lobal_minishell.old_stdout);
 }
 
-void	init(char **env)
+void	init(char ***env)
 {
-	g_lobal_minishell.env = env;
+	g_lobal_minishell.env = *env;
 	g_lobal_minishell.status = 0;
-	setup_environment(env, 1);
+	setup_environment(*env, 1);
 	setup_signals();
 }
 
@@ -59,6 +60,8 @@ void	init_minishell(char *input)
 	t_token	*head;
 
 	head = NULL;
+	g_lobal_minishell.flag2 = 0;
+	g_lobal_minishell.flag3 = 0;
 	g_lobal_minishell.pipes_nbr = 0;
 	g_lobal_minishell.old_stdin = dup(0);
 	g_lobal_minishell.old_stdout = dup(1);
