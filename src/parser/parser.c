@@ -29,10 +29,21 @@ static int check_syntax_pipe(t_token *curr_token)
 void parser(t_token *tokens)
 {
     int is_syntax_err;
+    int parenthesis_syntax;
 
     is_syntax_err = 0;
+    parenthesis_syntax = -1;
     while (tokens)
     {
+        //Parenthesis_parse.
+        if (tokens->type == TOKEN_OPENING_PARENTHESES)
+            parenthesis_syntax++;
+        else if (tokens->type == TOKEN_CLOSING_PARENTHESES)
+            parenthesis_syntax--;
+        // 💀 few parsing cases, needs to be addressed. ⏳
+        // if (parenthesis_syntax == -1)
+        //     is_syntax_err = 1;
+
         if (tokens->type == TOKEN_APPEND_REDIRECTION 
             || tokens->type == TOKEN_HEREDOC
             || tokens->type == TOKEN_OUTPUT_REDIRECTION

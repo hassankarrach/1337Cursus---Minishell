@@ -8,6 +8,7 @@
 # include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <dirent.h>
 # include "../utils/libft/libft.h"
 
 // inner includes ===>
@@ -26,5 +27,11 @@ typedef struct s_minishell
 }   t_minishell;
 
 extern t_minishell global_minishell;
+
+
+//expander
+void	handle_expand_asterisk_wildcard(t_token **list, char *pattern);
+char    **get_all_files_in_curr_dir();
+int     is_containing_asterisk(char *str);
 
 #endif

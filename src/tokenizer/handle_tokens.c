@@ -20,7 +20,6 @@ static int append_identifier(char **line_ptr, t_token **tokens_list)
 {
     char    *tmp;
     char    *value;
-    char    *trimmed_value;
     t_token *token;
     size_t  i;
 
@@ -43,13 +42,17 @@ static int append_identifier(char **line_ptr, t_token **tokens_list)
     value = ft_substr(tmp, 0, i); //TB free.
     if (!value)
         return (0);
-    trimmed_value = ft_strtrim(value, "\"\'");
-    token = new_token(trimmed_value, TOKEN_WORD);
+    (*line_ptr) += i;
+    if (is_containing_asterisk(value))
+    {
+        handle_expand_asterisk_wildcard(tokens_list, value);
+        return (1);
+    }
+    token = new_token(value, TOKEN_WORD);
     if (*value == '\'')
         token->is_single_quote = 1;
     if (!token)
         return (0);
-    (*line_ptr) += i;
     token_list_add_back(tokens_list, token);
     return (1);
 }

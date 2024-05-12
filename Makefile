@@ -10,7 +10,8 @@ LIBFT = $(addprefix ./src/utils/libft/, ft_strlcpy.c ft_strrchr.c ft_strtrim.c f
 # MiniShell-Srcs
 SRC_TOKENIZER = $(addprefix ./src/tokenizer/, handle_tokens.c tokenizer_list.c tokenizer_utils.c tokenizer.c)
 SRC_PARSER = $(addprefix ./src/parser/, parser.c)
-SRCS = $(SRC_TOKENIZER) $(SRC_PARSER) $(LIBFT) ./src/main.c
+SRC_EXPANDER = $(addprefix ./src/expander/, expand_wildcard.c)
+SRCS = $(SRC_TOKENIZER) $(SRC_PARSER) $(SRC_EXPANDER) $(LIBFT) ./src/main.c
 
 # Objects
 OBJS = $(SRCS:.c=.o)
