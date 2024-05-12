@@ -26,24 +26,38 @@ static int check_syntax_pipe(t_token *curr_token)
     return (0);
 }
 
+static int isValidParentheses(t_token *list) {
+    int count = 0;
+
+    while (list) 
+    {
+        if (list->type == TOKEN_OPENING_PARENTHESES)
+            count++;
+        else if (list->type == TOKEN_CLOSING_PARENTHESES)
+        {
+            if (count == 0)
+                return (0);
+            count--;
+        }
+        if (count < 0)
+            return (0);
+        list = list->next;
+    }
+    return (count == 0);
+}
+
 void parser(t_token *tokens)
 {
     int is_syntax_err;
-    int parenthesis_syntax;
 
     is_syntax_err = 0;
-    parenthesis_syntax = -1;
+    if (!isValidParentheses(tokens))
+    {
+        ft_putstr_fd("minishell error : syntax error.", 2);
+        return ;
+    }
     while (tokens)
     {
-        //Parenthesis_parse.
-        if (tokens->type == TOKEN_OPENING_PARENTHESES)
-            parenthesis_syntax++;
-        else if (tokens->type == TOKEN_CLOSING_PARENTHESES)
-            parenthesis_syntax--;
-        // 💀 few parsing cases, needs to be addressed. ⏳
-        // if (parenthesis_syntax == -1)
-        //     is_syntax_err = 1;
-
         if (tokens->type == TOKEN_APPEND_REDIRECTION 
             || tokens->type == TOKEN_HEREDOC
             || tokens->type == TOKEN_OUTPUT_REDIRECTION
