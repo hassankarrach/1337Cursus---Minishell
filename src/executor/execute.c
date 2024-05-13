@@ -12,6 +12,27 @@
 
 #include "../includes/minishell.h"
 
+void	start_execution(t_cmd *cmd)
+{
+	int	flag;
+
+	flag = check_builtins((cmd->args)[0]);
+	signal(SIGINT, &my_handler2);
+	signal(SIGQUIT, &my_handler2);
+	g_lobal_minishell.main_pid = fork();
+	if (!g_lobal_minishell.main_pid)
+		exec_child(cmd, flag);
+	else
+	{
+		waitpid(g_lobal_minishell.main_pid, &(g_lobal_minishell.status), 0);
+		if (WIFEXITED(g_lobal_minishell.status) != 0)
+			g_lobal_minishell.status = WEXITSTATUS(g_lobal_minishell.status);
+		setup_signals();
+		dup2(g_lobal_minishell.old_stdin, 0);
+		dup2(g_lobal_minishell.old_stdout, 1);
+	}
+}
+
 int	specify_types(t_tree *node)
 {
 	if (node == NULL)

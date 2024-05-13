@@ -1,35 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   build_tree.c                                       :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/12 22:18:33 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/04/12 22:18:38 by aelbasri         ###   ########.fr       */
+/*   Created: 2023/11/18 19:01:54 by aelbasri          #+#    #+#             */
+/*   Updated: 2023/11/26 11:32:44 by aelbasri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-t_tree	*build_tree(t_token *head, int flag)
-{
-	t_tree	*root;
-	t_tree	*tmp;
-	int		i;
+# include <unistd.h>
+# include <stdlib.h>
+# include "../libft/libft.h"
 
-	root = NULL;
-	tmp = NULL;
-	while (head)
-	{
-		i = grass(&head, &root, tmp, flag);
-		if (g_lobal_minishell.hc == 1)
-			return (NULL);
-		if (i == 1)
-			continue ;
-		else if (i == 2)
-			return (root);
-		head = head->next;
-	}
-	return (root);
-}
+char	*get_next_line(int fd);
+
+#endif

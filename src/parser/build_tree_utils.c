@@ -58,8 +58,13 @@ t_cmd	*_cmd(char **args, int type, int i)
 
 int	redir_node(char	***args, t_redir **hold, t_token **head, t_redir **redir)
 {
-	t_redir	*tmp1;
-	char	**tmp;
+	t_redir		*tmp1;
+	// pid_t		id;
+	char		*tmp2;
+	int			fd;
+	char		**tmp;
+	char		*heredoc;
+	static int	h;
 
 	tmp = *args;
 	if ((*head)->type == TOKEN_APPEND_REDIRECTION \
@@ -68,6 +73,31 @@ int	redir_node(char	***args, t_redir **hold, t_token **head, t_redir **redir)
 	|| (*head)->type == TOKEN_HEREDOC)
 	{
 		tmp1 = new_redir(head, (*head)->type);
+		if (tmp1->type == TOKEN_HEREDOC)
+		{
+			h++;
+			signal(SIGINT, &my_handler3);
+			tmp2 = ft_strjoin("/tmp/.heredoc", ft_itoa(h));
+			tmp1->hc_sep = tmp2;
+			fd = open(tmp2, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			g_lobal_minishell.flag2 = 1;
+			check_to_expand(&tmp1->file_name);
+			g_lobal_minishell.flag2 = 0;
+			while (1)
+			{
+				heredoc = readline("heredoc> ");
+				if (heredoc == NULL)
+					break ;
+				if (ft_strcmp(heredoc, tmp1->file_name) == 0)
+					break ;
+				ft_putstr_fd(heredoc, fd, '\n');
+			}
+			signal(SIGINT, &my_handler);
+			dup2(g_lobal_minishell.old_stdin, 0);
+			close(fd);
+		}
+		if (g_lobal_minishell.hc == 1)
+			return (0);
 		if ((*redir) != NULL)
 		{
 			(*redir)->child = (t_tree *)tmp1;
@@ -87,6 +117,7 @@ int	redir_node(char	***args, t_redir **hold, t_token **head, t_redir **redir)
 
 int	grass(t_token **head, t_tree **root, t_tree	*tmp, int flag)
 {
+	// printf("hello777");
 	if ((*head)->type == TOKEN_WORD \
 	|| (*head)->type == TOKEN_APPEND_REDIRECTION \
 	|| (*head)->type == TOKEN_INPUT_REDIRECTION \

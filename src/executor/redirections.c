@@ -88,18 +88,14 @@ void	check_herdoc_to_expand(char **file_name, int *flag)
 void	re_heredoc(t_redir *redir)
 {
 	int			old_fd;
-	char		*tmp;
 	int			fd;
 	int			flag;
-	static int	h;
 
 	flag = 0;
 	old_fd = dup(1);
 	check_herdoc_to_expand(&redir->file_name, &flag);
-	tmp = ft_strjoin("/tmp/.heredoc", ft_itoa(h));
-	fd = open(tmp, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	h++;
-	heredoc_redirection(redir, tmp, flag, &fd);
+	fd = open(redir->hc_sep, O_RDONLY, 0644);
+	heredoc_redirection(redir, flag, &fd);
 	dup2(old_fd, 1);
 	close(old_fd);
 	specify_types((t_tree *)redir->child);

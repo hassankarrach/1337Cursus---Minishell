@@ -6,7 +6,7 @@ RDLFLAG  = -lreadline
 
 # Libs-Srcs
 LIBFT = $(addprefix ./src/utils/libft/, ft_strlcpy.c ft_strrchr.c ft_strtrim.c ft_bzero.c ft_calloc.c ft_is_space.c ft_putstr_fd.c ft_split.c ft_strchr.c ft_strdup.c ft_strjoin.c ft_strlen.c ft_strncmp.c ft_strcmp.c ft_substr.c ft_itoa.c ft_lstnew.c ft_lstadd_back.c ft_lstlast.c ft_lstsize.c ft_isalpha.c ft_isalnum.c ft_isdigit.c ft_atoi.c)
-
+GNL = ./src/utils/get_next_line/get_next_line.c
 # MiniShell-Srcs
 SRC_MAIN = $(addprefix ./src/, main.c minishell.c)
 SRC_TOKENIZER = $(addprefix ./src/tokenizer/, handle_tokens.c tokenizer_list.c tokenizer_utils.c tokenizer.c)
@@ -15,7 +15,7 @@ SRC_EXECUTOR = $(addprefix ./src/executor/, execute.c execution_utils.c environe
 SRC_BUILT_INS = $(addprefix ./src/executor/built_ins/, builtins.c echo_builtin.c cd_builtin.c pwd_builtin.c export_builtin.c unset_builtin.c env_builtin.c exit_builtin.c builtins_utils.c)
 HEADERS = $(addprefix ./src/includes/, executor.h minishell.h parser.h tokenizer.h)
 
-SRCS = $(SRC_TOKENIZER) $(SRC_EXECUTOR) $(SRC_BUILT_INS) $(LIBFT) $(SRC_PARSER) $(SRC_MAIN)
+SRCS = $(SRC_TOKENIZER) $(SRC_EXECUTOR) $(SRC_BUILT_INS) $(LIBFT) $(GNL) $(SRC_PARSER) $(SRC_MAIN)
 
 # Objects
 OBJS = $(SRCS:.c=.o)

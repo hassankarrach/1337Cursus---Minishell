@@ -32,12 +32,13 @@ int	main(int argc, char **argv, char **env)
 		if (check_input(&input) == 1)
 			continue ;
 		init_minishell(input);
-		if (check_single_cmd(0) == 1)
+		if (g_lobal_minishell.hc == 1)
 		{
 			close_io();
 			continue ;
 		}
 		execute();
 		close_io();
+		unlink("/tmp/.buffer");
 	}
 }

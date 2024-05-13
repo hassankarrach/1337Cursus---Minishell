@@ -35,6 +35,7 @@ void	my_handler3(int i)
 {
 	(void)i;
 	write(1, "\n", 1);
+	g_lobal_minishell.hc = 1;
 	g_lobal_minishell.status = 130;
 	close(0);
 }

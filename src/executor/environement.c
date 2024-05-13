@@ -81,7 +81,7 @@ void	setup_environment(char **env ,int flag)
 	t_environment	*tmp;
 
 	(void)flag;
-	if (env != NULL && (*env) == NULL)
+	if (g_lobal_minishell.env != NULL && env != NULL && (*env) == NULL)
 		return ;
 	h_key = ft_strdup_key((g_lobal_minishell.env)[0], '=');
 	h_value = ft_strdup(*(g_lobal_minishell.env) + (ft_strlen(h_key) + 1));

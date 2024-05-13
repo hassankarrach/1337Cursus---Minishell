@@ -16,14 +16,14 @@ void	ft_and(t_op *and_or, int status)
 {
 	status = specify_types((t_tree *)and_or->left);
 	if (g_lobal_minishell.status == 0)
-		g_lobal_minishell.status = specify_types((t_tree *)and_or->right);
+		specify_types((t_tree *)and_or->right);
 }
 
 void	ft_or(t_op *and_or, int status)
 {
 	status = specify_types((t_tree *)and_or->left);
 	if (g_lobal_minishell.status != 0)
-		g_lobal_minishell.status = specify_types((t_tree *)and_or->right);
+		specify_types((t_tree *)and_or->right);
 }
 
 void	wait_loop(void)

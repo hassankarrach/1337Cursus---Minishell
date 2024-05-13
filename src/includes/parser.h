@@ -28,6 +28,7 @@ typedef struct s_logicat_operations
 typedef struct s_redir
 {
 	int				type;
+	char			*hc_sep;
 	char			*file_name;
 	t_tree			*child;
 }	t_redir;

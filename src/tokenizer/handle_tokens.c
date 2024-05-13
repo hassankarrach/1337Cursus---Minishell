@@ -81,7 +81,6 @@ t_token *handle_tokens(char *line)
         return (NULL);
     while (*line)
     {
-        // printf("hello\n");
         if (is_err)
             return (NULL);
         if (ft_is_space(*line))

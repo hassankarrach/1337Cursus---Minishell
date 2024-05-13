@@ -18,6 +18,7 @@ t_redir	*new_redir(t_token **head, int type)
 
 	redir = malloc(sizeof(t_redir));
 	redir->type = type;
+	redir->hc_sep = NULL;
 	redir->child = NULL;
 	redir->file_name = (*head)->next->value;
 	(*head) = (*head)->next->next;
@@ -40,6 +41,8 @@ void	new_cmd(t_token **head, t_tree **root)
 	{
 		if (redir_node(&data.args, &data.hold, head, &data.redir) == 1)
 			continue ;
+		if (g_lobal_minishell.hc == 1)
+			return ;
 		(*head) = (*head)->next;
 		i++;
 	}

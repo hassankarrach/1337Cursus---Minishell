@@ -36,6 +36,7 @@ int				exec_block(t_tree *node);
 int				exec_and_or(t_tree *node);
 int				exec_pipe(t_tree *node);
 void			exec_cmd(t_tree *node);
+void			exec_child(t_cmd *cmd, int flag);
 void			cp_expanded(char **tmp, char **tmp1);
 void			_expand(char **tmp);
 void			add_the_word(t_data data, t_list **head, char *str, int end);
@@ -75,8 +76,7 @@ void			recover_stdio(void);
 int				ft_open_red(char *file_name, int flag);
 int				in_redirection(char *file_name, int flag);
 int				out_redirection(char *file_name, int flag);
-void			heredoc_redirection(t_redir *redir, \
-				char *tmp, int flag, int *fd);
+void			heredoc_redirection(t_redir *redir, int flag, int *fd);
 void			io_redirections(t_redir *redir);
 void			re_heredoc(t_redir *redir);
 void			check_herdoc_to_expand(char **file_name, int *flag);

@@ -88,29 +88,28 @@ int	out_redirection(char *file_name, int flag)
 	return (0);
 }
 
-void	heredoc_redirection(t_redir *redir, char *tmp, int flag, int *fd)
+void	heredoc_redirection(t_redir *redir, int flag, int *fd)
 {
 	char	*heredoc;
+	int		fd1;
 
-	g_lobal_minishell.flag2 = 1;
-	check_to_expand(&redir->file_name);
-	g_lobal_minishell.flag2 = 0;
+	fd1 = open("/tmp/.buffer", O_CREAT | O_RDONLY | O_WRONLY | O_TRUNC, 0644);
 	while (1)
 	{
-		signal(SIGINT, &my_handler3);
-		heredoc = readline("heredoc> ");
+		heredoc = get_next_line(*fd);
 		if (heredoc == NULL)
-			break ;
-		if (ft_strcmp(heredoc, redir->file_name) == 0)
 			break ;
 		if (flag == 1)
 			check_to_expand(&heredoc);
-		ft_putstr_fd(heredoc, *fd, '\n');
+		// printf("ss = %s\n", heredoc);
+		ft_putstr_fd(heredoc, fd1, 0);
+		free(heredoc);
 	}
 	recover_stdio();
-	setup_signals();
+	close(fd1);
 	close(*fd);
-	*fd = open(tmp, O_RDONLY, 0644);
-	dup2(*fd, 0);
-	close(*fd);
+	fd1 = open("/tmp/.buffer", O_RDONLY, 0644);
+	dup2(fd1, 0);
+	close(fd1);
+	unlink(redir->hc_sep);
 }

@@ -12,26 +12,6 @@
 
 #include "./includes/minishell.h"
 
-int	check_single_cmd(int flag)
-{
-	t_cmd	*tmp;
-
-	if (g_lobal_minishell.root != NULL && \
-		(g_lobal_minishell.root)->type == TOKEN_WORD)
-	{
-		tmp = (t_cmd *)(g_lobal_minishell.root);
-		expansion(&(tmp->args), tmp->args_number);
-		// printf("%s\n", (tmp->args)[1]);
-		flag = check_builtins((tmp->args)[0]);
-		if ((flag >= 0 && flag <= 6))
-		{
-			builtins(tmp->args, flag);
-			return (1);
-		}
-	}
-	return (0);
-}
-
 void	close_io(void)
 {
 	close(g_lobal_minishell.old_stdin);
@@ -62,6 +42,7 @@ void	init_minishell(char *input)
 	head = NULL;
 	g_lobal_minishell.flag2 = 0;
 	g_lobal_minishell.flag3 = 0;
+	g_lobal_minishell.hc = 0;
 	g_lobal_minishell.pipes_nbr = 0;
 	g_lobal_minishell.old_stdin = dup(0);
 	g_lobal_minishell.old_stdout = dup(1);

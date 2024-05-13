@@ -29,6 +29,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include "../utils/libft/libft.h"
+#include "../utils/get_next_line/get_next_line.h"
 # include "./error.h"
 # include "./tokenizer.h"
 # include "./parser.h"
@@ -42,6 +43,7 @@ typedef struct s_minishell
 	int				error;
 	int				flag2;
 	int				flag3;
+	int				hc;
 	int				pipes_nbr;
 	int				*quote;
 	int				a_counter;
@@ -64,6 +66,5 @@ void	init_minishell(char *input);
 int		check_input(char **input);
 void	init(char ***env);
 void	close_io(void);
-int		check_single_cmd(int flag);
 
 #endif
