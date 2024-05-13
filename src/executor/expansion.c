@@ -66,7 +66,6 @@ void	check_to_expand(char **str)
 	va_init(&data, &i, &head, *str);
 	while ((*str)[i] != '\0')
 	{
-
 		if ((*str)[i] == '\'' || (*str)[i] == '\"')
 			check_to_expand2(i, *str, &head, &data);
 		else if ((*str)[i] == '$' && data.flag != 2)
@@ -112,9 +111,7 @@ void	expansion(char ***args, int nb)
 	i = 0;
 	while (tmp != NULL && tmp[i] != NULL)
 	{
-		// printf("1(%s)\n", tmp[i]);
 		check_to_expand(&(tmp[i]));
-		// printf("2(%s)\n", tmp[i]);
 		i++;
 	}
 	edit_args(args, nb);

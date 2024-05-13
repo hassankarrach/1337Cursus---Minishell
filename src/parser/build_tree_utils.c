@@ -58,13 +58,12 @@ t_cmd	*_cmd(char **args, int type, int i)
 
 int	redir_node(char	***args, t_redir **hold, t_token **head, t_redir **redir)
 {
-	t_redir		*tmp1;
-	// pid_t		id;
-	char		*tmp2;
+	static int	h;
 	int			fd;
+	char		*tmp2;
 	char		**tmp;
 	char		*heredoc;
-	static int	h;
+	t_redir		*tmp1;
 
 	tmp = *args;
 	if ((*head)->type == TOKEN_APPEND_REDIRECTION \
@@ -73,6 +72,7 @@ int	redir_node(char	***args, t_redir **hold, t_token **head, t_redir **redir)
 	|| (*head)->type == TOKEN_HEREDOC)
 	{
 		tmp1 = new_redir(head, (*head)->type);
+		// open_heredoc()
 		if (tmp1->type == TOKEN_HEREDOC)
 		{
 			h++;
@@ -117,7 +117,6 @@ int	redir_node(char	***args, t_redir **hold, t_token **head, t_redir **redir)
 
 int	grass(t_token **head, t_tree **root, t_tree	*tmp, int flag)
 {
-	// printf("hello777");
 	if ((*head)->type == TOKEN_WORD \
 	|| (*head)->type == TOKEN_APPEND_REDIRECTION \
 	|| (*head)->type == TOKEN_INPUT_REDIRECTION \

@@ -12,6 +12,16 @@
 
 #include "../includes/minishell.h"
 
+void	fd_error(char *file_name)
+{
+	recover_stdio();
+	if (access(file_name, F_OK) == 0)
+		custom_error("minishell-1.0: Permission denied: ", file_name, 1);
+	else
+		custom_error("minishell-1.0: \
+No such file or directory: ", file_name, 1);
+}
+
 size_t	ft_sublen(const char *s, char c)
 {
 	size_t	i;
@@ -72,7 +82,7 @@ t_environment	*new_env(char *key, char *value, int flag)
 	return (v_env);
 }
 
-void	setup_environment(char **env ,int flag)
+void	setup_environment(char **env, int flag)
 {
 	int				i;
 	int				key_len;
@@ -90,10 +100,8 @@ void	setup_environment(char **env ,int flag)
 	i = 1;
 	while ((g_lobal_minishell.env)[i] != NULL)
 	{
-		// free(h_key);
 		h_key = ft_strdup_key(g_lobal_minishell.env[i], '=');
 		key_len = ft_strlen(h_key) + 1;
-		// free(h_value);
 		h_value = ft_strdup(*(g_lobal_minishell.env + i) + key_len);
 		tmp->next = new_env(h_key, h_value, 0);
 		tmp = tmp->next;

@@ -12,16 +12,6 @@
 
 #include "../includes/minishell.h"
 
-void	fd_error(char *file_name)
-{
-	recover_stdio();
-	if (access(file_name, F_OK) == 0)
-		custom_error("minishell-1.0: Permission denied: ", file_name, 1);
-	else
-		custom_error("minishell-1.0: \
-No such file or directory: ", file_name, 1);
-}
-
 void	io_redirections(t_redir *redir)
 {
 	if (redir->type == TOKEN_INPUT_REDIRECTION)

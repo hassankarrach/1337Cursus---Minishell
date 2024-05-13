@@ -101,7 +101,6 @@ void	heredoc_redirection(t_redir *redir, int flag, int *fd)
 			break ;
 		if (flag == 1)
 			check_to_expand(&heredoc);
-		// printf("ss = %s\n", heredoc);
 		ft_putstr_fd(heredoc, fd1, 0);
 		free(heredoc);
 	}
