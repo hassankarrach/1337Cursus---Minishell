@@ -23,6 +23,10 @@ static int check_syntax_pipe(t_token *curr_token)
         curr_token = curr_token->next;
     if (curr_token->next && curr_token->next->type == TOKEN_PIPE)
         return (1);
+    if (curr_token->next && curr_token->next->type == TOKEN_WORD && curr_token->next->value[0] == '&')
+        return (1);
+    if (!curr_token->next)
+        return (1);
     return (0);
 }
 
@@ -46,6 +50,20 @@ static int isValidParentheses(t_token *list) {
     return (count == 0);
 }
 
+
+static int check_syntax_and_or(t_token *curr_token)
+{
+    while (curr_token->next && curr_token->next->type == TOKEN_WHITE_SPACE)
+        curr_token = curr_token->next;
+    if (curr_token->next && curr_token->next->type == TOKEN_PIPE)
+        return (1);
+    if (curr_token->next && curr_token->next->type == TOKEN_WORD && curr_token->next->value[0] == '&')
+        return (1);
+    if (!curr_token->next)
+        return (1);
+    return (0);
+}
+
 void parser(t_token *tokens)
 {
     int is_syntax_err;
@@ -65,8 +83,8 @@ void parser(t_token *tokens)
             is_syntax_err = check_syntax_redirections(tokens);
         else if (tokens->type == TOKEN_PIPE)
             is_syntax_err = check_syntax_pipe(tokens);
-        // else if (tokens->type == TOKEN_AND || tokens->type == TOKEN_OR)
-        //     is_syntax_err = check_syntax_and_or(tokens);
+        else if (tokens->type == TOKEN_AND || tokens->type == TOKEN_OR)
+            is_syntax_err = check_syntax_and_or(tokens);
 
         if (is_syntax_err)
         {

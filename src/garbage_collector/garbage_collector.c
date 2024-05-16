@@ -37,36 +37,57 @@ void    add_garbage(garbage_node **lst, garbage_node *new_garbage)
 	curr_garbage -> next = new_garbage;
 }
 
-void	clear_garbage(garbage_node **head)
-{
-	garbage_node    *curr_node;
-	garbage_node    *next;
+void free_token_list(t_token *head) {
+    t_token *current = head;
+    while (current != NULL) {
+        t_token *next = current->next;
+        if (current->value) {
+            free(current->value);
+        }
+        free(current);
+        current = next;
+    }
+}
 
-	curr_node = *head;
-	if (!curr_node)
-		return ;
-	while (curr_node)
-	{
-		if (curr_node->_garbage_type == node_garbage)
-		{
-			free(curr_node->garbage_ptr);
-			next = curr_node->next;
-			free(curr_node);
-			curr_node = next;
-		}
-		else if (curr_node->_garbage_type == ptr_garbage)
-		{
+void free_double_ptr(void *garbage_ptr) {
+    if (garbage_ptr) {
+        char **double_ptr = (char **)garbage_ptr;
+        char **temp_ptr = double_ptr;
+        while (*temp_ptr != NULL) {
+            free(*temp_ptr);
+            temp_ptr++;
+        }
+        free(garbage_ptr);
+    }
+}
 
-		}
-		else if (curr_node->_garbage_type == double_ptr_garbage)
-		{
-			int i = 0;
-			while ()
-			{
-			}
-		}
-	}
-	*head = NULL;
+void clear_garbage(garbage_node **head) {
+    garbage_node *curr_node;
+    garbage_node *next;
+
+    curr_node = *head;
+    if (!curr_node)
+        return;
+
+    while (curr_node) {
+        next = curr_node->next;
+        if (curr_node->_garbage_type == node_garbage) {
+            if (curr_node->garbage_ptr) {
+                free_token_list((t_token *)curr_node->garbage_ptr);
+            }
+        } else if (curr_node->_garbage_type == ptr_garbage) {
+            if (curr_node->garbage_ptr) {
+                free(curr_node->garbage_ptr);
+            }
+        } else if (curr_node->_garbage_type == double_ptr_garbage) {
+            if (curr_node->garbage_ptr) {
+                free_double_ptr(curr_node->garbage_ptr);
+            }
+        }
+        free(curr_node);
+        curr_node = next;
+    }
+    *head = NULL;
 }
 
 // void    garbage_collector(void *ptr, int to_be_clean)

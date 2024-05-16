@@ -82,17 +82,10 @@ int main(int argc, char **argv, char **env)
 		//===========================
 
 		//parsing.===================
-		// parser(global_minishell.tokens);
+		parser(global_minishell.tokens);
 		//===========================
 	}
 
-
-	int i = 0;
-	while (global_minishell.garbage_head)
-	{
-		i++;
-		global_minishell.garbage_head = global_minishell.garbage_head->next;
-	}
-	printf("==%d==\n", i);
+	// clear_garbage(&global_minishell.garbage_head);
 	return 0;
 }
