@@ -2,12 +2,8 @@
 
 t_minishell global_minishell;
 
-void    print_tokens()
+void    print_tokens(t_token *head)
 {
-	t_token *head = NULL;
-	head = ft_tokenize();
-	global_minishell.tokens = head;
-
 	// Test Tokenizer.
 	while (head)
 	{
@@ -62,22 +58,41 @@ void    print_tokens()
 		printf (" => ");
 		head = head->next;
 	}
-	printf("\n");
+	printf("\n\n");
 }
 
 int main(int argc, char **argv, char **env)
 {
+	global_minishell.garbage_head = NULL;
+
 	while (1)
 	{
-		char *input;
-		input = readline(PROMPT);
-		global_minishell.line = input;
-		//tokenizing.
-		print_tokens();
-		//parsing.
-		printf("\n\n");
-		parser(global_minishell.tokens);
+		//GETTING_INPUT==============
+		t_token *tokens_head;
+		global_minishell.line = readline(PROMPT);
+		add_garbage(&global_minishell.garbage_head, new_garbage(global_minishell.line, ptr_garbage));
+		if (strcmp(global_minishell.line, "end") == 0)
+			break;
+		//===========================
+
+		//tokenizing=================
+		tokens_head = ft_tokenize();
+		global_minishell.tokens = tokens_head;
+		print_tokens(tokens_head);
+		//===========================
+
+		//parsing.===================
+		// parser(global_minishell.tokens);
+		//===========================
 	}
 
+
+	int i = 0;
+	while (global_minishell.garbage_head)
+	{
+		i++;
+		global_minishell.garbage_head = global_minishell.garbage_head->next;
+	}
+	printf("==%d==\n", i);
 	return 0;
 }

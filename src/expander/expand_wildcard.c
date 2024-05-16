@@ -3,7 +3,9 @@
 static char *join_them(char *list, char *new)
 {
     list = ft_strjoin(list, " ");
+    add_garbage(&global_minishell.garbage_head, new_garbage(list, ptr_garbage));
     list = ft_strjoin(list, new);
+    add_garbage(&global_minishell.garbage_head, new_garbage(list, ptr_garbage));
     return (list);
 }
 
@@ -58,6 +60,7 @@ char    **get_all_files_in_curr_dir()
         entry = readdir(dir);
 	}
 
+    closedir(dir);
     return (ft_split(list, ' '));
 }
 
@@ -76,10 +79,10 @@ int	is_containing_asterisk(char *str)
 }
 
 
-
 void	handle_expand_asterisk_wildcard(t_token **list, char *pattern)
 {
 	char **files_list = get_all_files_in_curr_dir();
+    add_garbage(&global_minishell.garbage_head, new_garbage(files_list, double_ptr_garbage));
 	
 	int i = 0;
 	while (files_list[i])

@@ -22,8 +22,9 @@
 
 typedef struct s_minishell
 {
-    char    *line;
-    t_token *tokens;
+    char         *line;
+    t_token      *tokens;
+    garbage_node *garbage_head;
 }   t_minishell;
 
 extern t_minishell global_minishell;

@@ -65,6 +65,9 @@ void parser(t_token *tokens)
             is_syntax_err = check_syntax_redirections(tokens);
         else if (tokens->type == TOKEN_PIPE)
             is_syntax_err = check_syntax_pipe(tokens);
+        // else if (tokens->type == TOKEN_AND || tokens->type == TOKEN_OR)
+        //     is_syntax_err = check_syntax_and_or(tokens);
+
         if (is_syntax_err)
         {
             ft_putstr_fd("minishell error : syntax error.", 2);
