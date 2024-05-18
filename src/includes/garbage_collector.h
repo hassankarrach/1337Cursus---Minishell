@@ -14,9 +14,10 @@ typedef struct s_garbage_node{
 }               garbage_node;
 
 
-garbage_node	*new_garbage(void *garbage_ptr, garbage_type type);
+garbage_node	*new_garbage(void *garbage_ptr);
 void            add_garbage(garbage_node **lst, garbage_node *new_garbage);
 void	        clear_garbage(garbage_node **head);
-void	        *ft_malloc(size_t bytes, garbage_type type);
+void	        *ft_malloc(size_t bytes);
+void            add_double_ptr_garbages(char **double_ptr);
 
 #endif

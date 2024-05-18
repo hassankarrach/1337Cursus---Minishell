@@ -42,7 +42,6 @@ static int append_identifier(char **line_ptr, t_token **tokens_list)
     value = ft_substr(tmp, 0, i);
     if (!value)
         return (0);
-    add_garbage(&global_minishell.garbage_head, new_garbage(value, ptr_garbage));
     (*line_ptr) += i;
     if (is_containing_asterisk(value))
     {

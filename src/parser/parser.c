@@ -50,7 +50,6 @@ static int isValidParentheses(t_token *list) {
     return (count == 0);
 }
 
-
 static int check_syntax_and_or(t_token *curr_token)
 {
     while (curr_token->next && curr_token->next->type == TOKEN_WHITE_SPACE)

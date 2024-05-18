@@ -4,7 +4,7 @@ t_token	*new_token(char *value, token_type type)
 {
 	t_token	*new_token;
 
-	new_token = (t_token *)ft_malloc(sizeof(t_token), node_garbage);
+	new_token = (t_token *)malloc(sizeof(t_token));
 	if (!new_token)
 		return (NULL);
 	new_token->value = value;
