@@ -12,6 +12,35 @@
 
 #include "../includes/minishell.h"
 
+void	init_data(t_data *data)
+{
+	data->args = NULL;
+	data->redir = NULL;
+	data->hold = NULL;
+	data->cmd = NULL;
+}
+
+t_cmd	*_cmd(char **args, int type, int i)
+{
+	t_cmd	*new;
+
+	new = malloc(sizeof(t_cmd));
+	new->args = args;
+	new->type = type;
+	new->args_number = i;
+	return (new);
+}
+
+int	is_redir(int type)
+{
+	if (type == TOKEN_APPEND_REDIRECTION \
+	|| type == TOKEN_INPUT_REDIRECTION \
+	|| type == TOKEN_OUTPUT_REDIRECTION \
+	|| type == TOKEN_HEREDOC)
+		return (1);
+	return (0);
+}
+
 int	check_just_spaces(int flag, char **line, char *limiter)
 {
 	int	i;

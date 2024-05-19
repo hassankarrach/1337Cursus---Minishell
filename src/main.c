@@ -28,6 +28,7 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		input = readline(PROMPT);
+		add_garbage(&g_lobal_minishell.garbage_head, new_garbage(g_lobal_minishell.line));
 		ctrl_d(input);
 		if (check_input(&input) == 1)
 			continue ;
@@ -39,6 +40,7 @@ int	main(int argc, char **argv, char **env)
 		}
 		execute();
 		close_io();
+		clear_garbage(&g_lobal_minishell.garbage_head);
 		unlink("/tmp/.buffer");
 	}
 }

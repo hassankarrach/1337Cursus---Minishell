@@ -44,10 +44,7 @@ int	specify_types(t_tree *node)
 		exec_cmd(node);
 	else if (node->type == TOKEN_PIPE)
 		return (exec_pipe(node));
-	else if (node->type == TOKEN_APPEND_REDIRECTION \
-		|| node->type == TOKEN_INPUT_REDIRECTION \
-		|| node->type == TOKEN_OUTPUT_REDIRECTION \
-		|| node->type == TOKEN_HEREDOC)
+	else if (is_redir(node->type) == 1)
 		exec_redir(node);
 	else if (node->type == TOKEN_AND || node->type == TOKEN_OR)
 		return (exec_and_or(node));

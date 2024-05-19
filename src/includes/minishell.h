@@ -24,6 +24,7 @@
 # include <signal.h>
 # include <errno.h>
 # include <sys/stat.h>
+# include <dirent.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/types.h>
@@ -56,11 +57,16 @@ typedef struct s_minishell
 	char			**env;
 	t_environment	*environment;
 	t_token			*tokens;
+	garbage_node	*garbage_head;
 	char			*line;
 	t_tree			*root;
 }	t_minishell;
 
 extern t_minishell	g_lobal_minishell;
+
+void	handle_expand_asterisk_wildcard(t_token **list, char *pattern);
+char    **get_all_files_in_curr_dir();
+int     is_containing_asterisk(char *str);
 
 void	init_minishell(char *input);
 int		check_input(char **input);

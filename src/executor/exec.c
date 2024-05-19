@@ -69,8 +69,7 @@ void	exec_cmd(t_tree *node)
 	int		flag;
 
 	cmd = (t_cmd *)node;
-	if ((g_lobal_minishell.root)->type != TOKEN_WORD)
-		expansion(&(cmd->args), cmd->args_number);
+	expansion(&(cmd->args), cmd->args_number);
 	flag = check_builtins((cmd->args)[0]);
 	if (flag >= 0 && flag <= 6 && g_lobal_minishell.flag3 != 1)
 		builtins(cmd->args, flag);

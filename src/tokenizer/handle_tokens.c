@@ -11,12 +11,14 @@ static int append_seperator(token_type type, char **line_ptr, t_token **tokens_l
     (*line_ptr)++;
     if (type == TOKEN_AND || type == TOKEN_OR || type == TOKEN_APPEND_REDIRECTION || type == TOKEN_HEREDOC)
         (*line_ptr)++;
+    if (type == TOKEN_WHITE_SPACE)
+        skip_spaces(line_ptr);
     return (1);
 }
 
 static int append_identifier(char **line_ptr, t_token **tokens_list)
 {
-        char    *tmp;
+    char    *tmp;
     char    *value;
     t_token *token;
     size_t  i;
@@ -30,26 +32,36 @@ static int append_identifier(char **line_ptr, t_token **tokens_list)
         {
             if (!skip_quotes(tmp, &i))
             {
-	            ft_putstr_fd("minishell-1.0: unclosed `\"\'", 2, '\n');
+                print_quote_err(tmp[i]);
                 return (0);
             }
         }
         else
             i++;
     }
-    value = ft_substr(tmp, 0, i); //TB free.
+    value = ft_substr(tmp, 0, i);
     if (!value)
         return (0);
+    (*line_ptr) += i;
+    if (is_containing_asterisk(value))
+    {
+        handle_expand_asterisk_wildcard(tokens_list, value);
+        return (1);
+    }
     token = new_token(value, TOKEN_WORD);
+    if (*value == '\'')
+        token->is_single_quote = 1;
     if (!token)
         return (0);
-    (*line_ptr) += i;
     token_list_add_back(tokens_list, token);
     return (1);
 }
+
 static int	handle_separator(char **line_ptr, t_token **tokens_list)
 {
-	if (!ft_strncmp(*line_ptr, "<<", 2))
+    if (ft_is_space(**line_ptr))
+        return (append_seperator(TOKEN_WHITE_SPACE, line_ptr, tokens_list) && 1);
+	else if (!ft_strncmp(*line_ptr, "<<", 2))
     	return (append_seperator(TOKEN_HEREDOC, line_ptr, tokens_list) && 1);
 	else if (!ft_strncmp(*line_ptr, ">>", 2))
 		return (append_seperator(TOKEN_APPEND_REDIRECTION, line_ptr, tokens_list) && 1);
@@ -77,15 +89,11 @@ t_token *handle_tokens(char *line)
     is_err = 0;
     tokens_list = NULL;
 
-    if (line == NULL)
-        return (NULL);
     while (*line)
     {
         if (is_err)
             return (NULL);
-        if (ft_is_space(*line))
-            skip_spaces(&line);
-        else if (ft_strncmp(line, "<", 1) == 0 || ft_strncmp(line, ">", 1) == 0
+        if (ft_strncmp(line, "<", 1) == 0 || ft_strncmp(line, ">", 1) == 0 || ft_is_space(*line)
             || ft_strncmp(line, "|", 1) == 0 || ft_strncmp(line, "&&", 2) == 0
             || ft_strncmp(line, "(", 1) == 0 || ft_strncmp(line, ")", 1) == 0)
             is_err = (!handle_separator(&line, &tokens_list) && 1);

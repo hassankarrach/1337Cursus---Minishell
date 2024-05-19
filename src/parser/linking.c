@@ -12,6 +12,16 @@
 
 #include "../includes/minishell.h"
 
+int	count(char **args)
+{
+	int	i;
+
+	i = 0;
+	while (args[i] != 0)
+		i++;
+	return (i);
+}
+
 void	linking(t_redir **hold, t_cmd *cmd, t_redir **hold2, t_tree **root)
 {
 	while (1)

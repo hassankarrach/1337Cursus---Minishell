@@ -20,8 +20,11 @@ t_redir	*new_redir(t_token **head, int type)
 	redir->type = type;
 	redir->hc_sep = NULL;
 	redir->child = NULL;
-	redir->file_name = (*head)->next->value;
-	(*head) = (*head)->next->next;
+	(*head) = (*head)->next;
+	while ((*head)->type == TOKEN_WHITE_SPACE)
+		(*head) = (*head)->next;
+	redir->file_name = (*head)->value;
+	(*head) = (*head)->next;
 	return (redir);
 }
 
@@ -30,11 +33,8 @@ void	new_cmd(t_token **head, t_tree **root)
 	int		i;
 	t_data	data;
 
-	data.args = NULL;
-	data.redir = NULL;
-	data.hold = NULL;
-	data.cmd = NULL;
 	i = 0;
+	init_data(&data);
 	while ((*head) != NULL && (*head)->type != TOKEN_AND && \
 	(*head)->type != TOKEN_OR && (*head)->type != TOKEN_PIPE && \
 	(*head)->type != TOKEN_CLOSING_PARENTHESES)

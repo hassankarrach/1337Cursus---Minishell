@@ -17,7 +17,8 @@ typedef enum tokens{
     TOKEN_VARIABLE,
     TOKEN_OPENING_PARENTHESES,
     TOKEN_BLOCK,
-    TOKEN_CLOSING_PARENTHESES
+    TOKEN_CLOSING_PARENTHESES,
+    TOKEN_WHITE_SPACE
 }               token_type;
 
 typedef struct s_token{
@@ -39,6 +40,7 @@ int     is_quote(char c);
 int     is_separator(char *s);
 void    skip_spaces(char **line);
 int     skip_quotes(char *line, size_t *i);
+void    print_quote_err(char c);
 
 //handlers
 t_token *handle_tokens(char *line);

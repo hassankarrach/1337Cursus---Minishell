@@ -73,6 +73,8 @@ void	logicat_operations_link(t_op *n_op, t_tree **root);
 int		check_just_spaces(int flag, char **line, char *limiter);
 
 int		count(char **args);
+int		is_redir(int type);
+void	init_data(t_data *data);
 char	**join_arg(char **args, char *value);
 t_cmd	*_cmd(char **args, int type, int i);
 int		redir_node(char	***args, t_redir **hold, \
@@ -89,5 +91,6 @@ void	new_cmd(t_token **head, t_tree **root);
 void	new_block(t_tree **root, t_tree *node, t_token **head);
 void	new_pipe(t_tree **root);
 void	new_op(t_tree **root, int type);
+void	parser(t_token *tokens);
 
 #endif

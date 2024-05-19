@@ -51,5 +51,6 @@ void	init_minishell(char *input)
 	g_lobal_minishell.a_counter = 0;
 	g_lobal_minishell.root = NULL;
 	head = ft_tokenize();
+	parser(head);
 	g_lobal_minishell.root = build_tree(head, 0);
 }
