@@ -32,7 +32,8 @@ int	main(int argc, char **argv, char **env)
 		ctrl_d(input);
 		if (check_input(&input) == 1)
 			continue ;
-		init_minishell(input);
+		if (init_minishell(input) == 1)
+			continue ;
 		if (g_lobal_minishell.hc == 1)
 		{
 			close_io();

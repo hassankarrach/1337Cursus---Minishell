@@ -91,6 +91,6 @@ void	new_cmd(t_token **head, t_tree **root);
 void	new_block(t_tree **root, t_tree *node, t_token **head);
 void	new_pipe(t_tree **root);
 void	new_op(t_tree **root, int type);
-void	parser(t_token *tokens);
+int		parser(t_token *tokens);
 
 #endif

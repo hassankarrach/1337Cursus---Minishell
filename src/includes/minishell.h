@@ -68,7 +68,7 @@ void	handle_expand_asterisk_wildcard(t_token **list, char *pattern);
 char    **get_all_files_in_curr_dir();
 int     is_containing_asterisk(char *str);
 
-void	init_minishell(char *input);
+int		init_minishell(char *input);
 int		check_input(char **input);
 void	init(char ***env);
 void	close_io(void);

@@ -63,7 +63,7 @@ static int check_syntax_and_or(t_token *curr_token)
     return (0);
 }
 
-void parser(t_token *tokens)
+int parser(t_token *tokens)
 {
     int is_syntax_err;
 
@@ -71,7 +71,7 @@ void parser(t_token *tokens)
     if (!isValidParentheses(tokens))
     {
         ft_putstr_fd("minishell error : syntax error.", 2, '\n');
-        return ;
+        return (1);
     }
     while (tokens)
     {
@@ -88,8 +88,9 @@ void parser(t_token *tokens)
         if (is_syntax_err)
         {
             ft_putstr_fd("minishell error : syntax error.", 2, '\n');
-            return ;
+            return (1);
         }
         tokens = tokens->next;
     }
+    return (0);
 }

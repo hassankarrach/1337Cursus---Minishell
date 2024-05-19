@@ -35,7 +35,7 @@ int	check_input(char **input)
 	return (0);
 }
 
-void	init_minishell(char *input)
+int	init_minishell(char *input)
 {
 	t_token	*head;
 
@@ -51,6 +51,8 @@ void	init_minishell(char *input)
 	g_lobal_minishell.a_counter = 0;
 	g_lobal_minishell.root = NULL;
 	head = ft_tokenize();
-	parser(head);
+	if (parser(head) == 1)
+		return (1);
 	g_lobal_minishell.root = build_tree(head, 0);
+	return (0);
 }
