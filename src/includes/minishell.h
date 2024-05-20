@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 15:46:27 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/05/06 15:46:29 by aelbasri         ###   ########.fr       */
+/*   Updated: 2024/05/20 17:36:26 by hkarrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@
 # define GREEN "\033[1;32m"
 # define RED "\033[1;31m"
 
+# define PROMPT "> minishell-1.0$ "
+
 typedef struct s_minishell
 {
 	int				error;
@@ -57,7 +59,7 @@ typedef struct s_minishell
 	char			**env;
 	t_environment	*environment;
 	t_token			*tokens;
-	garbage_node	*garbage_head;
+	t_garbage_node	*garbage_head;
 	char			*line;
 	t_tree			*root;
 }	t_minishell;
@@ -65,8 +67,8 @@ typedef struct s_minishell
 extern t_minishell	g_lobal_minishell;
 
 void	handle_expand_asterisk_wildcard(t_token **list, char *pattern);
-char    **get_all_files_in_curr_dir();
-int     is_containing_asterisk(char *str);
+char	**get_all_files_in_curr_dir(void);
+int		is_containing_asterisk(char *str);
 
 int		init_minishell(char *input);
 int		check_input(char **input);

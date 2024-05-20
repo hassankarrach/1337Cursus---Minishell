@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:05:04 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/05/04 17:05:06 by aelbasri         ###   ########.fr       */
+/*   Updated: 2024/05/20 17:21:25 by hkarrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,11 @@ int	check_just_spaces(int flag, char **line, char *limiter)
 		}
 		i++;
 	}
+	return (1);
+}
+
+int	print_syntax_error(void)
+{
+	ft_putstr_fd("minishell error : syntax error.", 2, '\n');
 	return (1);
 }

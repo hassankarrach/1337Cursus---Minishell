@@ -1,40 +1,52 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/20 16:49:20 by hkarrach          #+#    #+#             */
+/*   Updated: 2024/05/20 16:50:53 by hkarrach         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-int is_quote(char c)
+int	is_quote(char c)
 {
-    if (c == '\'' || c == '"')
-        return (1);
-    return (0);
+	if (c == '\'' || c == '"')
+		return (1);
+	return (0);
 }
 
-int is_separator(char *s)
+int	is_separator(char *s)
 {
-    if (!ft_strncmp(s, "&&", 2) || *s == ' ' || *s == '\t' || *s == '<'
-        || *s == '<' || *s == '|' || *s == '(' || *s == ')')
-        return (1);
-    return (0);
+	if (!ft_strncmp(s, "&&", 2) || *s == ' ' || *s == '\t' || *s == '<'
+		|| *s == '<' || *s == '|' || *s == '(' || *s == ')')
+		return (1);
+	return (0);
 }
 
-void skip_spaces(char **line)
+void	skip_spaces(char **line)
 {
-    while (**line && ft_is_space(**line))
-        (*line)++;
+	while (**line && ft_is_space(**line))
+		(*line)++;
 }
 
-int skip_quotes(char *line, size_t *i)
+int	skip_quotes(char *line, size_t *i)
 {
-    char quote;
+	char	quote;
 
-    quote = line[*i];
-    if (ft_strchr(line + (*i + 1), quote))
-    {
-        (*i)++;
-        while (line[*i] != quote)
-            (*i)++;
-        (*i)++;
-        return (1);
-    }
-    return (0);
+	quote = line[*i];
+	if (ft_strchr(line + (*i + 1), quote))
+	{
+		(*i)++;
+		while (line[*i] != quote)
+			(*i)++;
+		(*i)++;
+		return (1);
+	}
+	return (0);
 }
 
 void	print_quote_err(char c)

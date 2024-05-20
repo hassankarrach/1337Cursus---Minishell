@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/13 10:37:40 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/04/13 10:37:43 by aelbasri         ###   ########.fr       */
+/*   Updated: 2024/05/20 17:37:04 by hkarrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,7 @@ void	new_block(t_tree **root, t_tree *node, t_token **head);
 void	new_pipe(t_tree **root);
 void	new_op(t_tree **root, int type);
 int		parser(t_token *tokens);
+
+int		print_syntax_error(void);
 
 #endif
