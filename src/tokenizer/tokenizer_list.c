@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer_list.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/20 16:48:44 by hkarrach          #+#    #+#             */
+/*   Updated: 2024/05/20 17:34:55 by hkarrach         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
-t_token	*new_token(char *value, token_type type)
+t_token	*new_token(char *value, t_token_type type)
 {
 	t_token	*new_token;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 15:46:27 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/05/06 15:46:29 by aelbasri         ###   ########.fr       */
+/*   Updated: 2024/05/23 13:50:13 by hkarrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@
 # define GREEN "\033[1;32m"
 # define RED "\033[1;31m"
 
+# define PROMPT "> minishell-1.0$ "
+
 typedef struct s_minishell
 {
 	int				error;
@@ -59,8 +61,8 @@ typedef struct s_minishell
 	char			**env;
 	t_environment	*environment;
 	t_token			*tokens;
-	garbage_node	*garbage_head;
-	garbage_node	*garbage_head2;
+	t_garbage_node	*garbage_head;
+	t_garbage_node	*garbage_head2;
 	char			*line;
 	t_tree			*root;
 }	t_minishell;

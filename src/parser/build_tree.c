@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_tree.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 22:18:33 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/04/12 22:18:38 by aelbasri         ###   ########.fr       */
+/*   Updated: 2024/05/23 13:53:53 by hkarrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,10 @@ t_tree	*build_tree(t_token *head, int flag)
 		head = head->next;
 	}
 	return (root);
+}
+
+int	print_syntax_error(void)
+{
+	ft_putstr_fd("minishell error : syntax error.", 2, '\n');
+	return (1);
 }
