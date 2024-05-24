@@ -6,7 +6,7 @@
 /*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:19:56 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/05/01 15:19:58 by aelbasri         ###   ########.fr       */
+/*   Updated: 2024/05/24 10:12:13 by aelbasri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,6 @@ int	main(int argc, char **argv, char **env)
 		execute();
 		close_io();
 		clear_garbage(&g_lobal_minishell.garbage_head);
-		unlink("/tmp/.buffer");
+		unlink("/tmp/.heredocbuffer");
 	}
 }
