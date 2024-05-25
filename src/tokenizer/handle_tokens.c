@@ -6,7 +6,7 @@
 /*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:36:40 by hkarrach          #+#    #+#             */
-/*   Updated: 2024/05/20 17:34:55 by hkarrach         ###   ########.fr       */
+/*   Updated: 2024/05/25 09:39:05 by hkarrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ static int	append_sep(t_token_type type, char **line_ptr,
 static int	creat_identifier_node(char *value, t_token **tokens_list)
 {
 	t_token	*token;
-
+	
+	// find_last_node => check if it iqual to one of input redirection tokens => dont expand if (*) world has only 1 item. 
 	if (is_containing_asterisk(value))
 	{
 		handle_expand_asterisk_wildcard(tokens_list, value);
@@ -58,14 +59,16 @@ static int	append_identifier(char **line_ptr, t_token **tokens_list)
 	i = 0;
 	while (tmp[i] && !is_separator(tmp + i))
 	{
-		if (is_quote(tmp[i]) && !skip_quotes(tmp, &i))
+		if (is_quote(tmp[i]))
 		{
-			print_quote_err(tmp[i]);
-			return (0);
+			if (!skip_quotes(tmp, &i))
+				return (print_quote_err(tmp[i]), 0);
 		}
-		i++;
+		else
+			i++;
 	}
 	value = ft_substr(tmp, 0, i);
+
 	if (!value)
 		return (0);
 	(*line_ptr) += i;

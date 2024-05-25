@@ -6,42 +6,11 @@
 /*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 16:52:32 by hkarrach          #+#    #+#             */
-/*   Updated: 2024/05/20 17:19:06 by hkarrach         ###   ########.fr       */
+/*   Updated: 2024/05/23 15:57:02 by hkarrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-static int	check_syntax_redirections(t_token *curr_token)
-{
-	while (curr_token->next && curr_token->next->type == TOKEN_WHITE_SPACE)
-		curr_token = curr_token->next;
-	if (curr_token->next && (curr_token->next->type == TOKEN_PIPE
-			|| curr_token->next->type == TOKEN_CLOSING_PARENTHESES
-			|| curr_token->next->type == TOKEN_OPENING_PARENTHESES
-			|| curr_token->next->type == TOKEN_APPEND_REDIRECTION
-			|| curr_token->next->type == TOKEN_HEREDOC
-			|| curr_token->next->type == TOKEN_INPUT_REDIRECTION
-			|| curr_token->next->type == TOKEN_OUTPUT_REDIRECTION))
-		return (1);
-	else if (!curr_token->next)
-		return (1);
-	return (0);
-}
-
-static int	check_syntax_pipe(t_token *curr_token)
-{
-	while (curr_token->next && curr_token->next->type == TOKEN_WHITE_SPACE)
-		curr_token = curr_token->next;
-	if (curr_token->next && curr_token->next->type == TOKEN_PIPE)
-		return (1);
-	if (curr_token->next && curr_token->next->type == TOKEN_WORD
-		&& curr_token->next->value[0] == '&')
-		return (1);
-	if (!curr_token->next)
-		return (1);
-	return (0);
-}
 
 static int	is_valid_parentheses(t_token *list)
 {
@@ -65,20 +34,6 @@ static int	is_valid_parentheses(t_token *list)
 	return (count == 0);
 }
 
-static int	check_syntax_and_or(t_token *curr_token)
-{
-	while (curr_token->next && curr_token->next->type == TOKEN_WHITE_SPACE)
-		curr_token = curr_token->next;
-	if (curr_token->next && curr_token->next->type == TOKEN_PIPE)
-		return (1);
-	if (curr_token->next && curr_token->next->type == TOKEN_WORD
-		&& curr_token->next->value[0] == '&')
-		return (1);
-	if (!curr_token->next)
-		return (1);
-	return (0);
-}
-
 int	parser(t_token *tokens)
 {
 	int	is_syntax_err;
@@ -93,10 +48,13 @@ int	parser(t_token *tokens)
 			|| tokens->type == TOKEN_OUTPUT_REDIRECTION
 			|| tokens->type == TOKEN_INPUT_REDIRECTION)
 			is_syntax_err = check_syntax_redirections(tokens);
-		else if (tokens->type == TOKEN_PIPE)
-			is_syntax_err = check_syntax_pipe(tokens);
-		else if (tokens->type == TOKEN_AND || tokens->type == TOKEN_OR)
-			is_syntax_err = check_syntax_and_or(tokens);
+		else if (tokens->type == TOKEN_PIPE 
+			|| tokens->type == TOKEN_AND || tokens->type == TOKEN_OR)
+			is_syntax_err = check_syntax_and_or_pipe(tokens);
+		else if (tokens->type == TOKEN_OPENING_PARENTHESES)
+			is_syntax_err = check_syntax_open_parentheses(tokens);
+		else if (tokens->type == TOKEN_CLOSING_PARENTHESES)
+			is_syntax_err = check_syntax_close_parentheses(tokens);
 		if (is_syntax_err)
 		{
 			ft_putstr_fd("minishell error : syntax error.", 2, '\n');

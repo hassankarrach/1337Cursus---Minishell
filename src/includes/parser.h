@@ -6,7 +6,7 @@
 /*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/13 10:37:40 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/05/23 13:48:34 by hkarrach         ###   ########.fr       */
+/*   Updated: 2024/05/23 15:56:36 by hkarrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,9 @@ void	new_op(t_tree **root, int type);
 int		parser(t_token *tokens);
 
 int		print_syntax_error(void);
+int		check_syntax_and_or_pipe(t_token *curr_token);
+int		check_syntax_redirections(t_token *curr_token);
+int		check_syntax_open_parentheses(t_token *curr_token);
+int		check_syntax_close_parentheses(t_token *curr_token);
 
 #endif
