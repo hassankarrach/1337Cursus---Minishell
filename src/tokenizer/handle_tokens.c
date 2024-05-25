@@ -6,7 +6,7 @@
 /*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:36:40 by hkarrach          #+#    #+#             */
-/*   Updated: 2024/05/25 11:18:35 by hkarrach         ###   ########.fr       */
+/*   Updated: 2024/05/25 14:37:36 by hkarrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	append_sep(t_token_type type, char **line_ptr,
 static int	creat_identifier_node(char *value, t_token **tokens_list)
 {
 	t_token	*token;
-	
+
 	if (is_containing_asterisk(value))
 	{
 		handle_expand_asterisk_wildcard(tokens_list, value);
@@ -67,7 +67,6 @@ static int	append_identifier(char **line_ptr, t_token **tokens_list)
 			i++;
 	}
 	value = ft_substr(tmp, 0, i);
-
 	if (!value)
 		return (0);
 	(*line_ptr) += i;

@@ -6,7 +6,7 @@
 /*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:33:00 by hkarrach          #+#    #+#             */
-/*   Updated: 2024/05/25 11:18:13 by hkarrach         ###   ########.fr       */
+/*   Updated: 2024/05/25 14:38:11 by hkarrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,6 @@ void	print_quote_err(char c);
 
 t_token	*handle_tokens(char *line);
 
-t_token			*ft_tokenize(void);
+t_token	*ft_tokenize(void);
 
 #endif

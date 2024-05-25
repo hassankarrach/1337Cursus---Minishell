@@ -6,7 +6,7 @@
 /*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 16:52:32 by hkarrach          #+#    #+#             */
-/*   Updated: 2024/05/23 15:57:02 by hkarrach         ###   ########.fr       */
+/*   Updated: 2024/05/25 14:36:17 by hkarrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,15 @@ int	parser(t_token *tokens)
 			|| tokens->type == TOKEN_OUTPUT_REDIRECTION
 			|| tokens->type == TOKEN_INPUT_REDIRECTION)
 			is_syntax_err = check_syntax_redirections(tokens);
-		else if (tokens->type == TOKEN_PIPE 
+		else if (tokens->type == TOKEN_PIPE
 			|| tokens->type == TOKEN_AND || tokens->type == TOKEN_OR)
 			is_syntax_err = check_syntax_and_or_pipe(tokens);
 		else if (tokens->type == TOKEN_OPENING_PARENTHESES)
 			is_syntax_err = check_syntax_open_parentheses(tokens);
 		else if (tokens->type == TOKEN_CLOSING_PARENTHESES)
 			is_syntax_err = check_syntax_close_parentheses(tokens);
-		if (is_syntax_err)
-		{
-			ft_putstr_fd("minishell error : syntax error.", 2, '\n');
+		if (is_syntax_err && print_syntax_error())
 			return (1);
-		}
 		tokens = tokens->next;
 	}
 	return (0);
