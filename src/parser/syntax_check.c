@@ -6,7 +6,7 @@
 /*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:54:41 by hkarrach          #+#    #+#             */
-/*   Updated: 2024/05/23 15:56:52 by hkarrach         ###   ########.fr       */
+/*   Updated: 2024/05/25 11:27:03 by hkarrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,19 @@ int	check_syntax_and_or_pipe(t_token *curr_token)
 		right = right->next;
 	while (left->prev && left->prev->type == TOKEN_WHITE_SPACE)
 		left = left->prev;
-
-	if (left->prev && (left->prev->type != TOKEN_SINGLE_QUOTE
+	if ((left->prev && (left->prev->type != TOKEN_SINGLE_QUOTE
 		&& left->prev->type != TOKEN_DOUBLE_QUOTE
 		&& left->prev->type != TOKEN_WORD
-		&& left->prev->type != TOKEN_CLOSING_PARENTHESES))
+		&& left->prev->type != TOKEN_CLOSING_PARENTHESES)) || !left->prev)
 		return (1);
-	if (right->next && (right->next->type != TOKEN_SINGLE_QUOTE
+	if ((right->next && (right->next->type != TOKEN_SINGLE_QUOTE
 		&& right->next->type != TOKEN_DOUBLE_QUOTE
 		&& right->next->type != TOKEN_WORD
 		&& right->next->type != TOKEN_HEREDOC
 		&& right->next->type != TOKEN_APPEND_REDIRECTION
 		&& right->next->type != TOKEN_INPUT_REDIRECTION
 		&& right->next->type != TOKEN_OUTPUT_REDIRECTION
-		&& right->next->type != TOKEN_CLOSING_PARENTHESES))
+		&& right->next->type != TOKEN_CLOSING_PARENTHESES)) || !right->next)
 		return (1);
 	return (0);
 }

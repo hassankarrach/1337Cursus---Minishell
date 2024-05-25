@@ -6,7 +6,7 @@
 /*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:36:40 by hkarrach          #+#    #+#             */
-/*   Updated: 2024/05/25 09:39:05 by hkarrach         ###   ########.fr       */
+/*   Updated: 2024/05/25 11:18:35 by hkarrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static int	creat_identifier_node(char *value, t_token **tokens_list)
 {
 	t_token	*token;
 	
-	// find_last_node => check if it iqual to one of input redirection tokens => dont expand if (*) world has only 1 item. 
 	if (is_containing_asterisk(value))
 	{
 		handle_expand_asterisk_wildcard(tokens_list, value);

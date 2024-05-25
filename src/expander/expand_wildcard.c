@@ -6,7 +6,7 @@
 /*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:37:25 by hkarrach          #+#    #+#             */
-/*   Updated: 2024/05/25 09:42:47 by hkarrach         ###   ########.fr       */
+/*   Updated: 2024/05/25 11:18:06 by hkarrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,19 +91,9 @@ void	handle_expand_asterisk_wildcard(t_token **list, char *pattern)
 {
 	char	**files_list;
 	int		i;
-	size_t	last_token_type;
 
 	i = 0;
 	files_list = get_all_files_in_curr_dir();
-	while (files_list[i])
-		i++;
-	last_token_type = get_last_token(list);
-	if ((last_token_type == TOKEN_INPUT_REDIRECTION
-		|| last_token_type == TOKEN_OUTPUT_REDIRECTION
-		|| last_token_type == TOKEN_APPEND_REDIRECTION
-		|| last_token_type == TOKEN_HEREDOC) && i == 1)
-		return (token_list_add_back(list, new_token(pattern, TOKEN_WORD)));
-	i = 0;
 	add_double_ptr_garbages(files_list);
 	while (files_list[i])
 	{
