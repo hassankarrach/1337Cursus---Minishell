@@ -1,8 +1,8 @@
 NAME = minishell
 
 # Flags
-# CFLAGS = -Wall -Wextra -Werror #-fsanitize=address
-RDLFLAG  = -lreadline
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address
+RDLFLAG = -lreadline
 
 # Libs-Srcs
 LIBFT = $(addprefix ./src/utils/libft/, ft_strlcpy.c ft_strrchr.c ft_strtrim.c ft_bzero.c ft_calloc.c ft_is_space.c ft_putstr_fd.c ft_split.c ft_strchr.c ft_strdup.c ft_strjoin.c ft_strlen.c ft_strncmp.c ft_strcmp.c ft_substr.c ft_itoa.c ft_lstnew.c ft_lstadd_back.c ft_lstlast.c ft_lstsize.c ft_isalpha.c ft_isalnum.c ft_isdigit.c ft_atoi.c)
@@ -23,17 +23,20 @@ SRCS = $(SRC_TOKENIZER) $(SRC_EXECUTOR) $(SRC_BUILT_INS) $(LIBFT) $(GNL) $(SRC_P
 OBJS = $(SRCS:.c=.o)
 
 # Deps
-all : $(NAME)
+all: $(NAME)
 
 # Compiling
-.c.o : 
-	cc -g $(CFLAGS) -c -o $@ $^
-$(NAME) : $(OBJS) $(HEADERS)
-	cc $(CFLAGS) $(RDLFLAG) $(OBJS) -o $(NAME) 
+.c.o:
+	cc $(CFLAGS) -c -o $@ $<
+
+$(NAME): $(OBJS) $(HEADERS)
+	cc $(CFLAGS) $(OBJS) $(RDLFLAG) -o $(NAME)
 
 # Cleaning
-clean : 
+clean:
 	rm -f $(OBJS)
-fclean : clean
+
+fclean: clean
 	rm -f $(NAME)
-re : fclean all 
+
+re: fclean all

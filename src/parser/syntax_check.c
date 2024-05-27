@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
+/*   By: zero <zero@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:54:41 by hkarrach          #+#    #+#             */
-/*   Updated: 2024/05/25 14:34:33 by hkarrach         ###   ########.fr       */
+/*   Updated: 2024/05/27 10:25:28 by zero             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,22 @@ int	check_syntax_and_or_pipe(t_token *curr_token)
 				&& left->prev->type != TOKEN_DOUBLE_QUOTE
 				&& left->prev->type != TOKEN_CLOSING_PARENTHESES
 				&& left->prev->type != TOKEN_WORD)) || !left->prev)
+	{
+		printf("reachs 1\n");
 		return (1);
+	}
 	if ((right->next && (right->next->type != TOKEN_SINGLE_QUOTE
 				&& right->next->type != TOKEN_DOUBLE_QUOTE
 				&& right->next->type != TOKEN_HEREDOC
 				&& right->next->type != TOKEN_APPEND_REDIRECTION
 				&& right->next->type != TOKEN_INPUT_REDIRECTION
 				&& right->next->type != TOKEN_OUTPUT_REDIRECTION
-				&& right->next->type != TOKEN_CLOSING_PARENTHESES
+				&& right->next->type != TOKEN_OPENING_PARENTHESES
 				&& right->next->type != TOKEN_WORD)) || !right->next)
+	{
+		printf("reachs 2\n");
 		return (1);
+	}
 	return (0);
 }
 
@@ -76,12 +82,18 @@ int	check_syntax_open_parentheses(t_token *curr_token)
 			&& right->next->type != TOKEN_INPUT_REDIRECTION
 			&& right->next->type != TOKEN_OUTPUT_REDIRECTION
 			&& right->next->type != TOKEN_OPENING_PARENTHESES))
+	{
+		printf("reachs 3\n");
 		return (1);
+	}
 	if (left->prev && (left->prev->type != TOKEN_AND
 			&& left->prev->type != TOKEN_OR
 			&& left->prev->type != TOKEN_PIPE
 			&& left->prev->type != TOKEN_OPENING_PARENTHESES))
+	{
+		printf("reachs 4\n");
 		return (1);
+	}
 	return (0);
 }
 
@@ -99,12 +111,20 @@ int	check_syntax_close_parentheses(t_token *curr_token)
 	if (right->next && (right->next->type != TOKEN_AND
 			&& right->next->type != TOKEN_OR
 			&& right->next->type != TOKEN_PIPE
-			&& right->next->type != TOKEN_CLOSING_PARENTHESES))
+			&& right->next->type != TOKEN_CLOSING_PARENTHESES
+			&& right->next->type != TOKEN_APPEND_REDIRECTION
+			&& right->next->type != TOKEN_OUTPUT_REDIRECTION))
+	{
+		printf("reachs 5\n");
 		return (1);
+	}
 	if (left->prev && (left->prev->type != TOKEN_SINGLE_QUOTE
 			&& left->prev->type != TOKEN_DOUBLE_QUOTE
 			&& left->prev->type != TOKEN_WORD
 			&& left->prev->type != TOKEN_CLOSING_PARENTHESES))
+	{
+		printf("reachs 6\n");
 		return (1);
+	}
 	return (0);
 }
