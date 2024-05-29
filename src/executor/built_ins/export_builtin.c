@@ -50,7 +50,9 @@ void	printf_varibles(int flag)
 			tmp = tmp->next;
 			continue ;
 		}
-		printf("%s=%s\n", tmp->key, tmp->value);
+		printf("%s=", tmp->key);
+		if (tmp->value != NULL)
+			printf("%s\n", tmp->value);
 		tmp = tmp->next;
 	}
 }
@@ -89,8 +91,7 @@ void	create_env_var(char **args, int *i, int flag, char c)
 	add_garbage(&g_lobal_minishell.garbage_head2, new_garbage(key));
 	if (args[j][ft_strlen(key)] == '=')
 		flag2 = 1;
-	if (flag2 == 1)
-		value = ft_strdup((*(args + j)) + ft_strlen(key) + 1) + flag;
+	value = ft_strdup((*(args + j)) + ft_strlen(key) + 1) + flag;
 	if (is_exist(key, value, flag, flag2) == 0)
 	{
 		if (flag2 == 1)
