@@ -52,7 +52,8 @@ void	start_execution(t_cmd *cmd)
 			g_lobal_minishell.status = WTERMSIG(g_lobal_minishell.status) + 128;
 		setup_signals();
 		dup2(g_lobal_minishell.old_stdin, 0);
-		dup2(g_lobal_minishell.old_stdout, 1);
+		if (g_lobal_minishell.flag3 != 1)
+			dup2(g_lobal_minishell.old_stdout, 1);
 	}
 }
 
