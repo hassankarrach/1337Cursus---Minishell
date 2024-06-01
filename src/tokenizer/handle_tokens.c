@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hkarrac <hkarrac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:36:40 by hkarrach          #+#    #+#             */
-/*   Updated: 2024/05/25 14:37:36 by hkarrach         ###   ########.fr       */
+/*   Updated: 2024/06/01 11:55:47 by hkarrac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	creat_identifier_node(char *value, t_token **tokens_list)
 {
 	t_token	*token;
 
-	if (is_containing_asterisk(value))
+	if (is_containing_asterisk(value) && value[0] != '\"' && value[0] != '\'')
 	{
 		handle_expand_asterisk_wildcard(tokens_list, value);
 		return (1);

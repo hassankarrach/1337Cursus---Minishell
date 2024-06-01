@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hkarrac <hkarrac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 15:19:56 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/05/25 14:37:04 by hkarrach         ###   ########.fr       */
+/*   Updated: 2024/06/01 11:54:33 by hkarrac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	main(int argc, char **argv, char **env)
 			close_io();
 			continue ;
 		}
+		
 		// printf("=%d\n", g_lobal_minishell.root->type);
 		// printf("=%d\n", (((t_pipe *)g_lobal_minishell.root)->left)->type);
 		// printf("=%d\n", (((t_pipe *)g_lobal_minishell.root)->right)->type);
