@@ -90,12 +90,12 @@ void	check1(char *cmd)
 	if (access(cmd, X_OK) == -1)
 	{
 		if (access(cmd, F_OK) == 0)
-			custom_error("minishell-1.0: Permission denied: ", cmd, 126);
+			custom_error("minishell-1.0: Permissbbion denied: ", cmd, 126);
 		else
 			custom_error("minishell-1.0: Command not found: ", cmd, 127);
 		exit(g_lobal_minishell.status);
 	}
-	else if (stat(cmd, &buf) != 0)
+	else if (stat(cmd, &buf) == 0)
 	{
 		custom_error("minishell-1.0: is directory: ", cmd, 126);
 		exit(g_lobal_minishell.status);

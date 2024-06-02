@@ -43,13 +43,6 @@ int	main(int argc, char **argv, char **env)
 			close_io();
 			continue ;
 		}
-		
-		// printf("=%d\n", g_lobal_minishell.root->type);
-		// printf("=%d\n", (((t_pipe *)g_lobal_minishell.root)->left)->type);
-		// printf("=%d\n", (((t_pipe *)g_lobal_minishell.root)->right)->type);
-		// printf("=%d\n", (((t_block *)(((t_pipe *)g_lobal_minishell.root)->left))->child)->type);
-		// printf("=%d\n", (((t_op *)(((t_block *)(((t_pipe *)g_lobal_minishell.root)->left))->child)))->left->type);
-		// printf("=%d\n", (((t_op *)(((t_block *)(((t_pipe *)g_lobal_minishell.root)->left))->child)))->right->type);
 		execute();
 		close_io();
 		clear_garbage(&g_lobal_minishell.garbage_head);
