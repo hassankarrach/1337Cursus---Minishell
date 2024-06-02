@@ -19,4 +19,5 @@ void	pwd_builtin(char *str)
 	(void)str;
 	pwd = getcwd(NULL, 0);
 	printf("%s\n", pwd);
+	free(pwd);
 }

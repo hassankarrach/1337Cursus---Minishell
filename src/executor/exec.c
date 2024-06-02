@@ -55,7 +55,7 @@ int	exec_pipe(t_tree *node)
 	}
 	else
 	{
-		g_lobal_minishell.flag3 = 1;
+		g_lobal_minishell.flag3 = 0;
 		setup_in_out_fds(va_pipe->pipe_fd[1], va_pipe->pipe_fd[0], 0);
 		status = specify_types((t_tree *)(va_pipe->right));
 		wait_loop();
