@@ -95,7 +95,6 @@ void	create_env_var(char **args, int *i, int flag, char c)
 		value = ft_strdup((*(args + j)) + ft_strlen(key) + 1) + flag;
 	else
 		value = ft_strdup("\0");
-	printf("ls == (%s), (%s), (%s)\n", args[j], key , value);
 	if (is_exist(key, value, flag, flag2) == 0)
 	{
 		if (flag2 == 1)
