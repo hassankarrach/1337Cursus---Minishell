@@ -48,7 +48,7 @@ void	exit_builtin(char **args)
 		}
 		check_is_digit(args[i], &j);
 	}
-	if (args[2] != NULL)
+	if (args[1] != NULL && args[2] != NULL)
 		custom_error("minishell-1.0: too many arguments: ", "exit", 1);
 	else
 		b_exit(args[i]);
