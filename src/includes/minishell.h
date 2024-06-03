@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hkarrac <hkarrac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/06 15:46:27 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/05/23 13:50:13 by hkarrach         ###   ########.fr       */
+/*   Updated: 2024/06/03 09:24:45 by hkarrac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ typedef struct s_minishell
 
 extern t_minishell	g_lobal_minishell;
 
-void	handle_expand_asterisk_wildcard(t_token **list, char *pattern);
+int		handle_expand_asterisk_wildcard(t_token **list, char *pattern);
 char	**get_all_files_in_curr_dir(void);
 int		is_containing_asterisk(char *str);
 

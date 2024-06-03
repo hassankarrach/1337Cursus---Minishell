@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_wildcard.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hkarrac <hkarrac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 17:37:25 by hkarrach          #+#    #+#             */
-/*   Updated: 2024/05/25 11:18:06 by hkarrach         ###   ########.fr       */
+/*   Updated: 2024/06/03 09:37:44 by hkarrac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,20 +87,27 @@ int	is_containing_asterisk(char *str)
 	return (0);
 }
 
-void	handle_expand_asterisk_wildcard(t_token **list, char *pattern)
+int	handle_expand_asterisk_wildcard(t_token **list, char *pattern)
 {
 	char	**files_list;
 	int		i;
+	int		status;
 
 	i = 0;
+	status = 0;
 	files_list = get_all_files_in_curr_dir();
 	add_double_ptr_garbages(files_list);
 	while (files_list[i])
 	{
 		if (is_match(files_list[i], pattern))
+		{
 			token_list_add_back(list,
 				new_token(ft_strdup(files_list[i]), TOKEN_WORD));
+			status = 1;
+		}
 		i++;
 	}
-	free(pattern);
+	if (status)
+		free(pattern);
+	return (status);
 }

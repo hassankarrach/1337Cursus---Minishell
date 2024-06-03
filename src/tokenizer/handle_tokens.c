@@ -6,7 +6,7 @@
 /*   By: hkarrac <hkarrac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:36:40 by hkarrach          #+#    #+#             */
-/*   Updated: 2024/06/01 11:55:47 by hkarrac          ###   ########.fr       */
+/*   Updated: 2024/06/03 09:37:25 by hkarrac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,12 @@ static int	append_sep(t_token_type type, char **line_ptr,
 static int	creat_identifier_node(char *value, t_token **tokens_list)
 {
 	t_token	*token;
+	int res;
 
 	if (is_containing_asterisk(value) && value[0] != '\"' && value[0] != '\'')
 	{
-		handle_expand_asterisk_wildcard(tokens_list, value);
-		return (1);
+		if (handle_expand_asterisk_wildcard(tokens_list, value) == 1)
+			return (1);
 	}
 	token = new_token(value, TOKEN_WORD);
 	if (*value == '\'')
