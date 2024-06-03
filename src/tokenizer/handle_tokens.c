@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_tokens.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkarrac <hkarrac@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:36:40 by hkarrach          #+#    #+#             */
-/*   Updated: 2024/06/03 09:37:25 by hkarrac          ###   ########.fr       */
+/*   Updated: 2024/06/03 10:44:34 by hkarrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static int	append_sep(t_token_type type, char **line_ptr,
 static int	creat_identifier_node(char *value, t_token **tokens_list)
 {
 	t_token	*token;
-	int res;
 
 	if (is_containing_asterisk(value) && value[0] != '\"' && value[0] != '\'')
 	{

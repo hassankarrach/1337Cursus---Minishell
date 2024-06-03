@@ -1,0 +1,16 @@
+total 220
+drwxr-xr-x 5 hkarrach candidates   4096 May 26 11:25 .
+drwxr-xr-x 8 hkarrach candidates   4096 May 23 13:34 ..
+-rw-r--r-- 1 hkarrach candidates      6 May 26 11:25 a
+-rw-r--r-- 1 hkarrach candidates      7 May 26 11:25 b
+-rw-r--r-- 1 hkarrach candidates      0 May 26 11:25 file
+-rw-r--r-- 1 hkarrach candidates      6 May 26 11:20 file1
+-rw-r--r-- 1 hkarrach candidates      0 May 26 11:23 file2
+-rw-r--r-- 1 hkarrach candidates      6 May 26 11:23 file4
+drwxr-xr-x 8 hkarrach candidates   4096 May 25 14:39 .git
+-rw-r--r-- 1 hkarrach candidates   1817 May 26 10:20 Makefile
+-rwxr-xr-x 1 hkarrach candidates 123896 May 26 11:17 minishell
+-rw-r--r-- 1 hkarrach candidates     29 May 24 18:19 README.md
+drwxr-xr-x 9 hkarrach candidates   4096 May 26 11:17 src
+-rw-r--r-- 1 hkarrach candidates  49583 May 25 15:36 .tldr
+drwxr-xr-x 2 hkarrach candidates   4096 May 23 14:27 .vscode

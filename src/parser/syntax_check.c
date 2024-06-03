@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkarrac <hkarrac@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:54:41 by hkarrach          #+#    #+#             */
-/*   Updated: 2024/05/27 15:06:29 by hkarrac          ###   ########.fr       */
+/*   Updated: 2024/06/03 10:46:28 by hkarrach         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	print_syntax_error(void)
 {
 	ft_putstr_fd("minishell error : syntax error.", 2, '\n');
+	g_lobal_minishell.status = 2;
 	return (1);
 }
 
@@ -53,6 +54,8 @@ int	check_syntax_redirections(t_token *curr_token)
 	if (curr_token->next && (curr_token->next->type != TOKEN_SINGLE_QUOTE
 			&& curr_token->next->type != TOKEN_DOUBLE_QUOTE
 			&& curr_token->next->type != TOKEN_WORD))
+		return (1);
+	if (!curr_token->next)
 		return (1);
 	return (0);
 }
