@@ -55,6 +55,8 @@ void	printf_varibles(int flag)
 			printf("%s\n", tmp->value);
 		tmp = tmp->next;
 	}
+	if (flag == 1)
+		g_lobal_minishell.status = 0;
 }
 
 int	check_to_create(char *str, int *j, int *flag, char *c)
@@ -121,7 +123,8 @@ void	export_builtin(char **args)
 		while (args[i] != 0)
 		{
 			j = 0;
-			check_validity(&flag, &c, args[i], j);
+			if (check_validity(&flag, &c, args[i], j) == 1)
+				return ;
 			while (args[i][j] != '=' && args[i][j] != '\0')
 			{
 				if (check_to_create(args[i], &j, &flag, &c) == 1)
@@ -130,5 +133,6 @@ void	export_builtin(char **args)
 			create_env_var(args, &i, flag, c);
 		}
 		re_create_env();
+		g_lobal_minishell.status = 0;
 	}
 }

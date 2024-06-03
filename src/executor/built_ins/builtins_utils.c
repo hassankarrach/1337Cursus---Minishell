@@ -37,10 +37,15 @@ void	add_back_env(t_environment *new)
 		g_lobal_minishell.environment = new;
 }
 
-void	check_validity(int *flag, char *c, char *str, int j)
+int	check_validity(int *flag, char *c, char *str, int j)
 {
 	(*flag) = 0;
 	(*c) = '=';
 	if (str[j] == '=')
+	{
 		custom_error("minishell-1.0: Not a valid identifier: ", str, 1);
+		g_lobal_minishell.status = 1;
+		return (1);
+	}
+	return (0);
 }

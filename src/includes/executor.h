@@ -63,7 +63,7 @@ void			env_builtin(char **args);
 void			exit_builtin(char **args);
 int				ft_strlen_end(char *str, char end);
 void			add_back_env(t_environment *new);
-void			check_validity(int *flag, char *c, char *str, int j);
+int				check_validity(int *flag, char *c, char *str, int j);
 void			re_create_env(void);
 void			setup_environment(char **env, int flag);
 
