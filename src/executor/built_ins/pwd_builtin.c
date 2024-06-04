@@ -14,10 +14,24 @@
 
 void	pwd_builtin(char *str)
 {
-	char	*pwd;
+	char			*pwd;
+	t_environment	*env;
 
 	(void)str;
+	env = g_lobal_minishell.environment;
 	pwd = getcwd(NULL, 0);
+	if (pwd == NULL)
+	{
+		while (env != NULL)
+		{
+			if (ft_strcmp("PWD", env->key) == 0)
+			{
+				pwd = ft_strdup(env->value);
+				break ;
+			}
+			env = env->next;
+		}
+	}
 	printf("%s\n", pwd);
 	free(pwd);
 }

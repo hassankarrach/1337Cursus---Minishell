@@ -12,6 +12,20 @@
 
 #include "../../includes/minishell.h"
 
+int	check_env_path(t_environment *tmp, char *str)
+{
+	char	*s;
+
+	if (ft_strcmp("PATH", str) == 0)
+	{
+		s = tmp->value;
+		tmp->value = ft_strdup("./");
+		free(s);
+		return (1);
+	}
+	return (0);
+}
+
 void	check_to_delete(char *str)
 {
 	t_environment	*tmp;
@@ -23,7 +37,9 @@ void	check_to_delete(char *str)
 	{
 		if (ft_strcmp(tmp->key, str) == 0)
 		{
-			if (prev == NULL)
+			if (check_env_path(tmp, str) == 1)
+				return ;
+			else if (prev == NULL)
 				g_lobal_minishell.environment = tmp->next;
 			else
 				prev->next = tmp->next;
