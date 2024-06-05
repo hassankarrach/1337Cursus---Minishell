@@ -12,6 +12,14 @@
 
 #include "../includes/minishell.h"
 
+void	my_handler5(int i)
+{
+	(void)i;
+	recover_stdio();
+	rl_on_new_line();
+	rl_replace_line("", 0);
+}
+
 void	copy_env(char ***env)
 {
 	t_environment	*tmp;
@@ -50,10 +58,10 @@ void	start_execution(t_cmd *cmd)
 			g_lobal_minishell.status = WEXITSTATUS(g_lobal_minishell.status);
 		else if (WIFSIGNALED(g_lobal_minishell.status))
 			g_lobal_minishell.status = WTERMSIG(g_lobal_minishell.status) + 128;
-		setup_signals();
 		dup2(g_lobal_minishell.old_stdin, 0);
 		if (g_lobal_minishell.flag3 != 1)
 			dup2(g_lobal_minishell.old_stdout, 1);
+		signal(SIGQUIT, &my_handler5);
 	}
 }
 

@@ -92,8 +92,9 @@ void			fd_error(char *file_name);
 void			setup_signals(void);
 void			my_handler(int i);
 void			my_handler2(int i);
-void			my_handler4(int i);
 void			my_handler3(int i);
+void			my_handler4(int i);
+void			my_handler5(int i);
 void			ctrl_d(char *input);
 
 #endif

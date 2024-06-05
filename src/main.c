@@ -32,6 +32,7 @@ int	main(int argc, char **argv, char **env)
 	init(&env);
 	while (1)
 	{
+		setup_signals();
 		input = readline(PROMPT);
 		ctrl_d(input);
 		if (check_input(&input) == 1)

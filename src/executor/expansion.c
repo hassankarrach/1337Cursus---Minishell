@@ -44,7 +44,6 @@ void	check_to_expand2(int i, char *str, t_list **head, t_data *data)
 void	re_create_str(char **str, t_list *head)
 {
 	char	*tmp1;
-	int	i = 0;
 
 	tmp1 = NULL;
 	while (head != NULL)
@@ -53,7 +52,6 @@ void	re_create_str(char **str, t_list *head)
 		tmp1 = *str;
 		add_garbage(&g_lobal_minishell.garbage_head2, new_garbage(*str));
 		head = head->next;
-		i++;
 	}
 	add_garbage(&g_lobal_minishell.garbage_head2, new_garbage(*str));
 }
