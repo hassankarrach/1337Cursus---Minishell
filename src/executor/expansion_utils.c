@@ -52,7 +52,9 @@ void	cp_expanded(char **tmp, char **tmp1)
 	free(s);
 	i = 0;
 	tmp2 = ft_strjoin(tmp1[0], tmp1[1]);
+	add_garbage(&g_lobal_minishell.garbage_head, new_garbage(tmp1[0]));
 	*tmp = ft_strjoin(tmp2, tmp1[2]);
+	add_garbage(&g_lobal_minishell.garbage_head, new_garbage(*tmp));
 }
 
 void	_expand(char **tmp, int i)

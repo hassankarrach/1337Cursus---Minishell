@@ -1,7 +1,7 @@
 NAME = minishell
 
 # Flags
-CFLAGS = -Wall -Wextra -Werror  -g3 
+CFLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3 
 RDLFLAG = -lreadline
 
 # Libs-Srcs
