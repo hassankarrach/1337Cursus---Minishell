@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbasri <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hkarrac <hkarrac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 17:03:02 by aelbasri          #+#    #+#             */
-/*   Updated: 2024/05/04 17:03:05 by aelbasri         ###   ########.fr       */
+/*   Updated: 2024/06/05 10:38:06 by hkarrac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ int	init_minishell(char *input)
 	g_lobal_minishell.root = NULL;
 	g_lobal_minishell.tokens = ft_tokenize();
 	if (parser(g_lobal_minishell.tokens) == 1)
+	{
+		clear_garbage(&g_lobal_minishell.garbage_head);
 		return (1);
+	}
 	g_lobal_minishell.root = build_tree(g_lobal_minishell.tokens, 0);
 	return (0);
 }

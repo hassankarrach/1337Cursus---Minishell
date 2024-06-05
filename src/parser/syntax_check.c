@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hkarrach <hkarrach@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hkarrac <hkarrac@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 15:54:41 by hkarrach          #+#    #+#             */
-/*   Updated: 2024/06/03 10:46:28 by hkarrach         ###   ########.fr       */
+/*   Updated: 2024/06/05 11:05:22 by hkarrac          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,8 @@ int	check_syntax_close_parentheses(t_token *curr_token)
 			&& right->next->type != TOKEN_PIPE
 			&& right->next->type != TOKEN_CLOSING_PARENTHESES
 			&& right->next->type != TOKEN_APPEND_REDIRECTION
-			&& right->next->type != TOKEN_OUTPUT_REDIRECTION))
+			&& right->next->type != TOKEN_OUTPUT_REDIRECTION
+			&& right->next->type != TOKEN_INPUT_REDIRECTION))
 		return (1);
 	if (left->prev && (left->prev->type != TOKEN_SINGLE_QUOTE
 			&& left->prev->type != TOKEN_DOUBLE_QUOTE
