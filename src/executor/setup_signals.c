@@ -35,6 +35,7 @@ void	my_handler2(int i)
 {
 	(void)i;
 	write(1, "\n", 1);
+	recover_stdio();
 	rl_on_new_line();
 	rl_replace_line("", 0);
 }
